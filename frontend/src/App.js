@@ -1,15 +1,13 @@
-import React from 'react';
-import { observer } from 'mobx-react';
-import UserStore from './stores/UserStore';
-import LoginForm from './LoginForm';
-import SubmitButton from './SubmitButton';
-import './App.css';
+import React, { useEffect } from "react";
+// import { observer } from "mobx-react";
+// import UserStore from "./stores/UserStore";
+import { LoginForm } from "./loginForm";
+// import SubmitButton from "./SubmitButton";
+import "./App.css";
 
+  const UserStore = { isLoggedIn: false, loading: false };
 
-class App extends React.Component {
-
-  async componentDidMount() {
-
+  useEffect(() => {
     // Mock for an API call that can check if the user is already logged in
     try {
       // let res = await fetch('/isLoggedIn', {
@@ -24,19 +22,17 @@ class App extends React.Component {
 
       if (UserStore.isLoggedIn) {
         UserStore.loading = false;
-      }
-      else {
+      } else {
         UserStore.loading = false;
         UserStore.isLoggedIn = false;
       }
-    }
-    catch(e) {
+    } catch (e) {
       UserStore.loading = false;
       UserStore.isLoggedIn = false;
     }
-  }
+  }, [UserStore.isLoggedIn]);
 
-  async doLogout() {
+  const doLogout = async () => {
     try {
       // What a POST Request may look like when user logs out
       // let res = await fetch('/logout', {
@@ -53,47 +49,48 @@ class App extends React.Component {
 
       if (result === "success") {
         UserStore.isLoggedIn = false;
-        UserStore.username ='';
+        UserStore.username = "";
       }
-    }
-    catch(e) {
+    } catch (e) {
       console.log("There was an error logging out user: " + UserStore.username);
     }
-  }
-  render() {
-    if (UserStore.loading) {
-      return (
-        <div className="App">
-          <div className = 'container'>
-            Loading, please wait...
-          </div>
+  };
+  if (UserStore.loading) {
+    return (
+      <div className="App">
+        <div className="container">Loading, please wait...</div>
+      </div>
+    );
+  } else if (UserStore.isLoggedIn) {
+    return (
+      <div className="App">
+        <div className="container">
+          Welcome {UserStore.username ? UserStore.username : "No Name Found"}
+          {/* <SubmitButton
+            text={"Log out"}
+            disabled={false}
+            onClick={() => this.doLogout()}
+          /> */}
+          {/* Alex Note - delete before merge 
+            I think this should redirect to their dashboard, and the logout should be a global button in our navbar/menu or w/e
+          */}
         </div>
-      );
-    }
-    else if (UserStore.isLoggedIn) {
-        return (
-          <div className="App">
-            <div className = 'container'>
-              Welcome {UserStore.username ? UserStore.username : "No Name Found"}
-              <SubmitButton
-              text = {'Log out'}
-              disabled = {false}
-              onClick = { () => this.doLogout() }
-              />
-            </div>
-          </div>
-        );
-      }
-
-    else {
-      return (
-        <div className="App">
-          <div className = 'container'>
-            <LoginForm></LoginForm>
-          </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="App">
+        <div className="container">
+          <LoginForm></LoginForm>
         </div>
-      )
-    }
+      </div>
+    );
   }
+<<<<<<< HEAD
 }
 export default observer(App);
+=======
+};
+// export default observer(App);
+export default App;
+>>>>>>> 982a13aaf0ba1b998f2a8bc7152c91422624b7bd

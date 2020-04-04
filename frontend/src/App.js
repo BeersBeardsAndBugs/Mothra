@@ -7,7 +7,9 @@ export const App = () => {
 
   const [user, setUser] = useState();
 
-  const Homepage = () => <div>Homepage</div>;
+  const Homepage = ({ user }) => (
+    <div>{user ? user.name + "'s " : ""}Homepage</div>
+  );
 
   const Signup = () => <div>Sign Up</div>;
 
@@ -17,7 +19,7 @@ export const App = () => {
         {
           {
             login: <LoginForm {...{ setPageSelected, setUser }} />,
-            homepage: <Homepage />,
+            homepage: <Homepage {...{ user }} />,
             signup: <Signup />,
           }[pageSelected]
         }

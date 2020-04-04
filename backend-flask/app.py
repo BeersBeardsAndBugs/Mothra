@@ -22,14 +22,12 @@ def create_user():
     user_new = User.create(name=name, password=password, email=email)
     user_new.save()
 
-@app.route('/user/<int:id>')
-def get_user(id):
-    user = User.select().where(User.id == id).get()
+@app.route('/login/', methods=["POST"])
+def get_user():
+    given = request.get_json()
+    print(given)
+    user = User.select().where(User.email == given["email"] and User.password == given["password"]).get()
     return json.dumps(model_to_dict(user)) 
-    
-
-
-
 
 
 

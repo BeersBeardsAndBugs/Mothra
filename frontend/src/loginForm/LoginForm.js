@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { post } from "../utils";
+import { post, get } from "../utils";
 import { GET_USER } from "../constants/";
 
 export const LoginForm = ({ setPageSelected, setUser }) => {
@@ -22,7 +22,7 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
     setIsButtonDisabled(false);
   };
 
-  const doLogin = (e) => {
+  const doLogin = async (e) => {
     e.preventDefault();
 
     setPageSelected("homepage");
@@ -34,10 +34,10 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
     }
     //Prevents user from double-clicking the submit button
     setIsButtonDisabled(true);
+    const body = { email: username, password };
 
-    const body = { username, password };
-    console.log(post(GET_USER, body, error));
-    // setUser();
+    const result = await post(GET_USER, body, error);
+    setUser(result);
   };
 
   const error = (e) => {

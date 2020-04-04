@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { post } from "../utils";
+import { GET_USER } from "../constants/";
 
-export const LoginForm = () => {
-
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false)
+export const LoginForm = ({ setPageSelected, setUser }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const setInputValue = (property, val) => {
     val = val.trim();
@@ -12,65 +13,36 @@ export const LoginForm = () => {
       //Cap Username at 20 chars. Should probably keep this in a constants file
       return;
     }
-    setUsername({ username: val});
+    setUsername(val);
   };
 
   const resetForm = () => {
-    setUsername({ username: ""});
-    setPassword({ password: ""});
-    setIsButtonDisabled({ isButtonDisabled: false});
+    setUsername("");
+    setPassword("");
+    setIsButtonDisabled(false);
   };
 
-  const doLogin = async () => {
+  const doLogin = (e) => {
+    e.preventDefault();
+
+    setPageSelected("homepage");
     if (!username) {
       return;
     }
     if (!password) {
       return;
     }
-
     //Prevents user from double-clicking the submit button
-    setIsButtonDisabled({ isButtonDisabled: true});
+    setIsButtonDisabled(true);
 
-    try {
-      // What a POST request might look like after the user selects "Log In" button
-      // let res = await fetch('/login', {
-      //   method: 'post',
-      //   headers: {
-      //     'Accept': 'application/json',
-      //     'Content-Type': 'application/json'
-      //   },
-      //   body: JSON.stringify({
-      //     username: this.state.username,
-      //     password: this.state.password
-      //   })
-      // });
-      //let result = await res.json();
+    const body = { username, password };
+    console.log(post(GET_USER, body, error));
+    // setUser();
+  };
 
-      /**
-       * Since we dont have a backend right now, I'm just going to mock a response for success
-       */
-
-      let result = "success";
-
-      if (result === "success") {
-        setIsButtonDisabled({ isButtonDisabled: true});
-        setUsername({ username: "USER_NAME" });
-        console.log("Logging was a success"); // Alex Note - delete before merge
-        /* Alex Note - delete before merge
-          We should talk about what we intend to use for this. I'm thinking 
-          it will be good for useContext hook. I dont think we need something like mobx for a 
-          project of this size. I am open to discussing this though because I'm honestly not sure
-          of the best practice here
-        */
-      } else {
-        resetForm();
-        alert("The login failed!");
-      }
-    } catch (e) {
-      console.log(e);
-      resetForm();
-    }
+  const error = (e) => {
+    resetForm();
+    console.log(e);
   };
 
   return (
@@ -82,27 +54,32 @@ export const LoginForm = () => {
           type="text"
           placeholder="Username"
           value={username ? username : ""}
-          onChange={val => setInputValue("username", val)}
+          name="username"
+          onChange={(e) => setUsername(e.target.value)}
         />
       </div>
-
       Password
       <div className="inputField">
         <input
           className="input"
           type="password" // Tells browser to hide input
           placeholder="Password"
+          name="password"
           value={password ? password : ""}
-          onChange={val => setInputValue("password", val)}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-
-    <div className="submitButton">
-      <button className="btn" disabled={isButtonDisabled} onClick={() => doLogin()}>
-        Login
-      </button>
-    </div>
-
+      <div className="submitButton">
+        <button
+          type="submit"
+          name="submit"
+          className="btn"
+          disabled={isButtonDisabled}
+          onClick={doLogin}
+        >
+          Login
+        </button>
+      </div>
     </div>
   );
 };

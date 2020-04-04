@@ -1,60 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { LoginForm } from "./loginForm";
 import "./App.css";
 
-const App = () => {
-  // placeholder until we settle how to do this
-  const UserStore = { isLoggedIn: false, loading: false };
+export const App = () => {
+  const [pageSelected, setPageSelected] = useState("login");
 
-  // Similar to Angular's NgOnChanges(). Will Re-Render every time specified values change
-  useEffect(() => {
-    // Mock for an API call that can check if the user is already logged in
-    try {
-      // let res = await fetch('/isLoggedIn', {
-      //   method: 'post',
-      //   headers: {
-      //     'Accept': 'application/json',
-      //     'Content-Type': 'application/json'
-      //   }
-      // });
+  const [user, setUser] = useState();
 
-      // let result = await res.json();
-      if (UserStore.isLoggedIn) {
-        UserStore.loading = false;
-      } else {
-        UserStore.loading = false;
-        UserStore.isLoggedIn = false;
-      }
-    } catch (e) {
-      UserStore.loading = false;
-      UserStore.isLoggedIn = false;
-    }
-  }, [UserStore.isLoggedIn]);
+  const Homepage = () => <div>Homepage</div>;
 
-  if (UserStore.loading) {
-    return (
-      <div className="App">
-        <div className="container">Loading, please wait...</div>
+  const Signup = () => <div>Sign Up</div>;
+
+  return (
+    <div className="App">
+      <div className="container">
+        {
+          {
+            login: <LoginForm {...{ setPageSelected, setUser }} />,
+            homepage: <Homepage />,
+            signup: <Signup />,
+          }[pageSelected]
+        }
       </div>
-    );
-  } else if (UserStore.isLoggedIn) {
-    return (
-      <div className="App">
-        <div className="container">
-          Welcome {UserStore.username ? UserStore.username : "No Name Found"}
-          
-          Show dashboard or something else here
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="App">
-        <div className="container">
-          <LoginForm></LoginForm>
-        </div>
-      </div>
-    );
-  }
+    </div>
+  );
 };
-export default App;

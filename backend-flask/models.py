@@ -12,7 +12,6 @@ class User(BaseModel):
   name = CharField(null = False)
   password = CharField(null = False)
   email = CharField(null = False)
-  username = CharField(null = False)
 
 class Bug(BaseModel):
   creator = ForeignKeyField(User, backref='bugs_created')

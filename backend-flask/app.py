@@ -13,14 +13,24 @@ def new_user_data_ep():
 def bug_list():
     bugs = Bug.select().get() 
     return json.dumps(model_to_dict(bugs))
-#app.route('/bugs/all')
-#def bug_list():
-#    bugs = []
-#    try:
-#        for bug in Bug.select():
-#            bugs.append(bug)
-#    except:
-#        bugs = 'no bugs in db'
+
+@app.route('/user/new', methods=['POST'])
+def create_user():
+    name = request.form['name']
+    password = request.form['password']
+    email = request.form['email']
+    user_new = User.create(name=name, password=password, email=email)
+    user_new.save()
+
+@app.route('/user/<int:id>')
+def get_user(id):
+    user = User.select().where(User.id == id).get()
+    return json.dumps(model_to_dict(user)) 
+    
+
+
+
+
 
 
 

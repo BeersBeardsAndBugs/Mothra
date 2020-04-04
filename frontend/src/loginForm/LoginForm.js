@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { post } from "../utils";
+import { post, get } from "../utils";
 import { GET_USER } from "../constants/";
 
 export const LoginForm = ({ setPageSelected, setUser }) => {
@@ -34,9 +34,8 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
     }
     //Prevents user from double-clicking the submit button
     setIsButtonDisabled(true);
-
     const body = { username, password };
-    console.log(post(GET_USER, body, error));
+    console.log(get("http://127.0.0.1:5000/user/" + '1', error));
     // setUser();
   };
 

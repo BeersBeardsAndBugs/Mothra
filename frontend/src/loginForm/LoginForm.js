@@ -1,24 +1,10 @@
 import React, { useState } from "react";
-import { InputField, SubmitButton } from "./statelessComponents";
-import UserStore from "../stores/UserStore";
 
 export const LoginForm = () => {
-  const [state, setState] = useState({
-    username: "",
-    password: "",
-    isButtonDisabled: false
-  });
-  /* Alex Note - delete before merge
-    the useState could also be written as 
-    
-    const [username, setUsername] = useState({})
-    const [password, setPassword] = useState({})
-    const [isButtonDisabled, setIsButtonDisabled] = useState({})
 
-    this give you separate "setState" functions for each piece of state.
-    This is usally prefered incase you need to pass the function to another component it 
-    wont give that component access to other state it shouldn't be able to touch
-  */
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false)
 
   const setInputValue = (property, val) => {
     val = val.trim();
@@ -26,26 +12,25 @@ export const LoginForm = () => {
       //Cap Username at 20 chars. Should probably keep this in a constants file
       return;
     }
-    setState({ ...state, [property]: val });
+    setUsername({ username: val});
   };
 
   const resetForm = () => {
-    setState({ ...state, username: "", password: "", isButtonDisabled: false });
+    setUsername({ username: ""});
+    setPassword({ password: ""});
+    setIsButtonDisabled({ isButtonDisabled: false});
   };
 
-  /*  Alex Note - delete before merge
-
-  */
   const doLogin = async () => {
-    if (!state.username) {
+    if (!username) {
       return;
     }
-    if (!state.password) {
+    if (!password) {
       return;
     }
 
     //Prevents user from double-clicking the submit button
-    setState({ ...state, isButtonDisabled: true });
+    setIsButtonDisabled({ isButtonDisabled: true});
 
     try {
       // What a POST request might look like after the user selects "Log In" button
@@ -69,8 +54,8 @@ export const LoginForm = () => {
       let result = "success";
 
       if (result === "success") {
-        UserStore.isLoggedIn = true;
-        UserStore.username = result.username;
+        setIsButtonDisabled({ isButtonDisabled: true});
+        setUsername({ username: "USER_NAME" });
         console.log("Logging was a success"); // Alex Note - delete before merge
         /* Alex Note - delete before merge
           We should talk about what we intend to use for this. I'm thinking 
@@ -91,24 +76,33 @@ export const LoginForm = () => {
   return (
     <div className="loginForm">
       Log In
-      <InputField
-        type="text"
-        placeholder="Username"
-        value={state.username ? state.username : ""}
-        onChange={val => setInputValue("username", val)}
-      />
+      <div className="inputField">
+        <input
+          className="input"
+          type="text"
+          placeholder="Username"
+          value={username ? username : ""}
+          onChange={val => setInputValue("username", val)}
+        />
+      </div>
+
       Password
-      <InputField
-        type="password" // Tells browser to hide characters when typed
-        placeholder="Password"
-        value={state.password ? state.password : ""}
-        onChange={val => setInputValue("password", val)}
-      />
-      <SubmitButton
-        text="Login"
-        disabled={state.isButtonDisabled}
-        onClick={() => doLogin()}
-      />
+      <div className="inputField">
+        <input
+          className="input"
+          type="password" // Tells browser to hide input
+          placeholder="Password"
+          value={password ? password : ""}
+          onChange={val => setInputValue("password", val)}
+        />
+      </div>
+
+    <div className="submitButton">
+      <button className="btn" disabled={isButtonDisabled} onClick={() => doLogin()}>
+        Login
+      </button>
+    </div>
+
     </div>
   );
 };

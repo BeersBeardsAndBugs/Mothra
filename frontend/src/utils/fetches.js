@@ -4,8 +4,8 @@ export const post = async (path, body, error) => {
     let res = await fetch(path, {
       method: "post",
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: "text/html",
+        "Content-Type": "text/html",
       },
       body: JSON.stringify(body),
     });

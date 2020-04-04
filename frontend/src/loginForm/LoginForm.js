@@ -38,48 +38,48 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
 
     const result = await post(GET_USER, body, error);
     setUser(result);
-  };
 
-  const error = (e) => {
-    resetForm();
-    console.log(e);
-  };
+    const error = (e) => {
+      resetForm();
+      console.log(e);
+    };
 
-  return (
-    <div className="loginForm">
-      Log In
-      <div className="inputField">
-        <input
-          className="input"
-          type="text"
-          placeholder="Username"
-          value={username ? username : ""}
-          name="username"
-          onChange={(e) => setUsername(e.target.value)}
-        />
+    return (
+      <div className="loginForm">
+        Log In
+        <div className="inputField">
+          <input
+            className="input"
+            type="text"
+            placeholder="Username"
+            value={username ? username : ""}
+            name="username"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        Password
+        <div className="inputField">
+          <input
+            className="input"
+            type="password" // Tells browser to hide input
+            placeholder="Password"
+            name="password"
+            value={password ? password : ""}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="submitButton">
+          <button
+            type="submit"
+            name="submit"
+            className="btn"
+            disabled={isButtonDisabled}
+            onClick={doLogin}
+          >
+            Login
+          </button>
+        </div>
       </div>
-      Password
-      <div className="inputField">
-        <input
-          className="input"
-          type="password" // Tells browser to hide input
-          placeholder="Password"
-          name="password"
-          value={password ? password : ""}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <div className="submitButton">
-        <button
-          type="submit"
-          name="submit"
-          className="btn"
-          disabled={isButtonDisabled}
-          onClick={doLogin}
-        >
-          Login
-        </button>
-      </div>
-    </div>
-  );
+    );
+  };
 };

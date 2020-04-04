@@ -11,9 +11,8 @@ def new_user_data_ep():
 
 @app.route('/bugs/all')
 def bug_list():
-    bugs = Bug.select().dicts().get() 
-    return json.dumps(bugs, defaults=json_util.default)
-#json_data = json.dumps(model_to_dict(user_obj))
+    bugs = Bug.select().get() 
+    return json.dumps(model_to_dict(bugs))
 #app.route('/bugs/all')
 #def bug_list():
 #    bugs = []

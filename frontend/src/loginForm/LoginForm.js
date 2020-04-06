@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { post } from "../utils";
+import { post, get } from "../utils";
 import { GET_USER } from "../constants/";
 
 export const LoginForm = ({ setPageSelected, setUser }) => {
@@ -22,7 +22,7 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
     setIsButtonDisabled(false);
   };
 
-  const doLogin = (e) => {
+  const doLogin = async (e) => {
     e.preventDefault();
 
     setPageSelected("homepage");
@@ -34,52 +34,52 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
     }
     //Prevents user from double-clicking the submit button
     setIsButtonDisabled(true);
+    const body = { email: username, password };
 
-    const body = { username, password };
-    console.log(post(GET_USER, body, error));
-    // setUser();
+    const result = await post(GET_USER, body, error);
+    setUser(result);
+
+    const error = (e) => {
+      resetForm();
+      console.log(e);
+    };
+
+    return (
+      <div className="loginForm">
+        Log In
+        <div className="inputField">
+          <input
+            className="input"
+            type="text"
+            placeholder="Username"
+            value={username ? username : ""}
+            name="username"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        Password
+        <div className="inputField">
+          <input
+            className="input"
+            type="password" // Tells browser to hide input
+            placeholder="Password"
+            name="password"
+            value={password ? password : ""}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="submitButton">
+          <button
+            type="submit"
+            name="submit"
+            className="btn"
+            disabled={isButtonDisabled}
+            onClick={doLogin}
+          >
+            Login
+          </button>
+        </div>
+      </div>
+    );
   };
-
-  const error = (e) => {
-    resetForm();
-    console.log(e);
-  };
-
-  return (
-    <div className="loginForm">
-      Log In
-      <div className="inputField">
-        <input
-          className="input"
-          type="text"
-          placeholder="Username"
-          value={username ? username : ""}
-          name="username"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      Password
-      <div className="inputField">
-        <input
-          className="input"
-          type="password" // Tells browser to hide input
-          placeholder="Password"
-          name="password"
-          value={password ? password : ""}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <div className="submitButton">
-        <button
-          type="submit"
-          name="submit"
-          className="btn"
-          disabled={isButtonDisabled}
-          onClick={doLogin}
-        >
-          Login
-        </button>
-      </div>
-    </div>
-  );
 };

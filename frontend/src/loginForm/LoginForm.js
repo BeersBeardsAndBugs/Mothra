@@ -1,85 +1,68 @@
 import React, { useState } from "react";
 import { post, get } from "../utils";
-import { GET_USER } from "../constants/";
+import { GET_USER } from "../constants";
+import { useForm } from "../hooks";
+import { Input } from "./input";
 
 export const LoginForm = ({ setPageSelected, setUser }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const USERNAME = "Username";
+  const PASSWORD = "Password";
 
-  const setInputValue = (property, val) => {
-    val = val.trim();
-    if (val.length > 20) {
-      //Cap Username at 20 chars. Should probably keep this in a constants file
-      return;
-    }
-    setUsername(val);
+  const inputsSchema = {
+    [USERNAME]: {
+      value: "",
+      error: "",
+      name: USERNAME,
+      required: true,
+      validator: {
+        regEx: /^[a-zA-z0-9@.]{3,20}$/,
+        error:
+          "The username can only have letters and numbers, and must be 3-20 characters long.",
+      },
+    },
+    [PASSWORD]: {
+      value: "",
+      error: "",
+      type: "password",
+      name: PASSWORD,
+      required: true,
+    },
   };
 
-  const resetForm = () => {
-    setUsername("");
-    setPassword("");
-    setIsButtonDisabled(false);
-  };
-
-  const doLogin = async (e) => {
-    e.preventDefault();
-
-    setPageSelected("homepage");
-    if (!username) {
-      return;
-    }
-    if (!password) {
-      return;
-    }
+  const doLogin = async (body) => {
     //Prevents user from double-clicking the submit button
-    setIsButtonDisabled(true);
-    const body = { email: username, password };
-
-    const result = await post(GET_USER, body, error);
-    setUser(result);
-
     const error = (e) => {
-      resetForm();
       console.log(e);
     };
-
-    return (
-      <div className="loginForm">
-        Log In
-        <div className="inputField">
-          <input
-            className="input"
-            type="text"
-            placeholder="Username"
-            value={username ? username : ""}
-            name="username"
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        Password
-        <div className="inputField">
-          <input
-            className="input"
-            type="password" // Tells browser to hide input
-            placeholder="Password"
-            name="password"
-            value={password ? password : ""}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className="submitButton">
-          <button
-            type="submit"
-            name="submit"
-            className="btn"
-            disabled={isButtonDisabled}
-            onClick={doLogin}
-          >
-            Login
-          </button>
-        </div>
-      </div>
-    );
+    const result = await post(GET_USER, body, error);
+    if (result) {
+      setPageSelected("homepage");
+      setUser(result);
+    }
   };
+
+  const { handleSubmit, handleOnChange, inputs, isSubmitDisabled } = useForm(
+    inputsSchema,
+    doLogin
+  );
+
+  return (
+    <form className="loginForm" onSubmit={handleSubmit}>
+      Log In
+      <Input {...{ input: inputs[USERNAME], handleOnChange }} />
+      Password
+      <Input {...{ input: inputs[PASSWORD], handleOnChange }} />
+      <div className="submitButton">
+        <button
+          type="submit"
+          name="submit"
+          className="btn"
+          disabled={isSubmitDisabled}
+          onClick={handleSubmit}
+        >
+          Login
+        </button>
+      </div>
+    </form>
+  );
 };

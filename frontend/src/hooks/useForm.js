@@ -70,6 +70,7 @@ export const useForm = (inputsSchema, onSubmit) => {
       event.preventDefault();
 
       if (validateInputs()) {
+        setIsSubmitDisabled(true);
         const body = Object.keys(inputs)
           .map((key) => {
             return { [key]: inputs[key].value };
@@ -77,7 +78,8 @@ export const useForm = (inputsSchema, onSubmit) => {
           .reduce((accum = {}, keyObj) => {
             return { ...accum, ...keyObj };
           });
-        // onSubmit(body);
+
+        onSubmit(body, setIsSubmitDisabled);
       }
     },
     [inputs]

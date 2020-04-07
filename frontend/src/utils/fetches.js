@@ -4,11 +4,12 @@ export const post = async (path, body, error) => {
     let res = await fetch(path, {
       method: "post",
       headers: {
-        Accept: "text/html",
-        "Content-Type": "text/html",
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
     });
+    console.log("res", res);
     const json = res.json();
     return json;
   } catch (e) {

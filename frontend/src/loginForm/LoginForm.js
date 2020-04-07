@@ -5,19 +5,19 @@ import { useForm } from "../hooks";
 import { Input } from "./input";
 
 export const LoginForm = ({ setPageSelected, setUser }) => {
-  const USERNAME = "Username";
-  const PASSWORD = "Password";
+  const EMAIL = "email";
+  const PASSWORD = "password";
 
   const inputsSchema = {
-    [USERNAME]: {
+    [EMAIL]: {
       value: "",
       error: "",
-      name: USERNAME,
+      name: EMAIL,
       required: true,
       validator: {
         regEx: /^[a-zA-z0-9@.]{3,20}$/,
         error:
-          "The username can only have letters and numbers, and must be 3-20 characters long.",
+          "The EMAIL can only have letters and numbers, and must be 3-20 characters long.",
       },
     },
     [PASSWORD]: {
@@ -29,12 +29,13 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
     },
   };
 
-  const doLogin = async (body) => {
+  const doLogin = async (body, isSubmitDisabled) => {
     //Prevents user from double-clicking the submit button
     const error = (e) => {
       console.log(e);
     };
     const result = await post(GET_USER, body, error);
+    isSubmitDisabled(false);
     if (result) {
       setPageSelected("homepage");
       setUser(result);
@@ -49,7 +50,7 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
   return (
     <form className="loginForm" onSubmit={handleSubmit}>
       Log In
-      <Input {...{ input: inputs[USERNAME], handleOnChange }} />
+      <Input {...{ input: inputs[EMAIL], handleOnChange }} />
       Password
       <Input {...{ input: inputs[PASSWORD], handleOnChange }} />
       <div className="submitButton">

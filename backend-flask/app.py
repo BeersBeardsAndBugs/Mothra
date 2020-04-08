@@ -5,35 +5,45 @@ from playhouse.shortcuts import model_to_dict, dict_to_model
 
 app = Flask(__name__)
 
-@app.route('/')
-def new_user_data_ep():
-    return 'Hello Mothra'
 
-@app.route('/bugs/all')
+@app.route("/")
+def new_user_data_ep():
+    return "Hello Mothra"
+
+
+@app.route("/bugs/all")
 def bug_list():
-    bugs = Bug.select().get() 
+    bugs = Bug.select().get()
     return json.dumps(model_to_dict(bugs))
 
-@app.route('/user/new', methods=['POST'])
+
+@app.route("/user/new/", methods=["POST"])
 def create_user():
-    name = request.form['name']
-    password = request.form['password']
-    email = request.form['email']
+    given = request.get_json()
+    name = given["name"]
+    password = given["password"]
+    email = given["email"]
     user_new = User.create(name=name, password=password, email=email)
     user_new.save()
+    user = (
+        User.select()
+        .where(User.email == given["email"] and User.password == given["password"])
+        .get()
+    )
+    return json.dumps(model_to_dict(user))
 
-@app.route('/login/', methods=["POST"])
+
+@app.route("/login/", methods=["POST"])
 def get_user():
     given = request.get_json()
     print(given)
-    user = User.select().where(User.email == given["email"] and User.password == given["password"]).get()
-    return json.dumps(model_to_dict(user)) 
+    user = (
+        User.select()
+        .where(User.email == given["email"] and User.password == given["password"])
+        .get()
+    )
+    return json.dumps(model_to_dict(user))
 
 
-
-
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(use_reloader=True)

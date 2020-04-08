@@ -33,7 +33,11 @@
   }
 }
 
-body, html, #root, .App, .container {
+body,
+html,
+#root,
+.App,
+.container {
   width: 100%;
   height: 100%;
 }
@@ -49,42 +53,49 @@ body, html, #root, .App, .container {
 }
 
 .loginForm {
- box-sizing: border-box;
- width: 100%;
- max-width: 400px;
- padding-left: 20px;
- padding-right: 20px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 400px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .inputField {
- padding-top: 16px;
+  padding-top: 16px;
 }
 
 .input {
- box-sizing: border-box;
- outline: none;
- border: solid 2px #1189de;
- border-radius: 4px;
- color: #292929;
- width: 100%;
- padding: 12px;
- font-size: 14px;
- background: rgba(255, 255, 255, 1);
+  box-sizing: border-box;
+  outline: none;
+  border: solid 2px #1189de;
+  border-radius: 4px;
+  color: #292929;
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 1);
 }
 
 .submitButton {
- padding-top: 16px;
+  padding-top: 16px;
 }
 
 .btn {
- width: 100%;
- min-width: 280px;
- color: #565656;
- padding: 12px;
- font-size: 14px;
- font-weight: bold;
- border: solid 2px #1189de;
- border-radius: 4px;
- background: #fff;
- cursor: pointer;
+  width: 100%;
+  min-width: 280px;
+  color: #565656;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border: solid 2px #1189de;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.login-signup-btn {
+  border: none;
+  background: none;
+  color: #00bbff;
+  cursor: pointer;
 }

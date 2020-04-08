@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { post, get } from "../utils";
+import React from "react";
+import { post } from "../utils";
 import { GET_USER } from "../constants";
 import { useForm } from "../hooks";
-import { Input } from "./input";
+import { Input } from "../shared";
 
 export const LoginForm = ({ setPageSelected, setUser }) => {
   const EMAIL = "email";
@@ -15,9 +15,8 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
       name: EMAIL,
       required: true,
       validator: {
-        regEx: /^[a-zA-z0-9@.]{3,20}$/,
-        error:
-          "The EMAIL can only have letters and numbers, and must be 3-20 characters long.",
+        regEx: /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+        error: "Must be a valid email address.",
       },
     },
     [PASSWORD]: {
@@ -64,6 +63,12 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
           Login
         </button>
       </div>
+      <button
+        className="login-signup-btn"
+        onClick={() => setPageSelected("signup")}
+      >
+        Sign Up
+      </button>
     </form>
   );
 };

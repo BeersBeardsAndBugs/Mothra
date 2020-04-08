@@ -6,7 +6,7 @@ export const Input = ({ input, handleOnChange }) => {
       <input
         className="input"
         type={input.type || "text"}
-        placeholder="Username"
+        placeholder={input.name}
         value={input.value}
         name={input.name}
         onChange={handleOnChange}

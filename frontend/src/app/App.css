@@ -1,3 +1,5 @@
+@import "../constants/vars.css";
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -10,18 +12,18 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--blank-space-color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: var(--primary-font-size);
+  color: var(--primary-font-color);
 }
 
 .App-link {
-  color: #61dafb;
+  color: var(--link-font-color);
 }
 
 @keyframes App-logo-spin {
@@ -43,13 +45,13 @@ html,
 }
 
 .container {
-  font-size: 28px;
-  color: #fff;
+  font-size: var(--title-font-size);
+  color: var(--title-font-color);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #282c34;
+  background-color: var(--blank-space-color);
 }
 
 .loginForm {
@@ -67,13 +69,12 @@ html,
 .input {
   box-sizing: border-box;
   outline: none;
-  border: solid 2px #1189de;
-  border-radius: 4px;
-  color: #292929;
+  border: var(--interaction-border);
+  border-radius: var(--interaction-border-radius);
+  font-size: var(--placeholder-font-size);
   width: 100%;
-  padding: 12px;
-  font-size: 14px;
-  background: rgba(255, 255, 255, 1);
+  padding: 12px; 
+  background: var(--interaction-background);
 }
 
 .submitButton {
@@ -83,19 +84,19 @@ html,
 .btn {
   width: 100%;
   min-width: 280px;
-  color: #565656;
+  color: var(--placeholder-font-color);
   padding: 12px;
-  font-size: 14px;
+  font-size: var(--primary-font-color);
   font-weight: bold;
-  border: solid 2px #1189de;
-  border-radius: 4px;
-  background: #fff;
+  border: var(--interaction-border);
+  border-radius: var(--interaction-border-radius);
+  background: var(--interaction-background);
   cursor: pointer;
 }
 
 .login-signup-btn {
   border: none;
   background: none;
-  color: #00bbff;
+  color: var(--link-font-color);
   cursor: pointer;
 }

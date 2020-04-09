@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { LoginForm } from "./loginForm";
 import { SignupForm } from "./signupForm";
+import { UserDashboard } from "./userDashboard";
 import "./App.css";
 
 export const App = () => {
@@ -18,7 +19,7 @@ export const App = () => {
         {
           {
             login: <LoginForm {...{ setPageSelected, setUser }} />,
-            homepage: <Homepage {...{ user }} />,
+            homepage: <UserDashboard {...{ user }} />,
             signup: <SignupForm {...{ setPageSelected, setUser }} />,
           }[pageSelected]
         }

@@ -1,8 +1,8 @@
 import React from "react";
-import { post } from "../utils";
-import { GET_USER } from "../constants";
-import { useForm } from "../hooks";
-import { Input } from "../shared";
+import { post } from "../../utils";
+import { GET_USER } from "../../constants";
+import { useForm } from "../../hooks";
+import { Input } from "../_shared";
 
 export const LoginForm = ({ setPageSelected, setUser }) => {
   const EMAIL = "email";

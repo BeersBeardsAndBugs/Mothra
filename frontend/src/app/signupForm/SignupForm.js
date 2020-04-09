@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
-import { post } from "../utils";
-import { CREATE_USER } from "../constants";
-import { useForm } from "../hooks";
-import { Input } from "../shared";
+import { post } from "../../utils";
+import { CREATE_USER } from "../../constants";
+import { useForm } from "../../hooks";
+import { Input } from "../_shared";
 
 export const SignupForm = ({ setPageSelected, setUser }) => {
   const EMAIL = "email";

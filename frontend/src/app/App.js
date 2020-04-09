@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { LoginForm } from "./loginForm";
+import { SignupForm } from "./signupForm";
+import { UserDashboard } from "./userDashboard";
 import "./App.css";
 
 export const App = () => {
@@ -11,16 +13,14 @@ export const App = () => {
     <div>{user ? user.name + "'s " : ""}Homepage</div>
   );
 
-  const Signup = () => <div>Sign Up</div>;
-
   return (
     <div className="App">
       <div className="container">
         {
           {
             login: <LoginForm {...{ setPageSelected, setUser }} />,
-            homepage: <Homepage {...{ user }} />,
-            signup: <Signup />,
+            homepage: <UserDashboard {...{ user }} />,
+            signup: <SignupForm {...{ setPageSelected, setUser }} />,
           }[pageSelected]
         }
       </div>

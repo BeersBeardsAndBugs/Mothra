@@ -24,7 +24,6 @@
 }
 
 .buglist {
-  background-color: lightgreen;
   grid-area: buglist;
 }
 

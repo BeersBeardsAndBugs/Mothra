@@ -1,3 +1,32 @@
 .userDashboard {
+  width: 100%;
+  height: 100%;
   background-color: fuchsia;
+  display: grid;
+  grid-template-columns: 30% auto;
+  grid-template-rows: 10% auto;
+  grid-template-areas:  "navbar navbar "
+                        "buglist bugviews"
+}
+
+.navbar,
+.buglist,
+.bugview {
+    padding: 16px;
+    text-align: center;
+}
+
+.navbar {
+  background-color: lightblue;
+  grid-area: navbar;
+}
+
+.buglist {
+  background-color: lightgreen;
+  grid-area: buglist;
+}
+
+.bugviews {
+  background-color: lightsalmon;
+  grid-area: bugviews;
 }

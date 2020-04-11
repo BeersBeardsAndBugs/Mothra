@@ -1,3 +1,7 @@
+:root {
+  --animation-l: none;
+}
+
 .navbar {
   background-color: rgb(210, 222, 241);
   grid-area: navbar;
@@ -30,7 +34,7 @@
   --logo-left-wing-skew: 10deg;
   --logo-right-wing-skew: -10deg;
   --logo-wings-scale: 1.5;
-  --animation: flappingLeft;
+  --animation-l: flappingLeft;
 }
 
 .settings {
@@ -38,59 +42,72 @@
   justify-self: end;
 }
 
-.leftWing {
+.moth {
   display: inline-block;
-  animation: var(--animation) 0.5s infinite;
-  -webkit-animation: var(--animation) 0.5s infinite;
-  -moz-animation: var(--animation) 0.5s infinite;
-  -o-animation: var(--animation) 0.5s infinite;
 }
 
-.rightWing {
-  display: inline-block;
-  animation: var(--animation) 0.5s infinite;
-  -webkit-animation: var(--animation) 0.5s infinite;
-  -moz-animation: var(--animation) 0.5s infinite;
-  -o-animation: var(--animation) 0.5s infinite;
+.leftWingFlap {
+  animation: flappingLeft var(--logo-animation-dur) infinite linear;
+  -webkit-animation: flappingLeft var(--logo-animation-dur) infinite linear;
+  -moz-animation: flappingLeft var(--logo-animation-dur) infinite linear;
+  -o-animation: flappingLeft var(--logo-animation-dur) infinite linear;
 }
 
-@-webkit-keyframes flappingLeft {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.5);
-  }
+.rightWingFlap {
+  animation: flappingRight var(--logo-animation-dur) infinite linear;
+  -webkit-animation: flappingRight var(--logo-animation-dur) infinite linear;
+  -moz-animation: flappingRight var(--logo-animation-dur) infinite linear;
+  -o-animation: flappingRight var(--logo-animation-dur) infinite linear;
 }
-@-moz-keyframes flappingLeft {
-  0%,
-  100% {
-    transform: scale(1);
-  }
 
-  50% {
-    transform: scale(1.5);
-  }
+.mothBody {
+  animation: mothBody var(--logo-animation-dur) infinite linear;
+  -webkit-animation: mothBody var(--logo-animation-dur) infinite linear;
+  -moz-animation: mothBody var(--logo-animation-dur) infinite linear;
+  -o-animation: mothBody var(--logo-animation-dur) infinite linear;
 }
-@-o-keyframes flappingLeft {
-  0%,
-  100% {
-    transform: scale(1);
-  }
 
-  50% {
-    transform: scale(1.5);
-  }
-}
 @keyframes flappingLeft {
   0%,
   100% {
-    transform: scale(1);
+    transform: skew(0deg) scale(1);
+  }
+  25% {
+    transform: skew(-2.5deg) scale(1.25);
   }
 
   50% {
-    transform: scale(1.5);
+    transform: skew(0deg) scale(1.5);
+  }
+  75% {
+    transform: skew(2.5deg) scale(1.25);
+  }
+}
+
+@keyframes flappingRight {
+  0%,
+  100% {
+    transform: skew(0deg) scale(1);
+  }
+  25% {
+    transform: skew(2.5deg) scale(1.25);
+  }
+
+  50% {
+    transform: skew(0deg) scale(1.5);
+  }
+  75% {
+    transform: skew(-2.5deg) scale(1.25);
+  }
+}
+
+@keyframes mothBody {
+  0%,
+  100% {
+    transform: scalex(1.5) scaley(1.1);
+  }
+
+  50% {
+    transform: scalex(1) scaley(1);
   }
 }

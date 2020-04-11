@@ -34,4 +34,5 @@ Also encourages us to standardize properties so we don't have to individually tw
   --logo-left-wing-skew: 0;
   --logo-right-wing-skew: 0;
   --logo-wings-scale: 1;
+  --logo-animation-dur: 1s;
 }

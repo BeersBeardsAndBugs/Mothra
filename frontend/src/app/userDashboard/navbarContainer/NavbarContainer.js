@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import { MobileMenu, ProfileMenu, Navbar } from "./navbar";
 import { navbarStyles } from "./navbarStyles";
@@ -37,7 +37,7 @@ export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
         setPageSelected("login");
         setUser(null);
         break;
-      case "default":
+      default:
         break;
     }
 

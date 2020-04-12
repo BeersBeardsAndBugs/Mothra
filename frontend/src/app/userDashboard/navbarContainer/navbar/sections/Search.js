@@ -1,10 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 
 export const Search = ({ classes }) => {
   const [search, setSearch] = useState("");
-  const searchAnchor = useRef(null);
   return (
     <div className={classes.search}>
       <div className={classes.searchIcon}>
@@ -21,15 +20,13 @@ export const Search = ({ classes }) => {
         onChange={(e) => setSearch(e.target.value)}
         onKeyUp={(e) => {
           if (e.key === "Enter") {
-            searchAnchor.current.click();
+            const a = document.createElement("a");
+            a.href = "https://www.google.com/search?&q=" + search;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            a.click();
           }
         }}
-      />
-      <a
-        href={"https://www.google.com/search?&q=" + search}
-        target="_blank"
-        rel="noopener"
-        ref={searchAnchor}
       />
     </div>
   );

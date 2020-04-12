@@ -15,7 +15,7 @@ export const App = () => {
         {
           {
             login: <LoginForm {...{ setPageSelected, setUser }} />,
-            homepage: <UserDashboard {...{ user, setUser }} />,
+            homepage: <UserDashboard {...{ user, setUser, setPageSelected }} />,
             signup: <SignupForm {...{ setPageSelected, setUser }} />,
           }[pageSelected]
         }

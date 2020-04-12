@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import { MobileMenu, ProfileMenu, Navbar } from "./components";
+import { MobileMenu, ProfileMenu, Navbar } from "./navbar";
 import { navbarStyles } from "./navbarStyles";
 
 export const NavbarContainer = ({ user, setUser, setPageSelected }) => {

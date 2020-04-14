@@ -29,4 +29,11 @@ Also encourages us to standardize properties so we don't have to individually tw
     --interaction-border: solid 2px #1189de;
     --interaction-border-radius: 4px;
     --interaction-background: white;
+
+    /* Bug Severity Color Codes */
+    --blocker-color-code: #b71c1c;
+    --critical-color-code: #e53935;
+    --high-color-code: #fb8c00;
+    --normal-color-code: #fdd835;
+    --enhancement-color-code: #8bc34a;
   }

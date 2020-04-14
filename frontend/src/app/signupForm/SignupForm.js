@@ -50,8 +50,8 @@ export const SignupForm = ({ setPageSelected, setUser }) => {
     const result = await post(CREATE_USER, body, error);
     isSubmitDisabled(false);
     if (result) {
-      setPageSelected("homepage");
       setUser(result);
+      setPageSelected("homepage");
     }
   };
 

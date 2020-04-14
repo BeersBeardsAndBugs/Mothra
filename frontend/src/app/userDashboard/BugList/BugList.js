@@ -7,7 +7,6 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import BugReportIcon from '@material-ui/icons/BugReportRounded';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -72,8 +71,8 @@ export const BugList = ({ bugs2 }) => {
       <div className={classes.matTheme}>
         <List>
           {
-            bugs.map((bug) => (
-              <ListItem button onClick={() =>handleClick(bug)}>
+            bugs.map((bug, i) => (
+              <ListItem key={i} button onClick={() =>handleClick(bug)}>
                 <ListItemAvatar>
                   <Avatar style={
                     bug.severity === "blocker" ? {background: "#b71c1c"} : 

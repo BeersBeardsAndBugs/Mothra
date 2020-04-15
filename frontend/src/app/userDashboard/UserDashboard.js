@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./UserDashboard.module.css";
-import BugDetailPane from "./BugView/BugDetailPane.js";
+import {BugDetail} from "./BugView/BugDetail"
 
 export const UserDashboard = ({ user }) => {
   return (
@@ -8,7 +8,7 @@ export const UserDashboard = ({ user }) => {
       <div className={styles.navbar}>NAVBAR ----- {user ? `${user.name}'s ` : ""}Dashboard</div>
       <div className={styles.buglist}>BUGLIST</div>
       <div className={styles.bugviews}>
-        <BugDetailPane/>
+        <BugDetail/>
       </div>
     </div>
   );

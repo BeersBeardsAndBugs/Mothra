@@ -11,15 +11,19 @@ export const Desktop = ({
   notifications,
   profileMenuId,
   handleProfileMenuOpen,
+  notificationsMenuId,
+  handleNotificationsMenuOpen,
 }) => {
   return (
     <div className={classes.sectionDesktop}>
-      <IconButton aria-label="show 4 new messagess" color="inherit">
-        <Badge badgeContent={messages?.length} color="secondary">
-          <MailIcon />
-        </Badge>
-      </IconButton>
-      <IconButton aria-label="show 17 new notifications" color="inherit">
+      <IconButton
+        aria-label={`show ${notifications?.length} new notifications`}
+        aria-label="notifications of current user"
+        aria-controls={notificationsMenuId}
+        aria-haspopup="true"
+        onClick={handleNotificationsMenuOpen}
+        color="inherit"
+      >
         <Badge badgeContent={notifications?.length} color="secondary">
           <NotificationsIcon />
         </Badge>

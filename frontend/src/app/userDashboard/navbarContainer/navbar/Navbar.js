@@ -14,6 +14,7 @@ export const Navbar = ({
   handleProfileMenuOpen,
   mobileMenuId,
   handleMobileMenuOpen,
+  handleNotificationsMenuOpen,
 }) => {
   return (
     <AppBar position="static">
@@ -38,6 +39,7 @@ export const Navbar = ({
             notifications: user.notifications,
             profileMenuId,
             handleProfileMenuOpen,
+            handleNotificationsMenuOpen,
           }}
         />
         <Mobile {...{ classes, mobileMenuId, handleMobileMenuOpen }} />

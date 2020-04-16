@@ -6,10 +6,14 @@ import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 
-export const MobileMenu = ({ handleProfileMenuOpen, notificationsCount }) => {
+export const MobileMenu = ({
+  notificationsMenuOpen,
+  profileMenuOpen,
+  notificationsCount,
+}) => {
   return (
     <Fragment>
-      <MenuItem>
+      <MenuItem onClick={notificationsMenuOpen}>
         <IconButton aria-label="show 11 new notifications" color="inherit">
           <Badge badgeContent={notificationsCount} color="secondary">
             <NotificationsIcon />
@@ -17,7 +21,7 @@ export const MobileMenu = ({ handleProfileMenuOpen, notificationsCount }) => {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem onClick={profileMenuOpen}>
         <IconButton
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"

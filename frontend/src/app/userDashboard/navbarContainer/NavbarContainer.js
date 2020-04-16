@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import {
   MobileMenu,
@@ -8,11 +8,11 @@ import {
   NotificationsMenu,
 } from "./navbar";
 import { navbarStyles } from "./navbarStyles";
-import {} from "./navbar";
+import { useMenu } from "../../../hooks";
 
 export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
   // ALEX TESTING
-  // use for testing notifications and messages badges
+  // use for testing notifications
   useEffect(() => {
     setUser({
       ...user,
@@ -24,28 +24,22 @@ export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
   }, []);
   // ALEX TESTING
 
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-  const [profileAnchorEl, setProfileAnchorEl] = useState(null);
-  const [notificationsAnchorEl, setNotificationsAnchorEl] = useState(null);
+  const [profileMenu] = useMenu("profile", {
+    name: user.name,
+    email: user.email,
+  });
+
+  const [notificationsMenu] = useMenu("profile", {
+    notifications: user.notifications,
+  });
+
+  const [mobileMenu] = useMenu("profile", {
+    notificationsMenuOpen: notificationsMenu.open,
+    profileMenuOpen: profileMenu.open,
+    notificationsCount: user.notifications?.length,
+  });
 
   const classes = makeStyles((theme) => navbarStyles(theme, fade))();
-
-  const isProfileMenuOpen = !!profileAnchorEl;
-  const isNotificationsMenuOpen = !!notificationsAnchorEl;
-  const isMobileMenuOpen = !!mobileMoreAnchorEl;
-  const profileMenuId = "primary-search-account-menu";
-  const notificationsMenuId = "primary-search-notif-menu";
-  const mobileMenuId = "primary-search-account-menu-mobile";
-
-  const handleProfileMenuOpen = (event) => {
-    setProfileAnchorEl(event.currentTarget);
-  };
-  const handleNotificationsMenuOpen = (event) => {
-    setNotificationsAnchorEl(event.currentTarget);
-  };
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
 
   const handleAllMenuClose = (action) => {
     switch (action) {
@@ -57,16 +51,16 @@ export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
         break;
     }
 
-    setMobileMoreAnchorEl(null);
-    setProfileAnchorEl(null);
-    setNotificationsAnchorEl(null);
+    profileMenu.close();
+    notificationsMenu.close();
+    mobileMenu.close();
   };
 
   const handleNotificationClick = (bugid) => {
     alert(
       `404: You are trying to open Bug-${bugid}, but the BugDetail Component isn't finished.`
     );
-    setNotificationsAnchorEl(null);
+    handleAllMenuClose();
   };
 
   return (
@@ -75,56 +69,23 @@ export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
         {...{
           classes,
           user,
-          profileMenuId,
-          handleProfileMenuOpen,
-          notificationsMenuId,
-          handleNotificationsMenuOpen,
-          mobileMenuId,
-          handleMobileMenuOpen,
+          profileMenu,
+          notificationsMenu,
+          mobileMenu,
         }}
       />
+      <MenuContainer {...{ ...mobileMenu.containerProps, handleAllMenuClose }}>
+        <MobileMenu {...{ ...mobileMenu.menuProps }} />
+      </MenuContainer>
 
-      <MenuContainer
-        {...{
-          anchorEl: profileAnchorEl,
-          menuId: profileAnchorEl,
-          isMenuOpen: isProfileMenuOpen,
-          handleAllMenuClose,
-        }}
-      >
-        <ProfileMenu
-          {...{ name: user.name, email: user.email, handleAllMenuClose }}
-        />
+      <MenuContainer {...{ ...profileMenu.containerProps, handleAllMenuClose }}>
+        <ProfileMenu {...{ ...profileMenu.menuProps, handleAllMenuClose }} />
       </MenuContainer>
       <MenuContainer
-        {...{
-          anchorEl: notificationsAnchorEl,
-          menuId: notificationsMenuId,
-          isMenuOpen: isNotificationsMenuOpen,
-          handleAllMenuClose,
-        }}
+        {...{ ...notificationsMenu.containerProps, handleAllMenuClose }}
       >
         <NotificationsMenu
-          {...{
-            handleNotificationClick,
-            notifications: user.notifications,
-          }}
-        />
-      </MenuContainer>
-      <MenuContainer
-        {...{
-          anchorEl: mobileMoreAnchorEl,
-          menuId: mobileMenuId,
-          isMenuOpen: isMobileMenuOpen,
-          handleAllMenuClose,
-        }}
-      >
-        <MobileMenu
-          {...{
-            handleNotificationsMenuOpen,
-            handleProfileMenuOpen,
-            notificationsCount: user.notifications?.length,
-          }}
+          {...{ ...notificationsMenu.menuProps, handleNotificationClick }}
         />
       </MenuContainer>
     </div>

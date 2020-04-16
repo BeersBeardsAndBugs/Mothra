@@ -7,21 +7,18 @@ import IconButton from "@material-ui/core/IconButton";
 
 export const Desktop = ({
   classes,
-  messages,
   notifications,
-  profileMenuId,
-  handleProfileMenuOpen,
-  notificationsMenuId,
-  handleNotificationsMenuOpen,
+  profileMenu,
+  notificationsMenu,
 }) => {
   return (
     <div className={classes.sectionDesktop}>
       <IconButton
         aria-label={`show ${notifications?.length} new notifications`}
         aria-label="notifications of current user"
-        aria-controls={notificationsMenuId}
+        aria-controls={notificationsMenu.id}
         aria-haspopup="true"
-        onClick={handleNotificationsMenuOpen}
+        onClick={notificationsMenu.open}
         color="inherit"
       >
         <Badge badgeContent={notifications?.length} color="secondary">
@@ -31,9 +28,9 @@ export const Desktop = ({
       <IconButton
         edge="end"
         aria-label="account of current user"
-        aria-controls={profileMenuId}
+        aria-controls={profileMenu.id}
         aria-haspopup="true"
-        onClick={handleProfileMenuOpen}
+        onClick={profileMenu.open}
         color="inherit"
       >
         <AccountCircle />

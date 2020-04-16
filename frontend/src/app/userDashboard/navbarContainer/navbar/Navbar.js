@@ -10,11 +10,9 @@ import { Search, Desktop, Mobile } from "./sections";
 export const Navbar = ({
   classes,
   user,
-  profileMenuId,
-  handleProfileMenuOpen,
-  mobileMenuId,
-  handleMobileMenuOpen,
-  handleNotificationsMenuOpen,
+  profileMenu,
+  notificationsMenu,
+  mobileMenu,
 }) => {
   return (
     <AppBar position="static">
@@ -37,12 +35,11 @@ export const Navbar = ({
             classes,
             messages: user.messages,
             notifications: user.notifications,
-            profileMenuId,
-            handleProfileMenuOpen,
-            handleNotificationsMenuOpen,
+            profileMenu,
+            notificationsMenu,
           }}
         />
-        <Mobile {...{ classes, mobileMenuId, handleMobileMenuOpen }} />
+        <Mobile {...{ classes, mobileMenu }} />
       </Toolbar>
     </AppBar>
   );

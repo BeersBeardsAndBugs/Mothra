@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
+import { navbarStyles } from "./navbarStyles";
+import { useMenu } from "../../../hooks";
+import { Navbar } from "./navbar";
 import {
   MobileMenu,
-  Navbar,
   ProfileMenu,
   MenuContainer,
   NotificationsMenu,
-} from "./navbar";
-import { navbarStyles } from "./navbarStyles";
-import { useMenu } from "../../../hooks";
+} from "./menus";
 
 export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
   // ALEX TESTING

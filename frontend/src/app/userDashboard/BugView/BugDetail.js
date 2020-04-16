@@ -1,9 +1,19 @@
 import React from 'react';
-import {bug} from "./jsondata"
+import { bug } from "./jsondata"
 import { post } from "../../../utils";
 import { GET_USER } from "../../../constants";
 import { useForm } from "../../../hooks";
 import { Input } from "../../_shared";
+import Card from "@material-ui/core/Card";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+
+  matTheme: {
+    backgroundColor: theme.palette.background.paper,
+  }
+}));
+
 
 export const BugDetail = () => {
   const TITLE = "title"
@@ -14,30 +24,30 @@ export const BugDetail = () => {
 
   const inputsSchema = {
     [TITLE]: {
-      value: "",
+      value: bug.title,
       error: "",
       name: TITLE,
       required: true,
     },
     [PRIORITY]: {
-      value: "",
+      value: bug.priority,
       error: "",
       name: PRIORITY,
       required: true,
     },
     [DESCRIPTION]: {
-      value: "",
+      value: bug.description,
       error: "",
       name: DESCRIPTION,
       required: true,
     },
     [COMMENTS]: {
-      value: "",
+      value: bug.comments,
       error: "",
       name: COMMENTS,
       required: true,
     },[HISTORY]: {
-      value: "",
+      value: bug.history,
       error: "",
       name: HISTORY,
       required: true,
@@ -60,7 +70,7 @@ export const BugDetail = () => {
     // </select>
 
     return (
-      <div>
+      <div className="mdc-card">
         <form className="bugDetail_form" onSubmit={handleSubmit}>
           <h1>{bug.title}</h1>
           <h3>Priority</h3>

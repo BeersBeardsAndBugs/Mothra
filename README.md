@@ -14,5 +14,5 @@ This will be a Django/Python API with a React frontend project for tracking bugs
 
 ## Running Dev Environment
 
-In terminal, cd into 'Mothra/
+In terminal, cd into 'Mothra/'
 start windev

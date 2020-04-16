@@ -12,7 +12,6 @@ export const BugDetail = () => {
   const COMMENTS = "comments"
   const HISTORY = "history"
 
-
   const inputsSchema = {
     [TITLE]: {
       value: "",
@@ -23,27 +22,26 @@ export const BugDetail = () => {
     [PRIORITY]: {
       value: "",
       error: "",
-      name: TITLE,
+      name: PRIORITY,
       required: true,
     },
     [DESCRIPTION]: {
       value: "",
       error: "",
-      name: TITLE,
+      name: DESCRIPTION,
       required: true,
     },
     [COMMENTS]: {
       value: "",
       error: "",
-      name: TITLE,
+      name: COMMENTS,
       required: true,
     },[HISTORY]: {
       value: "",
       error: "",
-      name: TITLE,
+      name: HISTORY,
       required: true,
     },
-
   };
   const formSubmit = () => {
     return true
@@ -68,7 +66,7 @@ export const BugDetail = () => {
           <h3>Priority</h3>
           <Input {...{ input: inputs[PRIORITY], handleOnChange }}/>
           <h3>Description</h3>
-          <Input {...{ input: inputs[DESCRIPTION], handleOnChange}}>
+          <Input {...{ input: inputs[DESCRIPTION], handleOnChange}}/>
           <h3>Date Created: {bug.dateCreated}</h3>
           <h3>Created By: {bug.createdBy}</h3>
           <h3>Status: {bug.status}</h3>
@@ -92,90 +90,3 @@ export const BugDetail = () => {
 
 }
 
-
-
-
-
-// import React from "react";
-
-// export const Name = ({prop}) => {
-//     return (<div></div>);
-// }
-
-// import React from "react";
-// import { useForm } from "hooks";
-
-// export const Name = () => {
-//   const PROPERTY_ONE = "Property One";
-
-//   const inputsSchema = {
-//     [PROPERTY_ONE]: { value: "", error: "" }
-//   };
-
-//   const validationSchema = {
-//     [PROPERTY_ONE]: {
-//       required: true,
-//       validator: {
-//         regEx: /^[a-zA-Z]*$/,
-//         error: "Property One can only have letters"
-//       }
-//     },
-   // [PROPERTY_TWO]: {
-   //   required: true,
-   //   validator: {
-   //     regEx: /^[a-zA-Z]*$/,
-   //     error: "Description can only have letters",
-   //     dependencies: [
-   //       {
-   //         otherInput: PROPERTY_ONE,
-   //         validate: (otherInputValue, thisValue) => {
-   //           return thisValue.length > otherInputValue.length;
-   //         },
-   //         error: PROPERTY_TWO + " must be longer than " + PROPERTY_ONE
-   //       }
-   //     ]
-   //   }
-   // }
-  // };
-
-//   const onSubmitForm = async submitted => {
-//     console.log(submitted)
-//     // const response = await axios.post(path, body)
-//     // Do something with result
-//   };
-
-//   const errorStyle = {
-//     color: "red",
-//     fontSize: "13px"
-//   };
-
- 
-
-//   return (
-//     <div>
-//       <form onSubmit={handleSubmit}>
-//         <div>
-//           <label htmlFor={PROPERTY_ONE}>
-//             {`${PROPERTY_ONE}: `}
-//             <input
-//               type={PROPERTY_ONE}
-//               name={PROPERTY_ONE}
-//               onChange={
-//                 handleInputChange
-//               }
-//               value={inputs[PROPERTY_ONE].value}
-//               required
-//             />
-//           </label>
-//           {inputs[PROPERTY_ONE].error && (
-//             <p style={errorStyle}>{inputs[PROPERTY_ONE].error}</p>
-//           )}
-//         </div>
-
-//         <button type="submit" name="submit" disabled={disable}>
-//           Submit
-//         </button>
-//       </form>
-//     </div>
-//   );
-// };

@@ -35,7 +35,7 @@ export const Navbar = ({
         </Typography>
         <Search {...{ classes }} />
         <div className={classes.grow} />
-        <Button variant="contained" color="Secondary" startIcon={<AddIcon />}>
+        <Button variant="contained" color="secondary" startIcon={<AddIcon />}>
           Create
         </Button>
         <div className={classes.grow} />

@@ -6,11 +6,11 @@ export const useMenu = (name, menuProps) => {
   const isMenuOpen = !!anchorEl;
   const id = name + "-menu";
   const pieces = {
-    menuProps,
-    containerProps: {
+    props: {
       anchorEl,
       id,
       isMenuOpen,
+      ...menuProps,
     },
     id,
     isMenuOpen,

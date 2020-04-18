@@ -1,8 +1,15 @@
-import React, { Fragment } from "react";
+import React from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Menu from "@material-ui/core/Menu";
 
-export const NotificationsMenu = ({ notifications, handleAllMenuClose }) => {
+export const NotificationsMenu = ({
+  notifications = [],
+  handleAllMenuClose,
+  anchorEl,
+  menuId,
+  isMenuOpen,
+}) => {
   const handleNotificationClick = (bugid) => {
     alert(
       `404: You are trying to open Bug-${bugid}, but the BugDetail Component isn't finished.`
@@ -10,7 +17,15 @@ export const NotificationsMenu = ({ notifications, handleAllMenuClose }) => {
     handleAllMenuClose();
   };
   return (
-    <Fragment>
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isMenuOpen}
+      onClose={handleAllMenuClose}
+    >
       {notifications.map((notification, index) => {
         return (
           <MenuItem
@@ -24,6 +39,6 @@ export const NotificationsMenu = ({ notifications, handleAllMenuClose }) => {
           </MenuItem>
         );
       })}
-    </Fragment>
+    </Menu>
   );
 };

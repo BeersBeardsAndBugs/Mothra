@@ -3,12 +3,7 @@ import { fade, makeStyles } from "@material-ui/core/styles";
 import { navbarStyles } from "./navbarStyles";
 import { useMenu } from "../../../hooks";
 import { Navbar } from "./navbar";
-import {
-  MobileMenu,
-  ProfileMenu,
-  MenuContainer,
-  NotificationsMenu,
-} from "./menus";
+import { MobileMenu, ProfileMenu, NotificationsMenu } from "./menus";
 
 export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
   // ALEX TESTING
@@ -62,20 +57,11 @@ export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
           mobileMenu,
         }}
       />
-      <MenuContainer {...{ ...mobileMenu.containerProps, handleAllMenuClose }}>
-        <MobileMenu {...{ ...mobileMenu.menuProps }} />
-      </MenuContainer>
-
-      <MenuContainer {...{ ...profileMenu.containerProps, handleAllMenuClose }}>
-        <ProfileMenu {...{ ...profileMenu.menuProps, handleAllMenuClose }} />
-      </MenuContainer>
-      <MenuContainer
-        {...{ ...notificationsMenu.containerProps, handleAllMenuClose }}
-      >
-        <NotificationsMenu
-          {...{ ...notificationsMenu.menuProps, handleAllMenuClose }}
-        />
-      </MenuContainer>
+      <MobileMenu {...{ ...mobileMenu.props, handleAllMenuClose }} />
+      <ProfileMenu {...{ ...profileMenu.props, handleAllMenuClose }} />
+      <NotificationsMenu
+        {...{ ...notificationsMenu.props, handleAllMenuClose }}
+      />
     </div>
   );
 };

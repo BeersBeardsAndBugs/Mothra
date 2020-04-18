@@ -1,0 +1,35 @@
+.bugList {
+    background-color: var(--blank-space-color);
+    color: whitesmoke;
+    display: grid;
+    grid-template-columns: 50% auto;
+    grid-template-rows: 50px auto;
+    grid-template-areas:  "ownersBugs allBugs"
+                          "bugs bugs";
+    gap: 3px;
+  }
+
+.ownersBugs,
+.allBugs,
+.bugs {
+    width: 100%;
+    height: 100;
+    text-align: center;
+    color: var(--primary-font-color);
+    font-size: var(--primary-font-size);
+}
+
+  .ownersBugs {
+    grid-area: ownersBugs;
+    background-color: whitesmoke;
+  }
+  
+  .allBugs {
+    grid-area: allBugs;
+    background-color: whitesmoke;
+  }
+  
+  .bugs {
+    background-color: whitesmoke;
+    grid-area: bugs;
+  }

@@ -12,10 +12,10 @@ bug2 = Bug(creator='alex', assigned_to='preston', name='bug2', priority='low', d
 bug2.save()
 
 
-comment1 = Comment(user=user, bug=bug1, text="hey hey this is my cooment", date="1/1/2020")
+comment1 = Comment(user='jordon', bug=bug1, text="hey hey this is my cooment", date="1/1/2020")
 comment1.save()
-comment2 = Comment(user=user, bug=bug2, text="comment from jordon", date="1/2/2020")
+comment2 = Comment(user='alex', bug=bug1, text="comment from jordon", date="1/2/2020")
 comment2.save()
-comment3 = Comment(user=user2, bug=bug2, text="comment from alex", date="1/2/2020")
+comment3 = Comment(user='preston', bug=bug2, text="comment from alex", date="1/2/2020")
 comment3.save()
 

@@ -5,7 +5,7 @@ import { UserDashboard } from "./userDashboard";
 import "./App.css";
 
 export const App = () => {
-  const [pageSelected, setPageSelected] = useState("login");
+  const [pageSelected, setPageSelected] = useState("homepage");
 
 
   const [user, setUser] = useState();

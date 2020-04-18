@@ -11,11 +11,11 @@ class BaseModel(Model):
 class User(BaseModel):
   name = CharField(null = False)
   password = CharField(null = False)
-  email = CharField(null = False)
+  email = CharField(null = False, unique = True)
 
 class Bug(BaseModel):
-  creator = ForeignKeyField(User, backref='bugs_created')
-  assigned_to = ForeignKeyField(User, backref='bugs_assigned')
+  assigned_to = CharField()
+  creator = CharField(null = False)
   name = CharField(null = False)
   description = CharField(null = False)
   created_date = CharField(null = False)

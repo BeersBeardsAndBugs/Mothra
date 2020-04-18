@@ -13,9 +13,11 @@ def new_user_data_ep():
 
 @app.route("/bugs/all")
 def bug_list():
-    bugs = Bug.select().get()
-    return json.dumps(model_to_dict(bugs))
-
+    bugs = Bug.select().dicts()
+    bugsarray =[]
+    for bug in bugs:
+        bugsarray.append(bug)
+    return json.dumps(bugsarray)
 
 @app.route("/user/new/", methods=["POST"])
 def create_user():

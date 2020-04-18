@@ -1,5 +1,6 @@
 from flask import request, Flask
 from models import *
+import datetime
 import json
 from playhouse.shortcuts import model_to_dict, dict_to_model
 
@@ -18,6 +19,14 @@ def bug_list():
     for bug in bugs:
         bugsarray.append(bug)
     return json.dumps(bugsarray)
+    bugs = Bug.select().get()
+    return json.dumps(model_to_dict(bugs))
+
+@app.route("/comments/all")
+def comment_list():
+    comments = Comment.select().get()
+    return json.dumps(model_to_dict(comments))
+
 
 @app.route("/user/new/", methods=["POST"])
 def create_user():
@@ -45,6 +54,13 @@ def get_user():
         .get()
     )
     return json.dumps(model_to_dict(user))
+
+@app.route("/bug/comment", methods=["POST"])
+def write_comment():
+    given = request.get_json()
+    print(given)
+    comment_new = Comment.create(bug=given["bug"], user = given["user"], text=given["text"], date=dateime.now())
+    comment_new.save()
 
 
 if __name__ == "__main__":

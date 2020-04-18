@@ -23,6 +23,13 @@ class Bug(BaseModel):
   priority = CharField(null = False)
   status = CharField(null = False)
 
+class Comment(BaseModel):
+  bug = ForeignKeyField(Bug, backref="comments")
+  user = ForeignKeyField(User, backref="comments")
+  text = CharField(null=False)
+  date = CharField(null=False)
+
+
 db.connect()
-db.create_tables([User, Bug])
+db.create_tables([User, Bug, Comment])
 

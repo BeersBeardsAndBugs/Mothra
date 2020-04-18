@@ -7,25 +7,33 @@ export const navbarStyles = (theme, fade) => {
     menuButton: {
       marginRight: theme.spacing(2),
     },
-    title: {
+    logo: {
       display: "none",
       [theme.breakpoints.up("sm")]: {
         display: "block",
       },
     },
-    search: {
-      position: "relative",
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.15),
-      "&:hover": {
-        backgroundColor: fade(theme.palette.common.white, 0.25),
+    logoSmall: {
+      display: "block",
+      [theme.breakpoints.up("sm")]: {
+        display: "none",
       },
-      marginRight: theme.spacing(2),
+    },
+    search: {
+      display: "none",
       marginLeft: 0,
       width: "100%",
       [theme.breakpoints.up("sm")]: {
+        position: "relative",
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: fade(theme.palette.common.white, 0.15),
+        "&:hover": {
+          backgroundColor: fade(theme.palette.common.white, 0.25),
+        },
+        marginRight: theme.spacing(2),
         marginLeft: theme.spacing(3),
         width: "auto",
+        display: "block",
       },
     },
     searchIcon: {

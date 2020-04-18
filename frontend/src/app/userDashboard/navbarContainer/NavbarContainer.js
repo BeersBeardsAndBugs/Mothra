@@ -17,7 +17,7 @@ export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
     setUser({
       ...user,
       notifications: [
-        { bugId: "1234", message: "Description Changed." },
+        { bugId: "1234", message: "The title has been altered." },
         { bugId: "2345", message: "Status changed" },
       ],
     });
@@ -27,6 +27,10 @@ export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
   const [profileMenu] = useMenu("profile", {
     name: user.name,
     email: user.email,
+    logout: () => {
+      setPageSelected("login");
+      setUser(null);
+    },
   });
 
   const [notificationsMenu] = useMenu("profile", {
@@ -41,26 +45,10 @@ export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
 
   const classes = makeStyles((theme) => navbarStyles(theme, fade))();
 
-  const handleAllMenuClose = (action) => {
-    switch (action) {
-      case "logout":
-        setPageSelected("login");
-        setUser(null);
-        break;
-      default:
-        break;
-    }
-
+  const handleAllMenuClose = () => {
     profileMenu.close();
     notificationsMenu.close();
     mobileMenu.close();
-  };
-
-  const handleNotificationClick = (bugid) => {
-    alert(
-      `404: You are trying to open Bug-${bugid}, but the BugDetail Component isn't finished.`
-    );
-    handleAllMenuClose();
   };
 
   return (
@@ -85,7 +73,7 @@ export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
         {...{ ...notificationsMenu.containerProps, handleAllMenuClose }}
       >
         <NotificationsMenu
-          {...{ ...notificationsMenu.menuProps, handleNotificationClick }}
+          {...{ ...notificationsMenu.menuProps, handleAllMenuClose }}
         />
       </MenuContainer>
     </div>

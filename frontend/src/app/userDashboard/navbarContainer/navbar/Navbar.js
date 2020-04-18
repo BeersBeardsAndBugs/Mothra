@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
 import { Logo } from "./logo";
 import { Search, Desktop, Mobile } from "./sections";
+import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
 
 export const Navbar = ({
   classes,
@@ -25,10 +27,17 @@ export const Navbar = ({
         >
           <MenuIcon />
         </IconButton>
-        <Typography className={classes.title} variant="h6" noWrap>
+        <Typography className={classes.logo} variant="h5" noWrap>
           <Logo />
         </Typography>
+        <Typography className={classes.logoSmall} variant="h5" noWrap>
+          {`};{`}
+        </Typography>
         <Search {...{ classes }} />
+        <div className={classes.grow} />
+        <Button variant="contained" color="Secondary" startIcon={<AddIcon />}>
+          Create
+        </Button>
         <div className={classes.grow} />
         <Desktop
           {...{

@@ -15,7 +15,7 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
       name: EMAIL,
       required: true,
       validator: {
-        regEx: /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+        regEx: /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+).([a-zA-Z]{2,5})$/,
         error: "Must be a valid email address.",
       },
     },
@@ -36,8 +36,8 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
     const result = await post(GET_USER, body, error);
     isSubmitDisabled(false);
     if (result) {
-      setPageSelected("homepage");
       setUser(result);
+      setPageSelected("homepage");
     }
   };
 

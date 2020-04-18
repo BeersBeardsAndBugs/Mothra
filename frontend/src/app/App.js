@@ -7,12 +7,7 @@ import "./App.css";
 export const App = () => {
   const [pageSelected, setPageSelected] = useState("homepage");
 
-
   const [user, setUser] = useState();
-
-  const Homepage = ({ user }) => (
-    <div>{user ? user.name + "'s " : ""}Homepage</div>
-  );
 
   return (
     <div className="App">
@@ -20,7 +15,7 @@ export const App = () => {
         {
           {
             login: <LoginForm {...{ setPageSelected, setUser }} />,
-            homepage: <UserDashboard {...{ user }} />,
+            homepage: <UserDashboard {...{ user, setUser, setPageSelected }} />,
             signup: <SignupForm {...{ setPageSelected, setUser }} />,
           }[pageSelected]
         }

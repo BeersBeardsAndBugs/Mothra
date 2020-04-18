@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { get } from "../../../utils";
+import { BUGS_ALL } from "../../../constants";
 import { makeStyles } from '@material-ui/core/styles';
+import styles from "./BugList.module.css";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import BugReportIcon from '@material-ui/icons/BugReportRounded';
 
@@ -12,82 +16,90 @@ const useStyles = makeStyles((theme) => ({
 
   matTheme: {
     backgroundColor: theme.palette.background.paper,
+  },
+  blocker: {
+    background: "#b71c1c"
+  },
+  critical: {
+    background: "#e53935"
+  },
+  high: {
+    background: "#fb8c00"
+  },
+  normal: {
+    background: "#fdd835"
+  },
+  enhancement: {
+    background: "#8bc34a"
   }
-}));
+  }));
 
 
-export const BugList = ({ bugs2 }) => {
+
+export const BugList = ({ bugs, setBugs, userName }) => {
+
+  const myBugsBtn = useRef(null);
+
+  useEffect(
+  () => {
+    const getList = async () => {
+
+
+      //Prevents user from double-clicking the submit button
+      const error = (e) => {
+        console.log(e);
+      };
+      const result = await get(BUGS_ALL, error);
+      if (result) {
+        setBugs(result);
+
+        myBugsBtn.current.click();
+
+      }
+    }
+    getList()
+  }, []
+  )
+
+  const [filteredList, setFilteredList] = useState([]);
+
   const classes = useStyles();
 
-  const bugs = [
-    { 
-      id: 200,
-      title : "App Crashes in Chrome",
-      owner: "Jordon",
-      dateCreated: "04-03-2020",
-      severity: "blocker"
-    },
-    { 
-      id: 450,
-      title : "Users can't edit Comments",
-      owner: "Jordon",
-      dateCreated: "04-09-2020",
-      severity: "critical"
-    },
-    { 
-      id: 78,
-      title : "Button Scaling Issues",
-      owner: "Jordon",
-      dateCreated: "03-01-2020",
-      severity: "high"
-    },
-    { 
-      id: 28,
-      title : "Doesn't work in IE",
-      owner: "Jordon",
-      dateCreated: "02-11-2020",
-      severity: "normal"
-    },
-    { 
-      id: 367,
-      title : "Needs Hungarian Translations",
-      owner: "Jordon",
-      dateCreated: "12-14-2019",
-      severity: "enhancement"
-    },
-    { 
-      id: 10000,
-      title : "Unclassified Bug?",
-      owner: "Jordon",
-      dateCreated: "01-01-2020"
-    }
-  ]
-
-    function handleClick(bug) {
+  
+    function selectBug(bug) {
       console.log(bug);
     }
 
+    function filterBugs(assigned_to) {
+      let filtered = []
+
+      // If owner isn't specified, just use OG list. Otherwise, filter the list by owner.
+      filtered = (!assigned_to) ? bugs : bugs.filter((bug) => {return bug.assigned_to === assigned_to;})
+
+      console.log(filtered);
+      setFilteredList(filtered);
+    }
+
   return (
-      <div className={classes.matTheme}>
+    <div className={styles.bugList}>
+      <div className={styles.ownersBugs}>
+        <Button ref={myBugsBtn} className="contained" onClick={() =>filterBugs(userName)}>Assigned Bugs</Button>
+      </div>
+      <div className={styles.allBugs}>
+        <Button onClick={() =>filterBugs()}>Other Bugs</Button></div>
+      <div className={styles.bugs}>
         <List>
           {
-            bugs.map((bug, i) => (
-              <ListItem key={i} button onClick={() =>handleClick(bug)}>
+            filteredList.map((bug, i) => (
+              <ListItem key={i} button onClick={() =>selectBug(bug)}>
                 <ListItemAvatar>
-                  <Avatar style={
-                    bug.severity === "blocker" ? {background: "#b71c1c"} : 
-                    bug.severity === "critical" ? {background: "#e53935"} :
-                    bug.severity === "high" ? {background: "#fb8c00"} :
-                    bug.severity === "normal" ? {background: "#fdd835"} :
-                    bug.severity === "enhancement" ? {background: "#8bc34a"} :
-                    {background: ""}
-                  }>
+                  <Avatar className={classes[bug.severity]}>
                     <BugReportIcon></BugReportIcon>
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={bug.title}
-                  secondary={bug.owner ? `${bug.owner}` : "No Owner"}
+                  primary={bug.description}
+                  secondary={bug.assigned_to ? `${bug.assigned_to}` : "No Owner"}
                 />
                 <ListItemSecondaryAction>
                 {/*
@@ -104,5 +116,7 @@ export const BugList = ({ bugs2 }) => {
           }
         </List>
       </div>
+      
+    </div>
   );
 }

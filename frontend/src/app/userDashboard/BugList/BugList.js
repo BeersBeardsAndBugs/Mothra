@@ -1,4 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { get } from "../../../utils";
+import { BUGS_ALL } from "../../../constants";
 import { makeStyles } from '@material-ui/core/styles';
 import styles from "./BugList.module.css";
 import List from '@material-ui/core/List';
@@ -32,86 +34,47 @@ const useStyles = makeStyles((theme) => ({
   }
   }));
 
-export const BugList = ({ }) => {
+
+
+export const BugList = ({ bugs, setBugs, userName }) => {
+
+  const myBugsBtn = useRef(null);
+
+  useEffect(
+  () => {
+    const getList = async () => {
+
+
+      //Prevents user from double-clicking the submit button
+      const error = (e) => {
+        console.log(e);
+      };
+      const result = await get(BUGS_ALL, error);
+      if (result) {
+        setBugs(result);
+
+        myBugsBtn.current.click();
+
+      }
+    }
+    getList()
+  }, []
+  )
 
   const [filteredList, setFilteredList] = useState([]);
 
   const classes = useStyles();
 
-  const bugs = [
-    { 
-      id: 200,
-      title : "App Crashes in Chrome",
-      owner: "Jordon",
-      dateCreated: "04-03-2020",
-      severity: "blocker"
-    },
-    { 
-      id: 393,
-      title : "No info text on button hover",
-      owner: "Preston",
-      dateCreated: "02-11-2020",
-      severity: "normal"
-    },
-    { 
-      id: 450,
-      title : "Users can't edit Comments",
-      owner: "Jordon",
-      dateCreated: "04-09-2020",
-      severity: "critical"
-    },
-    { 
-      id: 78,
-      title : "Button Scaling Issues",
-      owner: "Jordon",
-      dateCreated: "03-01-2020",
-      severity: "high"
-    },
-    { 
-      id: 28,
-      title : "Doesn't work in IE",
-      owner: "Jordon",
-      dateCreated: "02-11-2020",
-      severity: "normal"
-    },
-    { 
-      id: 432,
-      title : "Log Out isnt Instant",
-      owner: "",
-      dateCreated: "03-11-2020",
-      severity: "high"
-    },
-    { 
-      id: 367,
-      title : "Needs Hungarian Translations",
-      owner: "Jordon",
-      dateCreated: "12-14-2019",
-      severity: "enhancement"
-    },
-    { 
-      id: 69,
-      title : "Textbox Animations Needed",
-      owner: "Alex",
-      dateCreated: "12-11-2019",
-      severity: "enhancement"
-    },
-    { 
-      id: 10000,
-      title : "Unclassified Bug?",
-      owner: "Jordon",
-      dateCreated: "01-01-2020"
-    }
-  ]
-
+  
     function selectBug(bug) {
       console.log(bug);
     }
 
-    function filterBugs(owner) {
+    function filterBugs(assigned_to) {
       let filtered = []
 
       // If owner isn't specified, just use OG list. Otherwise, filter the list by owner.
-      filtered = (!owner) ? bugs : bugs.filter((bug) => {return bug.owner === owner;})
+      filtered = (!assigned_to) ? bugs : bugs.filter((bug) => {return bug.assigned_to === assigned_to;})
 
       console.log(filtered);
       setFilteredList(filtered);
@@ -120,10 +83,10 @@ export const BugList = ({ }) => {
   return (
     <div className={styles.bugList}>
       <div className={styles.ownersBugs}>
-        <Button className="contained" onClick={() =>filterBugs('Jordon')}>Assigned Bugs</Button>
+        <Button ref={myBugsBtn} className="contained" onClick={() =>filterBugs(userName)}>Assigned Bugs</Button>
       </div>
       <div className={styles.allBugs}>
-        <Button onClick={() =>filterBugs()}>All Bugs</Button></div>
+        <Button onClick={() =>filterBugs()}>Other Bugs</Button></div>
       <div className={styles.bugs}>
         <List>
           {
@@ -135,8 +98,8 @@ export const BugList = ({ }) => {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={bug.title}
-                  secondary={bug.owner ? `${bug.owner}` : "No Owner"}
+                  primary={bug.description}
+                  secondary={bug.assigned_to ? `${bug.assigned_to}` : "No Owner"}
                 />
                 <ListItemSecondaryAction>
                 {/*

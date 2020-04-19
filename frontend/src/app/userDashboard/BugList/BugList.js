@@ -98,7 +98,7 @@ export const BugList = ({
               onClick={() => handleVisibleBugChange(bug.id)}
             >
               <ListItemAvatar>
-                <Avatar className={classes[bug.severity]}>
+                <Avatar className={classes[bug.priority]}>
                   <BugReportIcon></BugReportIcon>
                 </Avatar>
               </ListItemAvatar>

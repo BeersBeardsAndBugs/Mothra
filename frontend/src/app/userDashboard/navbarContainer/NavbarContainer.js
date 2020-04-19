@@ -1,57 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import { MobileMenu, ProfileMenu, Navbar } from "./navbar";
 import { navbarStyles } from "./navbarStyles";
+import { useMenu } from "../../../hooks";
+import { Navbar } from "./navbar";
+import { MobileMenu, ProfileMenu, NotificationsMenu } from "./menus";
 
-export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
+export const NavbarContainer = ({
+  user,
+  setUser,
+  setPageSelected,
+  handleVisibleBugChange,
+}) => {
   // ALEX TESTING
-  // use for testing notifications and messages badges
+  // use for testing notifications
   useEffect(() => {
     setUser({
       ...user,
-      messages: [
-        "You're fired.",
-        "Did I mention you are fired?",
-        "In case you missed it, you no longer work here.",
+      notifications: [
+        { bugId: 1, message: "The title has been altered." },
+        { bugId: 2, message: "Status changed" },
       ],
-      notifications: ["Status Changed to: FIRED"],
     });
   }, []);
   // ALEX TESTING
 
-  const [profileAnchorEl, setProfileAnchorEl] = useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [profileMenu] = useMenu("profile", {
+    name: user.name,
+    email: user.email,
+    logout: () => {
+      setPageSelected("login");
+      setUser(null);
+    },
+  });
+
+  const [notificationsMenu] = useMenu("profile", {
+    notifications: user.notifications,
+    handleVisibleBugChange,
+  });
+
+  const [mobileMenu] = useMenu("profile", {
+    notificationsMenuOpen: notificationsMenu.open,
+    profileMenuOpen: profileMenu.open,
+    notificationsCount: user.notifications?.length,
+  });
 
   const classes = makeStyles((theme) => navbarStyles(theme, fade))();
 
-  const isProfileMenuOpen = !!profileAnchorEl;
-  const isMobileMenuOpen = !!mobileMoreAnchorEl;
-
-  const handleProfileMenuOpen = (event) => {
-    setProfileAnchorEl(event.currentTarget);
+  const handleAllMenuClose = () => {
+    profileMenu.close();
+    notificationsMenu.close();
+    mobileMenu.close();
   };
-
-  const handleAllMenuClose = (action) => {
-    switch (action) {
-      case "logout":
-        setPageSelected("login");
-        setUser(null);
-        break;
-      default:
-        break;
-    }
-
-    setProfileAnchorEl(null);
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const profileMenuId = "primary-search-account-menu";
-
-  const mobileMenuId = "primary-search-account-menu-mobile";
 
   return (
     <div className={`${classes.grow}`}>
@@ -59,32 +58,15 @@ export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
         {...{
           classes,
           user,
-          profileMenuId,
-          handleProfileMenuOpen,
-          mobileMenuId,
-          handleMobileMenuOpen,
+          profileMenu,
+          notificationsMenu,
+          mobileMenu,
         }}
       />
-      <MobileMenu
-        {...{
-          mobileMoreAnchorEl,
-          mobileMenuId,
-          isMobileMenuOpen,
-          handleAllMenuClose,
-          handleProfileMenuOpen,
-          messages: user.messages,
-          notifications: user.notifications,
-        }}
-      />
-      <ProfileMenu
-        {...{
-          profileAnchorEl,
-          profileMenuId,
-          isProfileMenuOpen,
-          handleAllMenuClose,
-          name: user.name,
-          email: user.email,
-        }}
+      <MobileMenu {...{ ...mobileMenu.props, handleAllMenuClose }} />
+      <ProfileMenu {...{ ...profileMenu.props, handleAllMenuClose }} />
+      <NotificationsMenu
+        {...{ ...notificationsMenu.props, handleAllMenuClose }}
       />
     </div>
   );

@@ -18,12 +18,13 @@ def get_bugs_test():
         comments = []
         for comment in bug.comments:
             newcomment = {
-                'user':comment.user,
+                'user': comment.user,
                 'text': comment.text,
                 'date': comment.date
                 }
             comments.append(newcomment)      
         newbug = {
+            'id': bug.id,
             'assigned_to': bug.assigned_to,
             'creator': bug.creator,
             'name': bug.name,

@@ -20,8 +20,7 @@ def get_bugs_test():
             newcomment = {
                 'user':comment.user,
                 'text': comment.text,
-                'date': comment.date
-                }
+                'date': comment.date}
             comments.append(newcomment)      
         newbug = {
             'assigned_to': bug.assigned_to,
@@ -41,7 +40,6 @@ def comment_list():
     comments = Comment.select().get()
     return json.dumps(model_to_dict(comments))
 
-
 @app.route("/user/new/", methods=["POST"])
 def create_user():
     given = request.get_json()
@@ -56,7 +54,6 @@ def create_user():
         .get()
     )
     return json.dumps(model_to_dict(user))
-
 
 @app.route("/login/", methods=["POST"])
 def get_user():
@@ -75,7 +72,6 @@ def write_comment():
     print(given)
     comment_new = Comment.create(bug=given["bug"], user = given["user"], text=given["text"], date=dateime.now())
     comment_new.save()
-
 
 if __name__ == "__main__":
     app.run(use_reloader=True)

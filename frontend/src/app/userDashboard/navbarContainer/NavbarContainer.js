@@ -5,15 +5,20 @@ import { useMenu } from "../../../hooks";
 import { Navbar } from "./navbar";
 import { MobileMenu, ProfileMenu, NotificationsMenu } from "./menus";
 
-export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
+export const NavbarContainer = ({
+  user,
+  setUser,
+  setPageSelected,
+  handleVisibleBugChange,
+}) => {
   // ALEX TESTING
   // use for testing notifications
   useEffect(() => {
     setUser({
       ...user,
       notifications: [
-        { bugId: "1234", message: "The title has been altered." },
-        { bugId: "2345", message: "Status changed" },
+        { bugId: 1, message: "The title has been altered." },
+        { bugId: 2, message: "Status changed" },
       ],
     });
   }, []);
@@ -30,6 +35,7 @@ export const NavbarContainer = ({ user, setUser, setPageSelected }) => {
 
   const [notificationsMenu] = useMenu("profile", {
     notifications: user.notifications,
+    handleVisibleBugChange,
   });
 
   const [mobileMenu] = useMenu("profile", {

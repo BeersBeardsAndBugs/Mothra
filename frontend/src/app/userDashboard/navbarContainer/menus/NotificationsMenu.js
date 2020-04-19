@@ -9,11 +9,10 @@ export const NotificationsMenu = ({
   anchorEl,
   menuId,
   isMenuOpen,
+  handleVisibleBugChange,
 }) => {
   const handleNotificationClick = (bugid) => {
-    alert(
-      `404: You are trying to open Bug-${bugid}, but the BugDetail Component isn't finished.`
-    );
+    handleVisibleBugChange(bugid);
     handleAllMenuClose();
   };
   return (

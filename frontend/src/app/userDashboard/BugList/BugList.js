@@ -1,50 +1,48 @@
 import React, { useRef, useState, useEffect } from "react";
 import { get } from "../../../utils";
 import { BUGS_ALL } from "../../../constants";
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 import styles from "./BugList.module.css";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Button from '@material-ui/core/Button';
-import Avatar from '@material-ui/core/Avatar';
-import BugReportIcon from '@material-ui/icons/BugReportRounded';
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import ListItemText from "@material-ui/core/ListItemText";
+import Button from "@material-ui/core/Button";
+import Avatar from "@material-ui/core/Avatar";
+import BugReportIcon from "@material-ui/icons/BugReportRounded";
 
 const useStyles = makeStyles((theme) => ({
-
   matTheme: {
     backgroundColor: theme.palette.background.paper,
   },
   blocker: {
-    background: "#b71c1c"
+    background: "#b71c1c",
   },
   critical: {
-    background: "#e53935"
+    background: "#e53935",
   },
   high: {
-    background: "#fb8c00"
+    background: "#fb8c00",
   },
   normal: {
-    background: "#fdd835"
+    background: "#fdd835",
   },
   enhancement: {
-    background: "#8bc34a"
-  }
-  }));
+    background: "#8bc34a",
+  },
+}));
 
-
-
-export const BugList = ({ bugs, setBugs, userName }) => {
-
+export const BugList = ({
+  bugs,
+  setBugs,
+  userName,
+  handleVisibleBugChange,
+}) => {
   const myBugsBtn = useRef(null);
 
-  useEffect(
-  () => {
+  useEffect(() => {
     const getList = async () => {
-
-
       //Prevents user from double-clicking the submit button
       const error = (e) => {
         console.log(e);
@@ -54,54 +52,61 @@ export const BugList = ({ bugs, setBugs, userName }) => {
         setBugs(result);
 
         myBugsBtn.current.click();
-
       }
-    }
-    getList()
-  }, []
-  )
+    };
+    getList();
+  }, []);
 
   const [filteredList, setFilteredList] = useState([]);
 
   const classes = useStyles();
 
-  
-    function selectBug(bug) {
-      console.log(bug);
-    }
+  function filterBugs(assigned_to) {
+    let filtered = [];
 
-    function filterBugs(assigned_to) {
-      let filtered = []
+    // If owner isn't specified, just use OG list. Otherwise, filter the list by owner.
+    filtered = !assigned_to
+      ? bugs
+      : bugs.filter((bug) => {
+          return bug.assigned_to === assigned_to;
+        });
 
-      // If owner isn't specified, just use OG list. Otherwise, filter the list by owner.
-      filtered = (!assigned_to) ? bugs : bugs.filter((bug) => {return bug.assigned_to === assigned_to;})
-
-      console.log(filtered);
-      setFilteredList(filtered);
-    }
+    console.log(filtered);
+    setFilteredList(filtered);
+  }
 
   return (
     <div className={styles.bugList}>
       <div className={styles.ownersBugs}>
-        <Button ref={myBugsBtn} className="contained" onClick={() =>filterBugs(userName)}>Assigned Bugs</Button>
+        <Button
+          ref={myBugsBtn}
+          className="contained"
+          onClick={() => filterBugs(userName)}
+        >
+          Assigned Bugs
+        </Button>
       </div>
       <div className={styles.allBugs}>
-        <Button onClick={() =>filterBugs()}>Other Bugs</Button></div>
+        <Button onClick={() => filterBugs()}>Other Bugs</Button>
+      </div>
       <div className={styles.bugs}>
         <List>
-          {
-            filteredList.map((bug, i) => (
-              <ListItem key={i} button onClick={() =>selectBug(bug)}>
-                <ListItemAvatar>
-                  <Avatar className={classes[bug.severity]}>
-                    <BugReportIcon></BugReportIcon>
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={bug.description}
-                  secondary={bug.assigned_to ? `${bug.assigned_to}` : "No Owner"}
-                />
-                <ListItemSecondaryAction>
+          {filteredList.map((bug, i) => (
+            <ListItem
+              key={i}
+              button
+              onClick={() => handleVisibleBugChange(bug.id)}
+            >
+              <ListItemAvatar>
+                <Avatar className={classes[bug.severity]}>
+                  <BugReportIcon></BugReportIcon>
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={bug.description}
+                secondary={bug.assigned_to ? `${bug.assigned_to}` : "No Owner"}
+              />
+              <ListItemSecondaryAction>
                 {/*
                   Keeping this here in case we want to include something in future
 
@@ -110,13 +115,11 @@ export const BugList = ({ bugs, setBugs, userName }) => {
                   </IconButton>
 
                 */}
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))
-          }
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
         </List>
       </div>
-      
     </div>
   );
-}
+};

@@ -59,7 +59,6 @@ def get_user():
     else:
         return content, status.HTTP_404_NOT_FOUND
 
-
 @app.route("/comment/", methods=["POST"])
 def write_comment():
     given = request.get_json()

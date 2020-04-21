@@ -1,8 +1,41 @@
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import PersonAddIcon from '@material-ui/icons/PersonAddOutlined';
 import React, { useRef, useState } from "react";
-import { post } from "../../utils";
 import { CREATE_USER } from "../../constants";
 import { useForm } from "../../hooks";
-import { Input } from "../_shared";
+import { post } from "../../utils";
+
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
+
+
 
 export const SignupForm = ({ setPageSelected, setUser }) => {
   const EMAIL = "email";
@@ -55,12 +88,101 @@ export const SignupForm = ({ setPageSelected, setUser }) => {
     }
   };
 
-  const { handleSubmit, handleOnChange, inputs, isSubmitDisabled } = useForm(
+  const { handleSubmit, handleOnChange, inputs, isSubmitDisabled, userName, email, password } = useForm(
     inputsSchema,
     doLogin
   );
 
+  const classes = useStyles();
+
   return (
+
+    <Container component="main" maxWidth="xs">
+    <CssBaseline />
+    <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <PersonAddIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign Up
+        </Typography>
+        <form className={classes.form} noValidate>
+        <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="name"
+            label="Name"
+            name={NAME}
+            autoFocus 
+            value = {inputs[NAME].value}
+            onChange={handleOnChange}
+          />
+          <TextField 
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name={EMAIL}
+            autoComplete="email" 
+            value = {inputs[EMAIL].value}
+            onChange={handleOnChange}
+          />
+          <TextField 
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            value = {inputs[PASSWORD].value}
+            onChange={handleOnChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            id="confirmPassword"
+            inputProps={{ref: confirmPassword}}
+            onBlur= {() => setIsPasswordConfirmed(
+              confirmPassword.current.value === inputs[PASSWORD].value
+            )}
+          />
+          {isPasswordConfirmed || (
+            <FormHelperText error>
+              Passwords do not match.
+            </FormHelperText>
+        )}
+          <Button disabled={isSubmitDisabled}
+           onClick={handleSubmit}
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Submit
+          </Button>
+          <Grid container>
+            <Grid item>
+              <Link href="#" onClick={() => setPageSelected("login")}>
+                {"Already have an account? Log In"}
+              </Link>
+            </Grid>
+          </Grid>
+
+          </form>
+
+{/*
     <form className="loginForm" onSubmit={handleSubmit}>
       Log In
       <Input {...{ input: inputs[EMAIL], handleOnChange }} />
@@ -106,5 +228,10 @@ export const SignupForm = ({ setPageSelected, setUser }) => {
         Log In
       </button>
     </form>
+
+    */}
+    
+    </div>
+    </Container>
   );
 };

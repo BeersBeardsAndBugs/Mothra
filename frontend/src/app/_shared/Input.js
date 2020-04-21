@@ -11,7 +11,7 @@ export const Input = ({ input, handleOnChange }) => {
         name={input.name}
         onChange={handleOnChange}
       />
-      <div style={{ color: "red", fontSize: "1rem" }}>{input.error}</div>
+      <div style={{ color: "red"}}>{input.error}</div>
     </div>
   );
 };

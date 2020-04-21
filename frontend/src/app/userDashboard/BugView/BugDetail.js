@@ -203,7 +203,7 @@ export const BugDetail = ({ visibleBug, userEmail }) => {
                             <Box>{comment[COMMENT.DATE]}</Box>
                         </Box>
                         <Box>
-                            <div>{comment[COMMENT.TEXT]}</div>
+                            <Box>{comment[COMMENT.TEXT]}</Box>
                         </Box>
                     </Box>
                 )

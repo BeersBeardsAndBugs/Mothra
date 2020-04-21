@@ -13,32 +13,20 @@ def new_user_data_ep():
 @app.route("/bugs/all")
 def get_bugs_test():
     bugs = Bug.select()
-    bugsarray =[]        
+    bug_list =[]        
     for bug in bugs:
         comments = []
         for comment in bug.comments:
-            newcomment = {
-                'user':comment.user,
-                'text': comment.text,
-                'date': comment.date}
-            comments.append(newcomment)      
-        newbug = {
-            'assigned_to': bug.assigned_to,
-            'creator': bug.creator,
-            'name': bug.name,
-            'description': bug.description,
-            'created_date': bug.created_date,
-            'updated_last': bug.updated_last,
-            'priority': bug.priority,
-            'status': bug.status,
-            'comments': (comments)}
-        bugsarray.append(newbug)
-    return json.dumps(bugsarray)
-
-@app.route("/comments/all")
-def comment_list():
-    comments = Comment.select().get()
-    return json.dumps(model_to_dict(comments))
+            comment = model_to_dict(comment)
+# JORDON COMMENT. DELETE BEFORE MERGE
+# Deleting the key "bug" from comment in this step to prevent an entire instance of 'bug' from populating the api. 
+# *Shakes fist at peewee*
+            del comment["bug"]
+            comments.append(comment)
+        bug = model_to_dict(bug)
+        bug.update({'comments': comments})
+        bug_list.append(bug)
+    return json.dumps(bug_list)
 
 @app.route("/user/new/", methods=["POST"])
 def create_user():
@@ -58,7 +46,6 @@ def create_user():
 @app.route("/login/", methods=["POST"])
 def get_user():
     given = request.get_json()
-    print(given)
     user = (
         User.select()
         .where(User.email == given["email"] and User.password == given["password"])
@@ -66,12 +53,16 @@ def get_user():
     )
     return json.dumps(model_to_dict(user))
 
-@app.route("/bug/comment", methods=["POST"])
+@app.route("/comment", methods=["POST"])
 def write_comment():
     given = request.get_json()
-    print(given)
     comment_new = Comment.create(bug=given["bug"], user = given["user"], text=given["text"], date=dateime.now())
     comment_new.save()
+
+@app.route("/comment/<id>/delete", methods=["POST"])
+def delete_comment(param_id):
+    comment = Comment.select().where(Comment.id == param_id).get()
+    comment.delete_instance()
 
 if __name__ == "__main__":
     app.run(use_reloader=True)

@@ -2,20 +2,27 @@ import React, { useRef, useState, useEffect } from "react";
 import { get } from "../../../utils";
 import { BUGS_ALL } from "../../../constants";
 import { makeStyles } from "@material-ui/core/styles";
-import styles from "./BugList.module.css";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Avatar from "@material-ui/core/Avatar";
 import BugReportIcon from "@material-ui/icons/BugReportRounded";
+import Grid from '@material-ui/core/Grid';
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  matTheme: {
-    backgroundColor: theme.palette.background.paper,
+
+  root: {
   },
+
+  listStyle: {
+    color: 'black'
+  },
+
   blocker: {
     background: "#b71c1c",
   },
@@ -61,36 +68,44 @@ export const BugList = ({
 
   const classes = useStyles();
 
-  function filterBugs(assigned_to) {
+  function filterBugs(assigned_to, forOwner) {
     let filtered = [];
 
-    // If owner isn't specified, just use OG list. Otherwise, filter the list by owner.
-    filtered = !assigned_to
-      ? bugs
-      : bugs.filter((bug) => {
-          return bug.assigned_to === assigned_to;
-        });
+    if (forOwner) {
+      filtered = bugs.filter((bug) => {
+        return bug.assigned_to === assigned_to
+      });
+    } else {
+      filtered = bugs.filter((bug) => {
+        return bug.assigned_to != assigned_to
+      });
+    }
+
 
     console.log(filtered);
     setFilteredList(filtered);
   }
 
   return (
-    <div className={styles.bugList}>
-      <div className={styles.ownersBugs}>
-        <Button
+
+     <Grid container spacing={1} alignItems="center" justify="center">
+      <Grid item xs={6}>
+        <ButtonGroup>
+        <Button fullWidth color="secondary" variant="contained"
           ref={myBugsBtn}
-          className="contained"
-          onClick={() => filterBugs(userName)}
-        >
-          Assigned Bugs
+          onClick={() => filterBugs(userName, true)}>
+              Assigned Bugs
         </Button>
-      </div>
-      <div className={styles.allBugs}>
-        <Button onClick={() => filterBugs()}>Other Bugs</Button>
-      </div>
-      <div className={styles.bugs}>
-        <List>
+        <Button fullWidth color="secondary" variant="contained"
+          onClick={() => filterBugs(userName, false)}>
+            <Typography variant="button">
+              Other Bugs
+            </Typography>
+        </Button>
+        </ButtonGroup>
+      </Grid>
+      <Grid item xs={10}>
+        <List className={classes.listStyle}>
           {filteredList.map((bug, i) => (
             <ListItem
               key={i}
@@ -98,7 +113,7 @@ export const BugList = ({
               onClick={() => handleVisibleBugChange(bug.id)}
             >
               <ListItemAvatar>
-                <Avatar className={classes[bug.severity]}>
+                <Avatar className={classes[bug.priority]}>
                   <BugReportIcon></BugReportIcon>
                 </Avatar>
               </ListItemAvatar>
@@ -119,7 +134,8 @@ export const BugList = ({
             </ListItem>
           ))}
         </List>
-      </div>
-    </div>
+      </Grid>
+    </Grid>
+
   );
 };

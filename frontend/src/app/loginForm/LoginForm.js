@@ -1,12 +1,45 @@
-import React from "react";
-import { post } from "../../utils";
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import React, { useState } from "react";
 import { GET_USER } from "../../constants";
 import { useForm } from "../../hooks";
-import { Input } from "../_shared";
+import { post } from "../../utils";
 
-export const LoginForm = ({ setPageSelected, setUser }) => {
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
+
+export const LoginForm = ({ setPageSelected, setUser, setError }) => {
   const EMAIL = "email";
   const PASSWORD = "password";
+  const [hasError, setHasError] = useState(false);
 
   const inputsSchema = {
     [EMAIL]: {
@@ -32,43 +65,115 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
     //Prevents user from double-clicking the submit button
     const error = (e) => {
       console.log(e);
+      setHasError(true);
     };
     const result = await post(GET_USER, body, error);
+
+    console.log(result);
     isSubmitDisabled(false);
     if (result) {
       setUser(result);
       setPageSelected("homepage");
     }
+    else {
+      setHasError(true);
+    }
   };
 
-  const { handleSubmit, handleOnChange, inputs, isSubmitDisabled } = useForm(
+  const { handleSubmit, handleOnChange, isSubmitDisabled, email, password } = useForm(
     inputsSchema,
     doLogin
   );
 
-  return (
-    <form className="loginForm" onSubmit={handleSubmit}>
-      Log In
-      <Input {...{ input: inputs[EMAIL], handleOnChange }} />
-      Password
-      <Input {...{ input: inputs[PASSWORD], handleOnChange }} />
-      <div className="submitButton">
-        <button
-          type="submit"
-          name="submit"
-          className="btn"
-          disabled={isSubmitDisabled}
-          onClick={handleSubmit}
-        >
-          Login
-        </button>
+  const classes = useStyles();
+
+  /*
+  export const Input = ({ input, handleOnChange }) => {
+    return (
+      <div className="inputField">
+        <input
+          className="input"
+          type={input.type || "text"}
+          placeholder={input.name}
+          value={input.value}
+          name={input.name}
+          onChange={handleOnChange}
+        />
+        <div style={{ color: "red"}}>{input.error}</div>
       </div>
-      <button
-        className="login-signup-btn"
-        onClick={() => setPageSelected("signup")}
-      >
-        Sign Up
-      </button>
-    </form>
+    );
+*/
+
+  return (
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <form className={classes.form} noValidate>
+          <TextField {...{ input: inputsSchema[EMAIL], handleOnChange }}
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus 
+            value = {email}
+            onChange={handleOnChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value = {password}
+            onChange={handleOnChange}
+          />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
+
+        {hasError && (
+            <FormHelperText error>
+              Invalid Username or Password
+            </FormHelperText>
+        )}
+
+          <Button disabled={isSubmitDisabled}
+           onClick={handleSubmit}
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item>
+              <Link href="#" onClick={() => setPageSelected("signup")}>
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+    </Container>
   );
+
 };
+
+

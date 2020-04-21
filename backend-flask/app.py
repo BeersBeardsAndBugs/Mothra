@@ -19,11 +19,7 @@ def get_bugs_test():
     for bug in bugs:
         comments = []
         for comment in bug.comments:
-
             comment = model_to_dict(comment)
-# JORDON COMMENT. DELETE BEFORE MERGE
-# Deleting the key "bug" from comment in this step to prevent an entire instance of 'bug' from populating the api. 
-# *Shakes fist at peewee*
             del comment["bug"]
             comments.append(comment)
         bug = model_to_dict(bug)

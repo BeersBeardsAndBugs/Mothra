@@ -10,7 +10,10 @@ export const post = async (path, body, error) => {
       body: JSON.stringify(body),
     });
     console.log("res", res);
-    const json = res.json();
+    if (res.status !== 200) {
+     return null; 
+    };
+    const json = await res.json();
     return json;
   } catch (e) {
     console.log("Caught Error!");
@@ -26,7 +29,12 @@ export const get = async (path, error) => {
         "Content-Type": "application/json",
       },
     });
-    return res.json();
+    console.log("res", res);
+    if (res.status !== 200) {
+     return null; 
+    };
+    const json = await res.json();
+    return json;
   } catch (e) {
     console.log("Caught Error!");
     error(e);

@@ -1,48 +1,39 @@
 import React from "react";
-import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
-import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import Menu from "@material-ui/core/Menu";
 
 export const MobileMenu = ({
-  mobileMoreAnchorEl,
-  mobileMenuId,
-  isMobileMenuOpen,
+  notificationsMenuOpen,
+  profileMenuOpen,
+  notificationsCount,
+  anchorEl,
+  menuId,
+  isMenuOpen,
   handleAllMenuClose,
-  handleProfileMenuOpen,
-  messages,
-  notifications,
 }) => {
   return (
     <Menu
-      anchorEl={mobileMoreAnchorEl}
+      anchorEl={anchorEl}
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={mobileMenuId}
+      id={menuId}
       keepMounted
       transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMobileMenuOpen}
+      open={isMenuOpen}
       onClose={handleAllMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 4 new messagess" color="inherit">
-          <Badge badgeContent={messages?.length} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={notificationsMenuOpen}>
         <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={notifications?.length} color="secondary">
+          <Badge badgeContent={notificationsCount} color="secondary">
             <NotificationsIcon />
           </Badge>
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem onClick={profileMenuOpen}>
         <IconButton
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"

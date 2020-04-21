@@ -3,6 +3,7 @@ from models import *
 import datetime
 import json
 from playhouse.shortcuts import model_to_dict, dict_to_model
+from helper import *
 
 app = Flask(__name__)
 
@@ -17,6 +18,7 @@ def get_bugs_test():
     for bug in bugs:
         comments = []
         for comment in bug.comments:
+
             comment = model_to_dict(comment)
 # JORDON COMMENT. DELETE BEFORE MERGE
 # Deleting the key "bug" from comment in this step to prevent an entire instance of 'bug' from populating the api. 
@@ -56,13 +58,58 @@ def get_user():
 @app.route("/comment", methods=["POST"])
 def write_comment():
     given = request.get_json()
-    comment_new = Comment.create(bug=given["bug"], user = given["user"], text=given["text"], date=dateime.now())
+    comment_new = Comment.create(bug=given["bug"], user = given["user"], text=given["text"], date=datetime.datetime.now())
     comment_new.save()
+    create_notification(given["bug"], given["text"])
+    return "No Problems =)"
 
-@app.route("/comment/<id>/delete", methods=["POST"])
+@app.route("/comment/<param_id>/delete", methods=["POST"])
 def delete_comment(param_id):
     comment = Comment.select().where(Comment.id == param_id).get()
     comment.delete_instance()
+    return "deleted"
+
+@app.route("/notification/new", methods=["POST"])
+def create_notification():
+    given = request.get_json()
+    bug_id = given["bug_id"]
+    text = given["text"]
+    date = datetime.datetime.now()
+    notification_new = Notification.create(bug_id=bug_id, text=text, date=date)
+    notification_new.save()
+    return "saved"
+
+@app.route("/notification/<param_id>", methods=["POST"])
+def check_notification(param_id):
+    notification = Notification.select().where(Notification.id == id).get()
+    notification.checked = True
+    notification.save()
+    return "saved"
+
+@app.route("/notifications/<params_user_id>")
+def get_notifications(params_user_id):
+    notification_list = []
+    watchers = Watcher.select().where(Watcher.user_id == params_user_id)
+    for watcher in watchers:
+        notifications = Notification.select().where(Notification.bug_id == watcher.bug_id)
+        for notification in notifications:
+            notification_list.append(model_to_dict(notification))
+    return json.dumps(notification_list)
+
+@app.route("/watcher/new", methods=["POST"])
+def add_watcher():
+    given = request.get_json()
+    bug_id = given["bug_id"]
+    user_id = given["user_id"]
+    watcher_new = Watcher.create(bug_id=bug_id, user_id=user_id)
+    watcher_new.save()
+    return "saved"
+
+@app.route("/watcher/<param_id>/delete", methods=["POST"])
+def remove_watcher(param_id):
+    watcher = Watcher.select().where(Watcher.id == param_id).get()
+    watcher.delete_instance()
+    return "deleted"
 
 if __name__ == "__main__":
     app.run(use_reloader=True)

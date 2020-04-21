@@ -34,7 +34,8 @@ def get_bugs_test():
             'updated_last': bug.updated_last,
             'priority': bug.priority,
             'status': bug.status,
-            'comments': (comments)}
+            'comments': (comments),
+            'title': bug.title}
         bugsarray.append(newbug)
     return json.dumps(bugsarray)
 

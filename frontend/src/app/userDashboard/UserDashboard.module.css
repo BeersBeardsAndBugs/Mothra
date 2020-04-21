@@ -1,33 +1,35 @@
 .userDashboard {
-  width: calc(100% - var(--blank-space-margins));
-  height: calc(100% - var(--blank-space-margins));
-  background-color: var(--blank-space-color);
-  display: grid;
-  grid-template-columns: 30% auto;
-  grid-template-rows: 10% auto;
-  grid-template-areas:  "navbar navbar "
-                        "buglist bugviews";
-  gap: var(--blank-space-margins);
+    width: calc(100% - var(--blank-space-margins));
+    height: calc(100% - var(--blank-space-margins));
+    background-color: var(--blank-space-color);
+    display: grid;
+    grid-template-columns: 30% auto;
+    grid-template-rows: 10% auto;
+    grid-template-areas:
+        'navbar navbar '
+        'buglist bugviews';
+    gap: var(--blank-space-margins);
 }
 
 .navbar,
-.buglist,
-.bugviews {
+.buglist {
     text-align: center;
     color: var(--primary-font-color);
     font-size: var(--primary-font-size);
 }
 
 .navbar {
-  background-color: lightblue;
-  grid-area: navbar;
+    background-color: lightblue;
+    grid-area: navbar;
 }
 
 .buglist {
-  grid-area: buglist;
+    grid-area: buglist;
 }
 
 .bugviews {
-  background-color: #2566D5;
-  grid-area: bugviews;
+    background: #fff;
+    grid-area: bugviews;
+    color: var(--primary-font-color);
+    font-size: var(--primary-font-size);
 }

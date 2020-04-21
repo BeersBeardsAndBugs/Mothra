@@ -1,5 +1,4 @@
-import { createMuiTheme, withTheme } from "@material-ui/core/styles";
-import {white } from "@material-ui/core/colors/";
+import { createMuiTheme } from "@material-ui/core/styles";
 
 /**
  * Material Theme Settings
@@ -22,9 +21,7 @@ const theme = createMuiTheme({
           main: '#66bb6a',
         },
 
-        error : {
-          main: '#f44336',
-        },
+
 
         // More color settings
         contrastThreshold: 2,

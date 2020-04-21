@@ -1,21 +1,18 @@
-import React, { useRef, useState } from "react";
-import { post } from "../../utils";
-import { CREATE_USER } from "../../constants";
-import { useForm } from "../../hooks";
-import { Input } from "../_shared";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import PersonAddIcon from '@material-ui/icons/PersonAddOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import PersonAddIcon from '@material-ui/icons/PersonAddOutlined';
+import React, { useRef, useState } from "react";
+import { CREATE_USER } from "../../constants";
+import { useForm } from "../../hooks";
+import { post } from "../../utils";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -110,31 +107,31 @@ export const SignupForm = ({ setPageSelected, setUser }) => {
           Sign Up
         </Typography>
         <form className={classes.form} noValidate>
-        <TextField {...{ input: inputsSchema[NAME], handleOnChange }}
+        <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="userName"
-            label="User Name"
-            name="userName"
+            id="name"
+            label="Name"
+            name={NAME}
             autoFocus 
-            value = {userName}
+            value = {inputs[NAME].value}
             onChange={handleOnChange}
           />
-          <TextField {...{ input: inputsSchema[EMAIL], handleOnChange }}
+          <TextField 
             variant="outlined"
             margin="normal"
             required
             fullWidth
             id="email"
             label="Email Address"
-            name="email"
+            name={EMAIL}
             autoComplete="email" 
-            value = {email}
+            value = {inputs[EMAIL].value}
             onChange={handleOnChange}
           />
-          <TextField {...{ input: inputsSchema[PASSWORD], handleOnChange }}
+          <TextField 
             variant="outlined"
             margin="normal"
             required
@@ -143,7 +140,7 @@ export const SignupForm = ({ setPageSelected, setUser }) => {
             label="Password"
             type="password"
             id="password"
-            value = {password}
+            value = {inputs[PASSWORD].value}
             onChange={handleOnChange}
           />
           <TextField
@@ -155,8 +152,8 @@ export const SignupForm = ({ setPageSelected, setUser }) => {
             label="Confirm Password"
             type="password"
             id="confirmPassword"
-            value = {confirmPassword}
-            onChange= {handleOnChange, () => setIsPasswordConfirmed(
+            inputProps={{ref: confirmPassword}}
+            onBlur= {() => setIsPasswordConfirmed(
               confirmPassword.current.value === inputs[PASSWORD].value
             )}
           />

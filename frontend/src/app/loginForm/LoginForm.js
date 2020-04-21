@@ -1,20 +1,20 @@
-import React, { useRef, useState } from "react";
-import { post } from "../../utils";
-import { GET_USER } from "../../constants";
-import { useForm } from "../../hooks";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import React, { useState } from "react";
+import { GET_USER } from "../../constants";
+import { useForm } from "../../hooks";
+import { post } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 export const LoginForm = ({ setPageSelected, setUser, setError }) => {
   const EMAIL = "email";
   const PASSWORD = "password";
+  const [hasError, setHasError] = useState(false);
 
   const inputsSchema = {
     [EMAIL]: {
@@ -64,12 +65,18 @@ export const LoginForm = ({ setPageSelected, setUser, setError }) => {
     //Prevents user from double-clicking the submit button
     const error = (e) => {
       console.log(e);
+      setHasError(true);
     };
     const result = await post(GET_USER, body, error);
+
+    console.log(result);
     isSubmitDisabled(false);
     if (result) {
       setUser(result);
       setPageSelected("homepage");
+    }
+    else {
+      setHasError(true);
     }
   };
 
@@ -138,6 +145,12 @@ export const LoginForm = ({ setPageSelected, setUser, setError }) => {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
+
+        {hasError && (
+            <FormHelperText error>
+              Invalid Username or Password
+            </FormHelperText>
+        )}
 
           <Button disabled={isSubmitDisabled}
            onClick={handleSubmit}

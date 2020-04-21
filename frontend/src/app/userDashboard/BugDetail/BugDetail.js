@@ -1,24 +1,21 @@
-import React, { useState } from 'react'
-import { useForm } from '../../../hooks'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
 import Box from '@material-ui/core/Box'
-import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
+import Grid from '@material-ui/core/Grid'
 import MenuItem from '@material-ui/core/MenuItem'
+import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
+import Typography from '@material-ui/core/Typography'
+import React, { useState } from 'react'
+import { BUG, COMMENT, OPTIONS_BUG_PRIORITY, PATH_NEW_COMMENT } from '../../../constants'
+import { useForm } from '../../../hooks'
 import { post } from '../../../utils'
-import {
-    PATH_NEW_COMMENT,
-    BUG,
-    COMMENT,
-    OPTIONS_BUG_PRIORITY,
-} from '../../../constants'
 
 const useStyles = makeStyles((theme) => ({
-    bugDetail: {
-        padding: '1rem',
-    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+      },
+
 }))
 
 export const BugDetail = ({ visibleBug, userEmail }) => {
@@ -72,9 +69,11 @@ export const BugDetail = ({ visibleBug, userEmail }) => {
         }
     }
     return (
-        <div className={classes.bugDetail}>
-            <form
-                className="bugDetail_form"
+        <Grid container xs={12}>
+
+
+
+            <form className={classes.form}
                 onSubmit={handleSubmit}
                 autocomplete="off"
             >
@@ -222,6 +221,7 @@ export const BugDetail = ({ visibleBug, userEmail }) => {
                     Save Comment
                 </Button>
             </form>
-        </div>
+
+        </Grid>
     )
 }

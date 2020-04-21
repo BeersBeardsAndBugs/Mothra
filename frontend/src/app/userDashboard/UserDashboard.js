@@ -1,9 +1,9 @@
+import Grid from "@material-ui/core/Grid";
 import React, { useState } from "react";
-import styles from "./UserDashboard.module.css";
-import { BugDetail } from "./BugView/BugDetail";
+import { BugDetail } from "./BugDetail";
 import { BugList } from "./BugList";
 import { NavbarContainer } from "./navbarContainer";
-import Grid from "@material-ui/core/Grid";
+import styles from "./UserDashboard.module.css";
 
 export const UserDashboard = ({ user, setUser, setPageSelected }) => {
     const [bugs, setBugs] = useState([])

@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
   },
 
   listStyle: {
-    backgroundColor: 'white',
     color: 'black'
   },
 
@@ -88,9 +87,9 @@ export const BugList = ({
   }
 
   return (
-    <div className={classes.root}>
-     <Grid container spacing={3}>
-      <Grid item xs={12}>
+
+     <Grid container spacing={1} alignItems="center" justify="center">
+      <Grid item xs={6}>
         <ButtonGroup>
         <Button fullWidth color="secondary" variant="contained"
           ref={myBugsBtn}
@@ -105,7 +104,7 @@ export const BugList = ({
         </Button>
         </ButtonGroup>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={10}>
         <List className={classes.listStyle}>
           {filteredList.map((bug, i) => (
             <ListItem
@@ -137,6 +136,6 @@ export const BugList = ({
         </List>
       </Grid>
     </Grid>
-  </div>
+
   );
 };

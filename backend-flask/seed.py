@@ -12,9 +12,7 @@ bug1 = Bug(creator='jordon', assigned_to='preston', name='bug1', priority='high'
 bug1.save()
 bug2 = Bug(creator='alex', assigned_to='preston', name='bug2', priority='low', description='im broke too', created_date='1-1-2020', updated_last='1-3-2020', status='in progress')
 bug2.save()
-bug3 = Bug(creator='preston', assigned_to='jordon', name='bug3', priority='critical',
- description='BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE BROKE ',
- created_date='1-1-2020', updated_last='1-3-2020', status='in progress')
+bug3 = Bug(creator='preston', assigned_to='jordon', name='bug3', priority='critical', description='Broked.', created_date='1-1-2020', updated_last='1-3-2020', status='in progress')
 bug3.save()
 
 

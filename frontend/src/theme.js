@@ -52,7 +52,7 @@ const theme = createMuiTheme({
             letterSpacing: "0.00938em"
           },
         body2: {
-            fontSize: "14px",
+            fontSize: "25px",
             lineHeight: 1.43,
             letterSpacing: "0.01071em"
           }

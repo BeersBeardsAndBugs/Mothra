@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { post } from "../../utils";
 import { GET_USER } from "../../constants";
 import { useForm } from "../../hooks";
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const LoginForm = ({ setPageSelected, setUser }) => {
+export const LoginForm = ({ setPageSelected, setUser, setError }) => {
   const EMAIL = "email";
   const PASSWORD = "password";
 
@@ -73,7 +73,7 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
     }
   };
 
-  const { handleSubmit, handleOnChange, inputs, isSubmitDisabled, email, password } = useForm(
+  const { handleSubmit, handleOnChange, isSubmitDisabled, email, password } = useForm(
     inputsSchema,
     doLogin
   );
@@ -96,11 +96,6 @@ export const LoginForm = ({ setPageSelected, setUser }) => {
       </div>
     );
 */
-
-function handOnChange() {
-
-  isSubmitDisabled = false;
-}
 
   return (
     <Container component="main" maxWidth="xs">

@@ -22,6 +22,10 @@ const theme = createMuiTheme({
           main: '#66bb6a',
         },
 
+        error : {
+          main: '#f44336',
+        },
+
         // More color settings
         contrastThreshold: 2,
         tonalOffset: 0.2,
@@ -29,26 +33,26 @@ const theme = createMuiTheme({
 
       // Adjust Font size and appearence here
       typography: {
-        htmlFontSize: "1.2rem",
+        htmlFontSize: "20px",
         fontFamily: ["Roboto", "Helvetica", "Arial", "sans-serif"],
-        fontSize: "1.2rem",
+        fontSize: "20px",
         fontWeightLight: 500,
         fontWeightRegular: 600,
         fontWeightMedium: 700,
         fontWeightBold: 900,
 
         h1: {
-            fontSize: "6rem",
+            fontSize: "40px",
             lineHeight: 1.167,
             letterSpacing: "-0.01562em",
         },
         body1: {
-            fontSize: "1.3rem",
+            fontSize: "20px",
             lineHeight: 1.5,
             letterSpacing: "0.00938em"
           },
         body2: {
-            fontSize: "1.2rem",
+            fontSize: "14px",
             lineHeight: 1.43,
             letterSpacing: "0.01071em"
           }

@@ -40,6 +40,6 @@ class Notification(BaseModel):
   date = CharField(null=False)
   checked = BooleanField(null=False, default=False)  
  
-
 db.connect()
 db.create_tables([User, Bug, Comment, Watcher, Notification])
+

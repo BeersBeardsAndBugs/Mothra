@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "venv\\Scripts\\python.exe",
+    "python.pythonPath": "/usr/local/bin/python3",
     "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

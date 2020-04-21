@@ -1,4 +1,5 @@
-from flask import request, Flask
+from flask import request, Flask, render_template
+from flask_api import status
 from models import *
 import datetime
 import json
@@ -53,9 +54,13 @@ def get_user():
         .where(User.email == given["email"] and User.password == given["password"])
         .get()
     )
-    return json.dumps(model_to_dict(user))
+    if user.exists():
+        return json.dumps(model_to_dict(user))
+    else:
+        return content, status.HTTP_404_NOT_FOUND
 
-@app.route("/comment", methods=["POST"])
+
+@app.route("/comment/", methods=["POST"])
 def write_comment():
     given = request.get_json()
     comment_new = Comment.create(bug=given["bug"], user = given["user"], text=given["text"], date=datetime.datetime.now())
@@ -63,30 +68,31 @@ def write_comment():
     create_notification(given["bug"], given["text"])
     return "No Problems =)"
 
-@app.route("/comment/<param_id>/delete", methods=["POST"])
+@app.route("/comment/<param_id>/delete/", methods=["POST"])
 def delete_comment(param_id):
     comment = Comment.select().where(Comment.id == param_id).get()
     comment.delete_instance()
     return "deleted"
 
-@app.route("/notification/new", methods=["POST"])
+@app.route("/notification/new/", methods=["POST"])
 def create_notification():
-    given = request.get_json()
+    given = request.form
     bug_id = given["bug_id"]
     text = given["text"]
     date = datetime.datetime.now()
     notification_new = Notification.create(bug_id=bug_id, text=text, date=date)
     notification_new.save()
-    return "saved"
+    created = Notification.select().where(Notification.text == text).get()
+    return model_to_dict(created)
 
-@app.route("/notification/<param_id>", methods=["POST"])
+@app.route("/notification/<param_id>/", methods=["POST"])
 def check_notification(param_id):
     notification = Notification.select().where(Notification.id == id).get()
     notification.checked = True
     notification.save()
     return "saved"
 
-@app.route("/notifications/<params_user_id>")
+@app.route("/notifications/<params_user_id>/")
 def get_notifications(params_user_id):
     notification_list = []
     watchers = Watcher.select().where(Watcher.user_id == params_user_id)
@@ -96,7 +102,7 @@ def get_notifications(params_user_id):
             notification_list.append(model_to_dict(notification))
     return json.dumps(notification_list)
 
-@app.route("/watcher/new", methods=["POST"])
+@app.route("/watcher/new/", methods=["POST"])
 def add_watcher():
     given = request.get_json()
     bug_id = given["bug_id"]
@@ -105,11 +111,15 @@ def add_watcher():
     watcher_new.save()
     return "saved"
 
-@app.route("/watcher/<param_id>/delete", methods=["POST"])
+@app.route("/watcher/<param_id>/delete/", methods=["POST"])
 def remove_watcher(param_id):
     watcher = Watcher.select().where(Watcher.id == param_id).get()
     watcher.delete_instance()
     return "deleted"
+
+@app.route("/testforms/")
+def testforms():
+    return render_template("testforms.html")
 
 if __name__ == "__main__":
     app.run(use_reloader=True)

@@ -12,16 +12,16 @@ Also encourages us to standardize properties so we don't have to individually tw
   --blank-space-color: #282c34;
   --blank-space-margins: 5%;
 
-  --title-font-size: 1.3em;
+  --title-font-size: 20px;
   --title-font-color: white;
 
-  --primary-font-size: 1em;
+  --primary-font-size: 20px;
   --primary-font-color: #1e2127de;
 
-  --placeholder-font-size: 1em;
+  --placeholder-font-size: 20px;
   --placeholder-font-color: #1e2127ab;
 
-  --link-font-size: 0.8em;
+  --link-font-size: 20px;
   --link-font-color: #1189de;
 
   /* Buttons and Input forms */

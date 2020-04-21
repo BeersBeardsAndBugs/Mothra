@@ -1,6 +1,6 @@
 .userDashboard {
-  width: calc(100% - var(--blank-space-margins));
-  height: calc(100% - var(--blank-space-margins));
+  width: 100%;
+  height: 100%;
   background-color: var(--blank-space-color);
   display: grid;
   grid-template-columns: 30% auto;

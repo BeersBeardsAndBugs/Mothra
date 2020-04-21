@@ -90,6 +90,24 @@ export const BugDetail = ({ visibleBug }) => {
         </button>
       </form>
       {/* <input value={inputs.title} onChange={ handleOnChange} onBlur={handleOnBlur}/> */}
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
+      <div>SPACE</div>
     </div>
   );
 };

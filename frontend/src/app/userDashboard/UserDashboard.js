@@ -6,18 +6,18 @@ import { NavbarContainer } from "./navbarContainer";
 import Grid from "@material-ui/core/Grid";
 
 export const UserDashboard = ({ user, setUser, setPageSelected }) => {
-  const [bugs, setBugs] = useState([]);
-  const [visibleBug, setVisibleBug] = useState({});
+    const [bugs, setBugs] = useState([])
+    const [visibleBug, setVisibleBug] = useState({})
 
-  const handleVisibleBugChange = (bugId) => {
-    const foundBugs = bugs.filter((bug) => bug.id === bugId);
-    if (foundBugs.length === 1) {
-      setVisibleBug((prevState) => ({
-        ...prevState,
-        ...foundBugs[0],
-      }));
+    const handleVisibleBugChange = (bugId) => {
+        const foundBugs = bugs.filter((bug) => bug.id === bugId)
+        if (foundBugs.length === 1) {
+            setVisibleBug((prevState) => ({
+                ...prevState,
+                ...foundBugs[0],
+            }))
+        }
     }
-  };
 
   return (
 
@@ -29,7 +29,7 @@ export const UserDashboard = ({ user, setUser, setPageSelected }) => {
         <BugList {...{ bugs, setBugs, userName: user.name, handleVisibleBugChange }}/>
       </Grid>
       <Grid container item xs={9} className={styles.bugviews}>
-        {visibleBug?.id && (<BugDetail key={visibleBug.id} {...{ visibleBug }} />)}
+        {visibleBug?.id && (<BugDetail key={visibleBug.id} {...{ visibleBug, userEmail: user.email  }} />)}
       </Grid>
     
 {/*

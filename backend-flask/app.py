@@ -3,6 +3,7 @@ from models import *
 import datetime
 import json
 from playhouse.shortcuts import model_to_dict, dict_to_model
+from helper import *
 
 app = Flask(__name__)
 
@@ -33,7 +34,8 @@ def get_bugs_test():
             'updated_last': bug.updated_last,
             'priority': bug.priority,
             'status': bug.status,
-            'comments': (comments)}
+            'comments': (comments),
+            'title': bug.title}
         bugsarray.append(newbug)
     return json.dumps(bugsarray)
 
@@ -73,9 +75,28 @@ def get_user():
 @app.route("/bug/comment", methods=["POST"])
 def write_comment():
     given = request.get_json()
-    print(given)
-    comment_new = Comment.create(bug=given["bug"], user = given["user"], text=given["text"], date=dateime.now())
+    comment_new = Comment.create(bug=given["bug"], user = given["user"], text=given["text"], date=datetime.datetime.now())
     comment_new.save()
+    create_notification(given["bug"], given["text"])
+    return "FUCK YOU"
+
+@app.route("/get_notifications/<params_user_id>")
+def get_notifications(params_user_id):
+    notification_list = []
+    watchers = Watcher.select().where(Watcher.user_id == params_user_id)
+    for watcher in watchers:
+        notifications = Notification.select().where(Notification.bug_id == watcher.bug_id)
+        for notification in notifications:
+            new_notification = {
+                'bug_id': notification.bug_id,
+                'text': notification.text,
+                'date': notification.date,
+                'checked': notification.checked
+            }
+            notification_list.append(new_notification) 
+ 
+
+    return json.dumps(notification_list)
 
 
 if __name__ == "__main__":

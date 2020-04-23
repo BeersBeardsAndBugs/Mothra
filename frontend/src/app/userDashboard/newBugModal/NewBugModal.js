@@ -1,12 +1,7 @@
-import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import Modal from '@material-ui/core/Modal'
-
-const myModalStyle = {
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-}
+import { makeStyles } from '@material-ui/core/styles'
+import React from 'react'
+import { NewBug } from './newBug'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -21,13 +16,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
     const classes = useStyles()
-    const [modalStyle] = React.useState(myModalStyle)
-
-    const NewBug = (
-        <div style={modalStyle} className={classes.paper}>
-            this is a new bug
-        </div>
-    )
 
     return (
         <div>
@@ -37,7 +25,7 @@ export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-                {NewBug}
+                <NewBug {...{ classes }} />
             </Modal>
         </div>
     )

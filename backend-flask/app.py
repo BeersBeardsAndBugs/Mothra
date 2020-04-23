@@ -27,33 +27,55 @@ def get_bugs_test():
         bug_list.append(bug)
     return json.dumps(bug_list)
 
+@app.route("/bug/new/", methods=["POST"])
+def create_bug():
+    given = request.get_json()
+    title = given["title"]
+    creator = given["creator"]
+    name = given["name"]
+    created_date = datetime.datetime.now()
+    updated_last = datetime.datetime.now()
+    priority = given["priority"]
+    status = given["status"]
+    bug_new = Bug.create(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status)
+    bug_new.save()
+
+@app.route("/bug/<param_id>/", methods=["POST"])
+def edit_bug(param_id):
+    given = request.get_json()
+    bug = Bug.get(id=param_id)
+    bug.title = given["title"]       
+    bug.name = given["name"]    
+    bug.updated_last = datetime.datime.now()   
+    bug.priority = given["priority"]    
+    bug.status = given["status"]
+    bug.assigned_to = given["assigned_to"]
+    bug.save()
+    print('bug updated')
+    return 'bug updated'   
+
 @app.route("/user/new/", methods=["POST"])
 def create_user():
     given = request.get_json()
-    name = given["name"]
-    password = given["password"]
-    email = given["email"]
-    user_new = User.create(name=name, password=password, email=email)
-    user_new.save()
-    user = (
-        User.select()
-        .where(User.email == given["email"] and User.password == given["password"])
-        .get()
-    )
-    return json.dumps(model_to_dict(user))
+    user_check = User.get(email=given['email'])
+    if user_check is not None:
+        print('not a unique email. Need to account for this on frontend')
+        return "Not a unique email", status.HTTP_409_CONFLICT
+    else:
+        user_new = User.create(name=given["name"], password=given["password"], email=given["email"])
+        user_new.save()
+        user = User.get()
+        user = User.get(email=given["email"], password=given["password"])
+        return json.dumps(model_to_dict(user))
 
 @app.route("/login/", methods=["POST"])
 def get_user():
     given = request.get_json()
-    user = (
-        User.select()
-        .where(User.email == given["email"] and User.password == given["password"])
-        .get()
-    )
-    if user.exists():
+    user = User.get(email=given["email"], password=given["password"])
+    if user is not None:
         return json.dumps(model_to_dict(user))
     else:
-        return content, status.HTTP_404_NOT_FOUND
+        return {}, status.HTTP_404_NOT_FOUND
 
 @app.route("/comment/new/", methods=["POST"])
 def write_comment():

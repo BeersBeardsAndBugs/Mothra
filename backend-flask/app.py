@@ -12,7 +12,7 @@ app = Flask(__name__)
 def new_user_data_ep():
     return "Hello Mothra"
 
-@app.route("/bugs/all")
+@app.route("/bugs")
 def get_bugs_test():
     bugs = Bug.select()
     bug_list =[]        
@@ -27,8 +27,9 @@ def get_bugs_test():
         bug_list.append(bug)
     return json.dumps(bug_list)
 
-@app.route("/bug/new/", methods=["POST"])
+@app.route("/bug", methods=["POST"])
 def create_bug():
+    if method.type
     given = request.get_json()
     title = given["title"]
     creator = given["creator"]
@@ -45,9 +46,9 @@ def edit_bug(param_id):
     given = request.get_json()
     bug = Bug.get(id=param_id)
     bug.title = given["title"]       
-    bug.name = given["name"]    
-    bug.updated_last = datetime.datime.now()   
-    bug.priority = given["priority"]    
+    bug.name = given["name"]
+    bug.updated_last = datetime.datime.now()
+    bug.priority = given["priority"]  
     bug.status = given["status"]
     bug.assigned_to = given["assigned_to"]
     bug.save()

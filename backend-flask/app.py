@@ -45,15 +45,12 @@ def create_user():
 @app.route("/login/", methods=["POST"])
 def get_user():
     given = request.get_json()
-    user = (
-        User.select()
-        .where(User.email == given["email"] and User.password == given["password"])
-        .get()
-    )
-    if user.exists():
+    user = User.get_or_none(User.email == given["email"], User.password == given["password"])
+
+    if user is not None:
         return json.dumps(model_to_dict(user))
     else:
-        return content, status.HTTP_404_NOT_FOUND
+        return {}, status.HTTP_404_NOT_FOUND
 
 @app.route("/comment/new/", methods=["POST"])
 def write_comment():

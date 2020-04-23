@@ -23,19 +23,19 @@ const useStyles = makeStyles((theme) => ({
     color: 'black'
   },
 
-  blocker: {
+  Blocker: {
     background: "#b71c1c",
   },
-  critical: {
+  Critical: {
     background: "#e53935",
   },
-  high: {
+  High: {
     background: "#fb8c00",
   },
-  normal: {
+  Normal: {
     background: "#fdd835",
   },
-  enhancement: {
+  Enhancement: {
     background: "#8bc34a",
   },
 }));
@@ -77,7 +77,7 @@ export const BugList = ({
       });
     } else {
       filtered = bugs.filter((bug) => {
-        return bug.assigned_to != assigned_to
+        return bug.assigned_to !== assigned_to
       });
     }
 
@@ -88,7 +88,7 @@ export const BugList = ({
 
   return (
 
-     <Grid container spacing={1} alignItems="center" justify="center">
+     <Grid container spacing={1} justify="center" alignItems="stretch" >
       <Grid item xs={6}>
         <ButtonGroup>
         <Button fullWidth color="secondary" variant="contained"
@@ -98,9 +98,7 @@ export const BugList = ({
         </Button>
         <Button fullWidth color="secondary" variant="contained"
           onClick={() => filterBugs(userName, false)}>
-            <Typography variant="button">
               Other Bugs
-            </Typography>
         </Button>
         </ButtonGroup>
       </Grid>

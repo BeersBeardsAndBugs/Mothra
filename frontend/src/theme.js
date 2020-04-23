@@ -30,29 +30,12 @@ const theme = createMuiTheme({
 
       // Adjust Font size and appearence here
       typography: {
-        htmlFontSize: "20px",
-        fontFamily: ["Roboto", "Helvetica", "Arial", "sans-serif"],
-        fontSize: "20px",
-        fontWeightLight: 500,
-        fontWeightRegular: 600,
-        fontWeightMedium: 700,
-        fontWeightBold: 900,
 
-        h1: {
-            fontSize: "40px",
-            lineHeight: 1.167,
-            letterSpacing: "-0.01562em",
-        },
-        body1: {
-            fontSize: "20px",
-            lineHeight: 1.5,
-            letterSpacing: "0.00938em"
-          },
-        body2: {
-            fontSize: "25px",
-            lineHeight: 1.43,
-            letterSpacing: "0.01071em"
-          }
+        fontFamily: ["Roboto", "Helvetica", "Arial", "sans-serif"],
+        // fontWeightLight: 600,
+        // fontWeightRegular: 700,
+        // fontWeightMedium: 800,
+        // fontWeightBold: 900,
       }
 });
 

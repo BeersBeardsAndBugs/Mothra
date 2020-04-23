@@ -50,7 +50,7 @@ def get_user():
         .where(User.email == given["email"] and User.password == given["password"])
         .get()
     )
-    if user.exists():
+    if hasattr(user, 'name'):
         return json.dumps(model_to_dict(user))
     else:
         return content, status.HTTP_404_NOT_FOUND

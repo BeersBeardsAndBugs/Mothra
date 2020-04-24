@@ -3,7 +3,7 @@ from flask_api import status
 from models import *
 import datetime
 import json
-from playhouse.shortcuts import model_to_dict, dict_to_model
+from playhouse.shortcuts import model_to_dict, dict_to_model, get_or_none
 from helper import *
 
 app = Flask(__name__)
@@ -15,7 +15,7 @@ def new_user_data_ep():
 @app.route("/login", methods=["POST"])
 def get_user():
     given = request.get_json()
-    user = User.get(email=given["email"], password=given["password"])
+    user = User.get_or_none(email=given["email"], password=given["password"])
     if user is not None:
         return json.dumps(model_to_dict(user))
     else:
@@ -24,7 +24,7 @@ def get_user():
 @app.route("/user", methods=["POST"])
 def create_user():
     given = request.get_json()
-    user_check = User.get(email=given['email'])
+    user_check = User.get_or_none(email=given['email'])
     if user_check is not None:
         print('not a unique email. Need to account for this on frontend')
         return "Not a unique email", status.HTTP_409_CONFLICT

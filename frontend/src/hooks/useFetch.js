@@ -31,9 +31,9 @@ export const useFetch = (basePath, defaultResponse = null) => {
     })
 
     const handleError = (error) => {
-        alert(
-            `Error while saving changes to database. Please try again. \nError: ${error}`
-        )
+        // alert(
+        //     ` An error occurred while attempting to communicate to database. Please try again. \nError: ${error}`
+        // )
         setError(error)
         dispatchResponse({
             type: 'replace',
@@ -61,8 +61,10 @@ export const useFetch = (basePath, defaultResponse = null) => {
                 handleError(res.status)
             } else {
                 const json = await res.json()
-                console.log('json', json)
-                dispatchResponse({ type: 'replace', payload: json })
+                if (method === 'get' || Object.keys(body).includes('email')) {
+                    console.log('refreshing')
+                    dispatchResponse({ type: 'replace', payload: json })
+                }
             }
         } catch (err) {
             handleError(err)
@@ -93,6 +95,7 @@ export const useFetch = (basePath, defaultResponse = null) => {
     }
 
     const edit = (body) => {
+        console.log('id', body.id)
         dispatchResponse({ type: 'edit', payload: body })
         dataFetch('put', `/${body.id}`, { body })
     }

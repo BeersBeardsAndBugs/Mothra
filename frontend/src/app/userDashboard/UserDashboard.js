@@ -1,10 +1,11 @@
 import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BugDetail } from './BugDetail'
 import { BugList } from './BugList'
 import { NavbarContainer } from './navbarContainer'
-import styles from './UserDashboard.module.css'
+import { NewBugModal } from './newBugModal'
+import { useFetch } from '../../hooks'
+import { PATH } from '../../constants'
 
 export const UserDashboard = ({ user, setPageSelected }) => {
     const [bugs] = useFetch(PATH.BUG, [])
@@ -25,15 +26,27 @@ export const UserDashboard = ({ user, setPageSelected }) => {
         }
     }
 
+    const handleNewBugModalOpen = () => {
+        setIsNewBugModalOpen(true)
+    }
+
+    const handleNewBugModalClose = () => {
+        setIsNewBugModalOpen(false)
+    }
+
+    const editBugSubmit = (editedBug) => {
+        bugs.edit({ ...editedBug, id: visibleBug.id })
+    }
+
     return (
         <Grid container spacing={2} alignItems="flex-start" justify="stretch">
             <Grid item sm={12} xs={12} xl={12}>
                 <NavbarContainer
                     {...{
                         user,
-                        setUser,
                         setPageSelected,
                         handleVisibleBugChange,
+                        handleNewBugModalOpen,
                     }}
                 />
             </Grid>
@@ -41,8 +54,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
                 <BugList
                     {...{
                         bugs,
-                        setBugs,
-                        userName: user.name,
+                        userName: user.response.name,
                         handleVisibleBugChange,
                     }}
                 />
@@ -51,10 +63,18 @@ export const UserDashboard = ({ user, setPageSelected }) => {
                 {visibleBug?.id && (
                     <BugDetail
                         key={visibleBug.id}
-                        {...{ visibleBug, userEmail: user.email }}
+                        {...{
+                            visibleBug,
+                            editBugSubmit,
+                        }}
                     />
                 )}
             </Grid>
+            {isNewBugModalOpen && (
+                <NewBugModal
+                    {...{ isNewBugModalOpen, handleNewBugModalClose }}
+                />
+            )}
         </Grid>
     )
 }

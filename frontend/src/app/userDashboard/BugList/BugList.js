@@ -10,7 +10,6 @@ import ButtonGroup from '@material-ui/core/ButtonGroup'
 import Avatar from '@material-ui/core/Avatar'
 import BugReportIcon from '@material-ui/icons/BugReportRounded'
 import Grid from '@material-ui/core/Grid'
-import { Typography } from '@material-ui/core'
 import { BUG } from '../../../constants'
 
 const useStyles = makeStyles((theme) => ({
@@ -37,29 +36,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const BugList = ({
-    bugs,
-    setBugs,
-    userName,
-    handleVisibleBugChange,
-}) => {
+export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
     const myBugsBtn = useRef(null)
-
-    useEffect(() => {
-        const getList = async () => {
-            //Prevents user from double-clicking the submit button
-            const error = (e) => {
-                console.log(e)
-            }
-            const result = await get(BUGS_ALL, error)
-            if (result) {
-                setBugs(result)
-
-                myBugsBtn.current.click()
-            }
-        }
-        getList()
-    }, [])
 
     const [filteredList, setFilteredList] = useState([])
 
@@ -69,12 +47,12 @@ export const BugList = ({
         let filtered = []
 
         if (forOwner) {
-            filtered = bugs.filter((bug) => {
-                return bug.assigned_to === assigned_to
+            filtered = bugs.response.filter((bug) => {
+                return bug[BUG.ASSIGNED_TO] === assigned_to
             })
         } else {
-            filtered = bugs.filter((bug) => {
-                return bug.assigned_to !== assigned_to
+            filtered = bugs.response.filter((bug) => {
+                return bug[BUG.ASSIGNED_TO] !== assigned_to
             })
         }
 
@@ -109,18 +87,18 @@ export const BugList = ({
                         <ListItem
                             key={i}
                             button
-                            onClick={() => handleVisibleBugChange(bug.id)}
+                            onClick={() => handleVisibleBugChange(bug[BUG.ID])}
                         >
                             <ListItemAvatar>
-                                <Avatar className={classes[bug.priority]}>
+                                <Avatar className={classes[bug[BUG.PRIORITY]]}>
                                     <BugReportIcon></BugReportIcon>
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText
-                                primary={bug.description}
+                                primary={bug[BUG.DESCRIPTION]}
                                 secondary={
-                                    bug.assigned_to
-                                        ? `${bug.assigned_to}`
+                                    bug[BUG.ASSIGNED_TO]
+                                        ? `${bug[BUG.ASSIGNED_TO]}`
                                         : 'No Owner'
                                 }
                             />

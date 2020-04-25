@@ -12,7 +12,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import React from 'react'
-import { PATH } from '../../constants'
+import { PATH, USER } from '../../constants'
 import { useForm } from '../../hooks'
 
 const useStyles = makeStyles((theme) => ({
@@ -36,25 +36,22 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const LoginForm = ({ setPageSelected, user }) => {
-    const EMAIL = 'email'
-    const PASSWORD = 'password'
-
     const inputsSchema = {
-        [EMAIL]: {
+        [USER.EMAIL]: {
             value: '',
             error: '',
-            name: EMAIL,
+            name: USER.EMAIL,
             required: true,
             validator: {
                 regEx: /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+).([a-zA-Z]{2,5})$/,
                 error: 'Must be a valid email address.',
             },
         },
-        [PASSWORD]: {
+        [USER.PASSWORD]: {
             value: '',
             error: '',
             type: 'password',
-            name: PASSWORD,
+            name: USER.PASSWORD,
             required: true,
         },
     }
@@ -91,8 +88,8 @@ export const LoginForm = ({ setPageSelected, user }) => {
                         name="email"
                         autoComplete="email"
                         autoFocus
-                        name={EMAIL}
-                        value={inputs[EMAIL].value}
+                        name={USER.EMAIL}
+                        value={inputs[USER.EMAIL].value}
                         onChange={handleOnChange}
                     />
                     <TextField
@@ -105,8 +102,8 @@ export const LoginForm = ({ setPageSelected, user }) => {
                         type="password"
                         id="password"
                         autoComplete="current-password"
-                        name={PASSWORD}
-                        value={inputs[PASSWORD].value}
+                        name={USER.PASSWORD}
+                        value={inputs[USER.PASSWORD].value}
                         onChange={handleOnChange}
                     />
                     <FormControlLabel
@@ -114,19 +111,13 @@ export const LoginForm = ({ setPageSelected, user }) => {
                         label="Remember me"
                     />
 
-                    {user.hasError && (
+                    {(inputs[USER.EMAIL].error ||
+                        inputs[USER.PASSWORD].error ||
+                        user.error) && (
                         <FormHelperText error>
-                            Invalid Username or Password
-                        </FormHelperText>
-                    )}
-                    {inputs[PASSWORD].error && (
-                        <FormHelperText error>
-                            {inputs[PASSWORD].error}
-                        </FormHelperText>
-                    )}
-                    {inputs[EMAIL].error && (
-                        <FormHelperText error>
-                            {inputs[EMAIL].error}
+                            {inputs[USER.EMAIL].error}
+                            {inputs[USER.PASSWORD].error}
+                            {user.error && 'Invalid Username or Password'}
                         </FormHelperText>
                     )}
 

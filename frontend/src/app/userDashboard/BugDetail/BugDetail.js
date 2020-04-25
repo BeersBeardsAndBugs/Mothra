@@ -5,19 +5,15 @@ import CardContent from '@material-ui/core/CardContent'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import React, { useState } from 'react'
-import { BUG, COMMENT, PATH } from '../../../constants'
-import { useForm } from '../../../hooks'
-import { post } from '../../../utils'
 import GridList from '@material-ui/core/GridList'
 import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan'
-import Avatar from '@material-ui/core/Avatar'
-import Divider from '@material-ui/core/Divider'
-import CardHeader from '@material-ui/core/CardHeader'
-import theme from '../../../theme'
+import React from 'react'
+import { BUG, PATH } from '../../../constants'
+import { useForm, useFetch } from '../../../hooks'
+import { Comments } from './comments'
 
 const useStyles = makeStyles((theme) => ({
     pictureContainer: {
@@ -48,8 +44,10 @@ const pictures = [
     { img: 'png_img.png', title: '.png upload', author: 'Alex' },
 ]
 
-export const BugDetail = ({ visibleBug, userEmail }) => {
+export const BugDetail = ({ editBugSubmit, visibleBug }) => {
+    const [comments] = useFetch(PATH.COMMENT, visibleBug.comments)
     const classes = useStyles()
+
     const inputsSchema = {
         [BUG.DESCRIPTION]: {
             value: visibleBug[BUG.DESCRIPTION],
@@ -57,47 +55,12 @@ export const BugDetail = ({ visibleBug, userEmail }) => {
             name: BUG.DESCRIPTION,
             required: true,
         },
-        [BUG.PRIORITY]: {
-            value: visibleBug[BUG.PRIORITY],
-            error: '',
-            name: BUG.PRIORITY,
-            required: true,
-        },
-    }
-    const formSubmit = () => {
-        return true
     }
 
     const { handleSubmit, handleOnChange, inputs, isSubmitDisabled } = useForm(
         inputsSchema,
-        formSubmit
+        editBugSubmit
     )
-
-    const handleOnBlur = () => {
-        // do stuff when an input is clicked away from
-    }
-    // <select name="myDropdown" value={myDropdown} onChange={handleOnChange}>
-    //     <option value=""></option>
-    // </select>
-
-    const [newComment, setNewComment] = useState('')
-
-    const handleCommentSubmit = async (e) => {
-        e.preventDefault()
-        const body = {
-            bug: visibleBug[COMMENT.TEXT],
-            user: userEmail,
-            text: newComment,
-        }
-        const error = (e) => {
-            console.log(e)
-        }
-        const result = await post(PATH.COMMENT, body, error)
-
-        if (result) {
-            console.log(result)
-        }
-    }
 
     return (
         <Grid container justify="flex-start" alignItems="stretch" spacing={2}>
@@ -157,6 +120,8 @@ export const BugDetail = ({ visibleBug, userEmail }) => {
                             type="submit"
                             variant="contained"
                             color="primary"
+                            onClick={handleSubmit}
+                            disabled={isSubmitDisabled}
                         >
                             Save Change
                         </Button>
@@ -213,89 +178,11 @@ export const BugDetail = ({ visibleBug, userEmail }) => {
             {/*   Comments Section  
     <Grid container item xs={5} alignItems="stretch" spacing={2}>
     */}
-            <Grid item xs={12} sm={12}>
-                <Card>
-                    <CardContent>
-                        <CardHeader title="Comments"></CardHeader>
-
-                        {/*   New Comment Starts here   */}
-                        {visibleBug.comments.map((comment, index) => {
-                            return (
-                                <Card
-                                    style={{
-                                        padding: '20px 20px',
-                                        marginTop: 10,
-                                    }}
-                                    key={`${
-                                        visibleBug[BUG.ID]
-                                    }-comment-${index}`}
-                                >
-                                    <CardContent>
-                                        <Grid
-                                            container
-                                            wrap="nowrap"
-                                            spacing={2}
-                                        >
-                                            <Grid item>
-                                                <Avatar
-                                                    alt=""
-                                                    src={
-                                                        comment[COMMENT.USER] +
-                                                        '.jpg'
-                                                    }
-                                                    colorDefault={
-                                                        theme.palette.primary
-                                                            .main
-                                                    }
-                                                />
-                                            </Grid>
-                                            <Grid
-                                                justifyContent="left"
-                                                item
-                                                xs
-                                                zeroMinWidth
-                                            >
-                                                <Typography variant="h6">
-                                                    {comment[COMMENT.USER]}
-                                                </Typography>
-                                                <br />
-                                                <Typography>
-                                                    {comment[COMMENT.TEXT]}
-                                                </Typography>
-                                                <Typography variant="caption">
-                                                    {comment.date}
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Card>
-                            )
-                        })}
-
-                        <Divider></Divider>
-
-                        <br />
-                        <TextField
-                            fullWidth
-                            id="standard-textarea"
-                            label="Enter Comment"
-                            placeholder="What's on your mind?"
-                            multiline
-                            rows={4}
-                            value={newComment}
-                            onChange={handleOnChange}
-                            variant="outlined"
-                        />
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                        >
-                            Save Comment
-                        </Button>
-                    </CardContent>
-                </Card>
-            </Grid>
+            {!comments.isLoading ? (
+                <Comments {...{ bugId: visibleBug[BUG.ID], comments }} />
+            ) : (
+                <Typography>Loading Comments...</Typography>
+            )}
         </Grid>
     )
 }

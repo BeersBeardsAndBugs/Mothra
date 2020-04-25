@@ -21,14 +21,14 @@ export const UserDashboard = ({ user, setUser, setPageSelected }) => {
     }
 
   return (
-    <Grid container spacing={2} alignItems="flex-start" justify="center">
-      <Grid container item xs={12}>
+    <Grid container spacing={2} alignItems="flex-start" justify="stretch">
+      <Grid item sm={12} xs={12} xl={12}>
         <NavbarContainer {...{ user, setUser, setPageSelected, handleVisibleBugChange }}/>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={12} sm={3} xl={2}>
         <BugList {...{ bugs, setBugs, userName: user.name, handleVisibleBugChange }}/>
       </Grid>
-      <Grid item alignContent="stretch" xs={9}>
+      <Grid item xs={12} sm={9} xl={9}>
         {visibleBug?.id && (<BugDetail key={visibleBug.id} {...{ visibleBug, userEmail: user.email  }} />)}
       </Grid>
     </Grid>);

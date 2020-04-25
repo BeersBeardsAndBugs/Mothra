@@ -88,21 +88,21 @@ export const BugList = ({
 
   return (
 
-     <Grid container spacing={1} justify="center" alignItems="stretch" >
-      <Grid item xs={6}>
-        <ButtonGroup>
-        <Button fullWidth color="secondary" variant="contained"
+     <Grid container spacing={1} justify="center" alignItems="stretch">
+      <Grid item xs={12} sm={12}>
+        <ButtonGroup fullWidth>
+        <Button  color="secondary" variant="contained"
           ref={myBugsBtn}
           onClick={() => filterBugs(userName, true)}>
               Assigned Bugs
         </Button>
-        <Button fullWidth color="secondary" variant="contained"
+        <Button  color="secondary" variant="contained"
           onClick={() => filterBugs(userName, false)}>
               Other Bugs
         </Button>
         </ButtonGroup>
       </Grid>
-      <Grid item xs={10}>
+      <Grid item xs={12} sm={12}>
         <List className={classes.listStyle}>
           {filteredList.map((bug, i) => (
             <ListItem

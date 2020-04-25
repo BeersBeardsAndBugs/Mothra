@@ -20,18 +20,25 @@ import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import CardHeader from '@material-ui/core/CardHeader';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import theme from "../../../theme";
 
 
 
 const useStyles = makeStyles((theme) => ({
 
-
-      gridList: {
-        flexWrap: 'nowrap',
-        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-        transform: 'translateZ(0)',
+    pictureContainer: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        overflow: 'hidden',
+        backgroundColor: theme.palette.background.paper,
       },
+      gridList: {
+        width: 500,
+        height: 450,
+      },
+
       title: {
         color: theme.palette.primary.light,
       },
@@ -101,7 +108,7 @@ export const BugDetail = ({ visibleBug, userEmail }) => {
     }
     
 return (
-    <Grid container justify="flex-start" spacing={2}>
+    <Grid container justify="flex-start" alignItems="stretch" spacing={2}>
 
         {/*   Bug Detail Title Banner   */}
         <Grid item xs={12}>
@@ -119,30 +126,27 @@ return (
         </Grid>
 
 
-        {/*   Bug Detail Description and Images  */}
+        {/*   Bug Detail Description and Images  
         <Grid container item xs={7} alignItems="stretch" direction="column" spacing={2}>
-
+*/}
         {/*   Bug Description Details   */}
-        <Grid item>
+        <Grid item xs={12} sm={7}>
             <Card>
                 <CardContent>
-                <Typography>
+                <Typography variant="body1">
                     Status: {visibleBug[BUG.STATUS]}
                 </Typography>
-                <Typography>
+                <Typography variant="body1">
                     Bug Priority: {visibleBug[BUG.PRIORITY]}
                 </Typography>
-                <Typography>
+                <Typography variant="body1">
                     Current Owner: {visibleBug[BUG.ASSIGNED_TO]}
                 </Typography>
-                <Typography>
-                    Last Updated: {visibleBug[BUG.UPDATED_LAST]}
+                <Typography variant="body1">
+                    Last Updated: {visibleBug[BUG.UPDATED_LAST]} by {visibleBug[BUG.UPDATED_BY]}
                 </Typography>
-                <Typography>
-                    Created By: {visibleBug[BUG.CREATED_BY]} on {visibleBug[BUG.CREATED_DATE]}
-                </Typography>
-                <Typography>
-                    Created On: {visibleBug[BUG.CREATED_BY]} on {visibleBug[BUG.CREATED_DATE]}
+                <Typography variant="body1">
+                    Created: {visibleBug[BUG.CREATED_DATE]} by {visibleBug[BUG.CREATED_BY]}
                 </Typography>
                 <br/>
                 <TextField
@@ -157,17 +161,22 @@ return (
                     onChange={handleOnChange}
                     variant="outlined"
                 />
+                <Button type="submit" variant="contained" color="primary">
+                    Save Change
+                </Button>
                 </CardContent>
             </Card>
         </Grid>
 
         {/*   Bug Detail Images   */}
-        <Grid item>
+        <Grid item xs={12} sm={5}>
             <Card>
-                <CardContent>
-                <GridList className={classes.gridList} cols={1.5}> {pictures.map((tile) => (
+                <CardContent >
+
+                <div className={classes.pictureContainer}>
+                <GridList cellHeight={160} className={classes.gridList} cols={3}> {pictures.map((tile) => (
                     <GridListTile key={tile.img}>
-                        <img src={tile.img} alt={tile.title} />
+                        <img src={tile.img} alt={tile.title} cols={tile.cols || 1}/>
                         <GridListTileBar 
                             title={tile.title} 
                             classes={{ root: classes.titleBar,title: classes.title,}}
@@ -177,26 +186,32 @@ return (
                                 </IconButton>
                                 }
                         />
-                    </GridListTile>
+                </GridListTile>
                 ))}
                 </GridList>
+                </div>
+
                 </CardContent>
             </Card>
         </Grid>
-    </Grid>
+    
+    {/* </Grid> */}
 
 
-    {/*   Comments Section  */}
+    {/*   Comments Section  
     <Grid container item xs={5} alignItems="stretch" spacing={2}>
-        <Grid item xs={12}>
+    */}
+        <Grid item xs={12} sm={12}>
           <Card >
-            <CardContent>
+            <CardContent >
                 <CardHeader title="Comments"></CardHeader>
+                
                 {/*   New Comment Starts here   */}
-
                 {visibleBug.comments.map((comment, index) => {return (
                 <Card style={{ padding: "20px 20px", marginTop: 10 }} key={`${visibleBug[BUG.ID]}-comment-${index}`}>
                     <CardContent>
+
+
                     <Grid container wrap="nowrap" spacing={2}>
                         <Grid item>
                             <Avatar alt="" src={comment[COMMENT.USER] + '.jpg'} colorDefault={theme.palette.primary.main}/>
@@ -219,172 +234,29 @@ return (
                 )
             })}
 
+
+
             <Divider></Divider>
-            </CardContent>
-          </Card>
-        </Grid>
-    </Grid>
 
-
-
-
-
-
-    {/*
-            <form className={classes.form}
-                onSubmit={handleSubmit}
-                autocomplete="off"
-            >
-                <Box
-                    display="flex"
-                    p={1}
-                    bgcolor="background.paper"
-                    alignItems="center"
-                >
-                    <Box p={3} flexGrow={1}>
-                        <Typography variant="h3">
-                            {visibleBug[BUG.TITLE]}
-                        </Typography>
-                    </Box>
-                    <Box p={3}>
-                        <Typography variant="h5">
-                            {visibleBug[BUG.ID]}
-                        </Typography>
-                    </Box>
-                    <Box p={3}>
-                        <TextField
-                            select
-                            label="Priority"
-                            name={BUG.PRIORITY}
-                            value={inputs[BUG.PRIORITY].value}
-                            onChange={handleOnChange}
-                            variant="outlined"
-                        >
-                            {OPTIONS_BUG_PRIORITY.map((option) => (
-                                <MenuItem key={option} value={option}>
-                                    {option}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    </Box>
-                </Box>
-                <Grid container p={3} direction="row">
-                    <Grid item container xs direction="row">
-                        <TextField
-                            fullWidth
-                            id="standard-textarea"
-                            label="Description"
-                            placeholder="Description"
-                            multiline
-                            rows={4}
-                            name={BUG.DESCRIPTION}
-                            value={inputs[BUG.DESCRIPTION].value}
-                            onChange={handleOnChange}
-                            variant="outlined"
-                        />
-                    </Grid>
-                    <Grid item container xs direction="column">
-                        <Grid
-                            item
-                            container
-                            direction="row"
-                            alignItems="center"
-                            spacing={3}
-                        >
-                            <Grid item container xs justify="flex-end">
-                                <Typography variant="body1">
-                                    Assigned To:
-                                </Typography>
-                            </Grid>
-                            <Grid item xs>
-                                <Typography variant="body1">
-                                    {visibleBug[BUG.ASSIGNED_TO]}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid
-                            item
-                            container
-                            direction="row"
-                            justify="center"
-                            alignItems="center"
-                            spacing={3}
-                        >
-                            <Grid item container xs justify="flex-end">
-                                <Typography variant="body1">Status:</Typography>
-                            </Grid>
-                            <Grid item xs>
-                                <Typography variant="body1">
-                                    {visibleBug[BUG.STATUS]}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid item container direction="row" spacing={3}>
-                            <Grid item container xs justify="flex-end">
-                                <Typography variant="body1">
-                                    Created By:
-                                </Typography>
-                            </Grid>
-                            <Grid item xs>
-                                <Typography variant="body1">
-                                    {visibleBug[BUG.CREATED_BY]}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid item container direction="row" spacing={3}>
-                            <Grid item container xs justify="flex-end">
-                                <Typography variant="body1">
-                                    Created Date:
-                                </Typography>
-                            </Grid>
-                            <Grid item xs>
-                                <Typography variant="body1">
-                                    {visibleBug[BUG.CREATED_DATE]}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Button type="submit" variant="contained" color="primary">
-                    Save Changes
-                </Button>
-            </form>
-            <Box>
-                <Typography variant="h5">Comments</Typography>
-            </Box>
-            {visibleBug.comments.map((comment, index) => {
-                return (
-                    <Box p={3} key={`${visibleBug[BUG.ID]}-comment-${index}`}>
-                        <Box display="flex" justify="flex-end">
-                            <Box flexGrow={1}>{comment[COMMENT.USER]}</Box>
-                            <Box>{comment[COMMENT.DATE]}</Box>
-                        </Box>
-                        <Box>
-                            <Box>{comment[COMMENT.TEXT]}</Box>
-                        </Box>
-                    </Box>
-                )
-            })}
-            <form onSubmit={handleCommentSubmit}>
+            <br/>
                 <TextField
                     fullWidth
                     id="standard-textarea"
                     label="Enter Comment"
-                    placeholder="What's on your mind?™"
+                    placeholder="What's on your mind?"
+                    multiline
+                    rows={4}
                     value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
+                    onChange={handleOnChange}
                     variant="outlined"
                 />
                 <Button type="submit" variant="contained" color="primary">
                     Save Comment
                 </Button>
-            </form>
-
-            */}
-
-
-
+            </CardContent>
+          </Card>
         </Grid>
+    </Grid>
 
     )
 }

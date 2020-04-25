@@ -32,10 +32,10 @@ const theme = createMuiTheme({
       typography: {
 
         fontFamily: ["Roboto", "Helvetica", "Arial", "sans-serif"],
-        // fontWeightLight: 600,
-        // fontWeightRegular: 700,
-        // fontWeightMedium: 800,
-        // fontWeightBold: 900,
+        fontWeightLight: 600,
+        fontWeightRegular: 700,
+        fontWeightMedium: 800,
+        fontWeightBold: 900,
       }
 });
 

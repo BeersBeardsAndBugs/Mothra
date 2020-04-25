@@ -20,28 +20,45 @@ const useStyles = makeStyles((theme) => ({
         color: 'black',
     },
 
-    blocker: {
+    Blocker: {
         background: '#b71c1c',
     },
-    critical: {
+    Critical: {
         background: '#e53935',
     },
-    high: {
+    High: {
         background: '#fb8c00',
     },
-    normal: {
+    Normal: {
         background: '#fdd835',
     },
-    enhancement: {
+    Enhancement: {
         background: '#8bc34a',
     },
 }))
 
-export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
+export const BugList = ({
+    bugs,
+    setBugs,
+    userName,
+    handleVisibleBugChange,
+}) => {
     const myBugsBtn = useRef(null)
 
     useEffect(() => {
-        // myBugsBtn.current.click()
+        const getList = async () => {
+            //Prevents user from double-clicking the submit button
+            const error = (e) => {
+                console.log(e)
+            }
+            const result = await get(BUGS_ALL, error)
+            if (result) {
+                setBugs(result)
+
+                myBugsBtn.current.click()
+            }
+        }
+        getList()
     }, [])
 
     const [filteredList, setFilteredList] = useState([])
@@ -52,24 +69,24 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
         let filtered = []
 
         if (forOwner) {
-            filtered = bugs.response.filter((bug) => {
-                return bug[BUG.ASSIGNED_TO] === assigned_to
+            filtered = bugs.filter((bug) => {
+                return bug.assigned_to === assigned_to
             })
         } else {
-            filtered = bugs.response.filter((bug) => {
-                return bug.assigned_to != assigned_to
+            filtered = bugs.filter((bug) => {
+                return bug.assigned_to !== assigned_to
             })
         }
 
+        console.log(filtered)
         setFilteredList(filtered)
     }
 
     return (
-        <Grid container spacing={1} alignItems="center" justify="center">
-            <Grid item xs={6}>
-                <ButtonGroup>
+        <Grid container spacing={1} justify="center" alignItems="stretch">
+            <Grid item xs={12} sm={12}>
+                <ButtonGroup fullWidth>
                     <Button
-                        fullWidth
                         color="secondary"
                         variant="contained"
                         ref={myBugsBtn}
@@ -78,16 +95,15 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
                         Assigned Bugs
                     </Button>
                     <Button
-                        fullWidth
                         color="secondary"
                         variant="contained"
                         onClick={() => filterBugs(userName, false)}
                     >
-                        <Typography variant="button">Other Bugs</Typography>
+                        Other Bugs
                     </Button>
                 </ButtonGroup>
             </Grid>
-            <Grid item xs={10}>
+            <Grid item xs={12} sm={12}>
                 <List className={classes.listStyle}>
                     {filteredList.map((bug, i) => (
                         <ListItem

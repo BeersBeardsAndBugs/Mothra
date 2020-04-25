@@ -1,45 +1,91 @@
-import { useState, useEffect } from 'react'
+import { useState, useReducer, useRef, useEffect } from 'react'
 
-const useFetch = (basePath) => {
+const dataReducer = (objects, { type, payload }) => {
+    switch (type) {
+        case 'add':
+            return [...objects, payload]
+        case 'remove':
+            return objects.filter((object) => object.id !== payload)
+        case 'edit':
+            return objects.map((object) =>
+                object.id === payload.id ? { ...object, ...payload } : object
+            )
+        case 'replace':
+            return payload
+        default:
+            return objects
+    }
+}
+
+export const useFetch = (basePath, defaultResponse = null) => {
     const [storedPath] = useState(basePath)
-    const [response, setResponse] = useState(null)
+    const [response, dispatchResponse] = useReducer(
+        dataReducer,
+        defaultResponse
+    )
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [headers] = useState({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+    const responseRef = useRef()
+    useEffect(() => {
+        responseRef.current = response
     })
 
-    const dataFetch = async (method, pathExtention = '', body) => {
+    const handleError = (error) => {
+        alert(
+            `Error while saving changes to database. Please try again. \nError: ${error}`
+        )
+        setError(error)
+        dispatchResponse({
+            type: 'replace',
+            payload: responseRef.current,
+        })
+    }
+
+    const dataFetch = async (method, pathExtention = '', { headers, body }) => {
         setIsLoading(true)
         try {
-            const options = { method, headers }
-            if (['post', 'put'].some((item) => item === method))
+            let options = {
+                method,
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    ...headers,
+                },
+            }
+            if (['post', 'put'].some((item) => item === method)) {
                 options = { ...options, body: JSON.stringify(body) }
-
+            }
             const res = await fetch(storedPath + pathExtention, options)
 
             if (res.status !== 200) {
-                setResponse(null)
+                handleError(res.status)
             } else {
                 const json = await res.json()
-                setResponse(json)
+                console.log('json', json)
+                dispatchResponse({ type: 'replace', payload: json })
             }
-        } catch (error) {
-            setError(error)
+        } catch (err) {
+            handleError(err)
         } finally {
             setIsLoading(false)
         }
     }
 
-    // Read all
-    const getAll = () => {
-        dataFetch('get')
+    const reset = () => {
+        dispatchResponse({ type: 'replace', payload: defaultResponse })
     }
 
-    // Create One
-    const add = () => {
-        dataFetch('post')
+    const getAll = (headers) => {
+        dataFetch('get', '', { headers })
+    }
+
+    const login = (path, body) => {
+        dataFetch('post', path, { body })
+    }
+
+    const add = (body) => {
+        dispatchResponse({ type: 'add', payload: body })
+        dataFetch('post', '', { body })
     }
 
     const getById = (id) => {
@@ -47,26 +93,27 @@ const useFetch = (basePath) => {
     }
 
     const edit = (body) => {
-        dataFetch('put', `/${body.id}`)
-    }
-    const remove = (body) => {
-        dataFetch('put', `/${id}`)
+        dispatchResponse({ type: 'edit', payload: body })
+        dataFetch('put', `/${body.id}`, { body })
     }
 
-    return { response, error, isLoading }
+    const remove = (id) => {
+        dispatchResponse({ type: 'remove', payload: id })
+        dataFetch('delete', `/${id}`)
+    }
+
+    return [
+        {
+            response,
+            error,
+            isLoading,
+            getAll,
+            add,
+            getById,
+            edit,
+            remove,
+            login,
+            reset,
+        },
+    ]
 }
-
-// get all:
-// @app.route("/bugs")
-
-// create one:
-// @app.route("/bugs", methods=["POST"])
-
-// read one:
-// @app.route("/bugs/<id>")
-
-// update one:
-// @app.route("/bugs/<id>", methods=["PUT"])
-
-// delete one:
-// @app.route("/bugs/<id>", methods=["DELETE"])

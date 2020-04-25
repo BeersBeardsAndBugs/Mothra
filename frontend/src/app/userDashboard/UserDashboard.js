@@ -1,18 +1,23 @@
 import Grid from '@material-ui/core/Grid'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BugDetail } from './BugDetail'
 import { BugList } from './BugList'
 import { NavbarContainer } from './navbarContainer'
 import { NewBugModal } from './newBugModal'
 import styles from './UserDashboard.module.css'
+import { PATH } from '../../constants'
+import { useFetch } from '../../hooks'
 
-export const UserDashboard = ({ user, setUser, setPageSelected }) => {
-    const [bugs, setBugs] = useState([])
+export const UserDashboard = ({ user, setPageSelected }) => {
+    const [bugs] = useFetch(PATH.BUG, [])
     const [visibleBug, setVisibleBug] = useState({})
     const [isNewBugModalOpen, setIsNewBugModalOpen] = React.useState(false)
 
+    useEffect(() => {
+        bugs.getAll()
+    }, [])
     const handleVisibleBugChange = (bugId) => {
-        const foundBugs = bugs.filter((bug) => bug.id === bugId)
+        const foundBugs = bugs.response.filter((bug) => bug.id === bugId)
         if (foundBugs.length === 1) {
             setVisibleBug((prevState) => ({
                 ...prevState,
@@ -35,7 +40,6 @@ export const UserDashboard = ({ user, setUser, setPageSelected }) => {
                 <NavbarContainer
                     {...{
                         user,
-                        setUser,
                         setPageSelected,
                         handleVisibleBugChange,
                         handleNewBugModalOpen,
@@ -43,20 +47,21 @@ export const UserDashboard = ({ user, setUser, setPageSelected }) => {
                 />
             </Grid>
             <Grid container item xs={3} className={styles.buglist}>
-                <BugList
-                    {...{
-                        bugs,
-                        setBugs,
-                        userName: user.name,
-                        handleVisibleBugChange,
-                    }}
-                />
+                {bugs?.response && (
+                    <BugList
+                        {...{
+                            bugs: bugs,
+                            userName: user.response.name,
+                            handleVisibleBugChange,
+                        }}
+                    />
+                )}
             </Grid>
             <Grid container item xs={9} className={styles.bugviews}>
                 {visibleBug?.id && (
                     <BugDetail
                         key={visibleBug.id}
-                        {...{ visibleBug, userEmail: user.email }}
+                        {...{ visibleBug, userEmail: user.response.email }}
                     />
                 )}
             </Grid>

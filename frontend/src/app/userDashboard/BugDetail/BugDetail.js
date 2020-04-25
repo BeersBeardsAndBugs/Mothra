@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import React, { useState } from 'react'
-import { BUG, COMMENT, OPTIONS_BUG_PRIORITY, PATH_NEW_COMMENT } from '../../../constants'
+import { BUG, COMMENT, OPTIONS_BUG_PRIORITY, PATH } from '../../../constants'
 import { useForm } from '../../../hooks'
 import { post } from '../../../utils'
 
@@ -14,8 +14,7 @@ const useStyles = makeStyles((theme) => ({
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
-      },
-
+    },
 }))
 
 export const BugDetail = ({ visibleBug, userEmail }) => {
@@ -62,7 +61,7 @@ export const BugDetail = ({ visibleBug, userEmail }) => {
         const error = (e) => {
             console.log(e)
         }
-        const result = await post(PATH_NEW_COMMENT, body, error)
+        const result = await post(PATH.COMMENT, body, error)
 
         if (result) {
             console.log(result)
@@ -70,10 +69,8 @@ export const BugDetail = ({ visibleBug, userEmail }) => {
     }
     return (
         <Grid container xs={12}>
-
-
-
-            <form className={classes.form}
+            <form
+                className={classes.form}
                 onSubmit={handleSubmit}
                 autocomplete="off"
             >
@@ -187,7 +184,12 @@ export const BugDetail = ({ visibleBug, userEmail }) => {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Button type="submit" variant="contained" color="primary">
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    disabled={isSubmitDisabled}
+                >
                     Save Changes
                 </Button>
             </form>
@@ -221,7 +223,6 @@ export const BugDetail = ({ visibleBug, userEmail }) => {
                     Save Comment
                 </Button>
             </form>
-
         </Grid>
     )
 }

@@ -66,3 +66,89 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+## Custom Hooks
+
+### useFetch
+
+#### Description
+
+_function_ useFetch(path, initialValue)
+
+useFetch is used to manage state that:
+
+-   originates in the database
+-   must remain in sync with the database
+-   and can have CRUD operations performed on by the user
+
+Properties
+
+-response,
+
+-   error,
+-   isLoading,
+-   getAll,
+-   add,
+-   getById,
+-   edit,
+-   remove,
+-   login,
+-   reset,
+
+#### Initialize
+
+1. Initialize
+
+    ```jsx
+    // when data is an array
+    const [moths] = useFetch(PATH.MOTH, [])
+
+    // when data is an object/string
+    const [moth] = useFetch(PATH.MOTH, null)
+    // or
+    const [moth] = useFetch(PATH.MOTH, {})
+    ```
+
+2. Get Initial Data
+
+    ```jsx
+    // when data is an array or always a single object/string
+    moths.getAll()
+
+    // when data is an object/string and id needs to be specified
+    moth.getById(id)
+    ```
+
+
+    Code Example
+    ```jsx
+    import React, { useEffect } from 'react'
+    import { useFetch } from '../hooks'
+    import { PATH } from '../constants'
+
+    export const MothsList = ({prop}) => {
+        const [moths] = useFetch(PATH.MOTH, [])
+
+        // Get initial data when component is mounted the first time
+        useEffect(() => {
+            moths.getAll()
+        },[])
+    }
+
+    return <ol>
+        {moths?.response?.map(moth => {
+            <li>{moth}</li>
+        })}
+    </ol>
+
+    ```
+
+#### Special Uses
+
+```jsx
+const [moths] = useFetch('', null)
+```
+
+### useForm
+
+### useMenu

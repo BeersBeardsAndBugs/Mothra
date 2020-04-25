@@ -1,4 +1,8 @@
-export const GET_USER = 'login/'
-export const CREATE_USER = 'user/new/'
-export const BUGS_ALL = 'bugs/all'
-export const PATH_NEW_COMMENT = 'bug/comment'
+export const PATH = {
+    USER: '/user',
+    LOGIN: '/login',
+    BUG: '/bug',
+    COMMENT: '/comment',
+    NOTIFICATION: '/notification',
+    WATCHER: '/watcher',
+}

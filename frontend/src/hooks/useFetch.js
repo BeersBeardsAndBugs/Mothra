@@ -75,8 +75,8 @@ export const useFetch = (basePath, defaultResponse = null) => {
         dispatchResponse({ type: 'replace', payload: defaultResponse })
     }
 
-    const getAll = (headers) => {
-        dataFetch('get', '', { headers })
+    const getAll = (_headers) => {
+        dataFetch('get', '', { _headers })
     }
 
     const login = (path, body) => {

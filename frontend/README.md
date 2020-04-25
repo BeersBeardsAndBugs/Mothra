@@ -83,8 +83,7 @@ useFetch is used to manage state that:
 
 Properties
 
--response,
-
+-   response,
 -   error,
 -   isLoading,
 -   getAll,
@@ -137,7 +136,7 @@ Properties
 
     return <ol>
         {moths?.response?.map(moth => {
-            <li>{moth}</li>
+            <li>{moth.name}</li>
         })}
     </ol>
 

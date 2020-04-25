@@ -16,6 +16,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
     useEffect(() => {
         bugs.getAll()
     }, [])
+
     const handleVisibleBugChange = (bugId) => {
         const foundBugs = bugs.response.filter((bug) => bug.id === bugId)
         if (foundBugs.length === 1) {

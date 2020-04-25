@@ -11,6 +11,12 @@ export const NavbarContainer = ({
     handleVisibleBugChange,
     handleNewBugModalOpen,
 }) => {
+    // const [notifications] = useFetch(PATH.NOTIFICATION, [])
+
+    // useEffect(() => {
+    //     notifications.getById(user.response.id)
+    // }, [])
+
     const [profileMenu] = useMenu('profile', {
         name: user.response.name,
         email: user.response.email,

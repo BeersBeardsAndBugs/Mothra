@@ -3,7 +3,7 @@ from flask_api import status
 from models import *
 import datetime
 import json
-from playhouse.shortcuts import model_to_dict, dict_to_model, get_or_none
+from playhouse.shortcuts import model_to_dict, dict_to_model
 from helper import *
 
 app = Flask(__name__)
@@ -67,29 +67,14 @@ def create_bug():
 @app.route("/bug/<param_id>", methods=["PUT"])
 def edit_bug(param_id):
     given = request.get_json()
-<<<<<<< HEAD
     bug = Bug.get(id=param_id)
-    bug.title = given["title"]       
-    bug.name = given["name"]
-    bug.updated_last = datetime.datime.now()
-    bug.priority = given["priority"]  
-    bug.status = given["status"]
-    bug.assigned_to = given["assigned_to"]
+    updated_keys = given.keys()
+    for key in updated_keys:
+        bug[key] = given[key]
     bug.save()
     print('bug updated')
     return 'bug updated'   
 
-=======
-    user = (
-        User.select()
-        .where(User.email == given["email"] and User.password == given["password"])
-        .get()
-    )
-    if hasattr(user, 'name'):
-        return json.dumps(model_to_dict(user))
-    else:
-        return content, status.HTTP_404_NOT_FOUND
->>>>>>> PrestonsBranch
 
 @app.route("/comment", methods=["POST"])
 def write_comment():

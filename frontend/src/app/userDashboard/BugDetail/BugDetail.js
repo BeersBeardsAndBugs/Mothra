@@ -178,10 +178,10 @@ export const BugDetail = ({ editBugSubmit, visibleBug }) => {
             {/*   Comments Section  
     <Grid container item xs={5} alignItems="stretch" spacing={2}>
     */}
-            {!comments.isLoading ? (
-                <Comments {...{ bugId: visibleBug[BUG.ID], comments }} />
-            ) : (
+            {comments.isLoading && !comments.reponse ? (
                 <Typography>Loading Comments...</Typography>
+            ) : (
+                <Comments {...{ bugId: visibleBug[BUG.ID], comments }} />
             )}
         </Grid>
     )

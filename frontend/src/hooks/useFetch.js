@@ -55,16 +55,18 @@ export const useFetch = (basePath, defaultResponse = null) => {
             if (['post', 'put'].some((item) => item === method)) {
                 options = { ...options, body: JSON.stringify(body) }
             }
+            console.log('SENT', {
+                path: storedPath + pathExtention,
+                options,
+            })
             const res = await fetch(storedPath + pathExtention, options)
-
+            console.log('RESPONSE', res)
             if (res.status !== 200) {
                 handleError(res.status)
             } else {
                 const json = await res.json()
-                if (method === 'get' || Object.keys(body).includes('email')) {
-                    console.log('refreshing')
-                    dispatchResponse({ type: 'replace', payload: json })
-                }
+                console.log('DATA', json)
+                dispatchResponse({ type: 'replace', payload: json })
             }
         } catch (err) {
             handleError(err)

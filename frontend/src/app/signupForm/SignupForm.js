@@ -157,24 +157,15 @@ export const SignupForm = ({ setPageSelected, user }) => {
                             }
                         }}
                     />
-                    {inputs[USER.NAME].error || (
+                    {(inputs[USER.NAME].error ||
+                        inputs[USER.EMAIL].error ||
+                        inputs[USER.PASSWORD].error ||
+                        !isPasswordConfirmed) && (
                         <FormHelperText error>
                             {inputs[USER.NAME].error}
-                        </FormHelperText>
-                    )}
-                    {inputs[USER.EMAIL].error || (
-                        <FormHelperText error>
                             {inputs[USER.EMAIL].error}
-                        </FormHelperText>
-                    )}
-                    {inputs[USER.PASSWORD].error || (
-                        <FormHelperText error>
                             {inputs[USER.PASSWORD].error}
-                        </FormHelperText>
-                    )}
-                    {isPasswordConfirmed || (
-                        <FormHelperText error>
-                            Passwords do not match.
+                            {!isPasswordConfirmed && 'Passwords do not match.'}
                         </FormHelperText>
                     )}
 

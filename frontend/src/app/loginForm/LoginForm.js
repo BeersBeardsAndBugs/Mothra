@@ -57,7 +57,7 @@ export const LoginForm = ({ setPageSelected, user }) => {
     }
 
     const doLogin = (body) => {
-        user.login(PATH.LOGIN, body)
+        user.special(PATH.LOGIN, body)
     }
 
     const { handleSubmit, handleOnChange, isSubmitDisabled, inputs } = useForm(

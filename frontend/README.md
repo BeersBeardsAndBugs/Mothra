@@ -81,7 +81,7 @@ useFetch is used to manage state that:
 -   must remain in sync with the database
 -   and can have CRUD operations performed on by the user
 
-Properties
+Result [_stateObject_] Properties
 
 -   response
     -   _object_, holds the data in state from the fetch response
@@ -279,5 +279,59 @@ const VerifyBtn = <button onClick={() => moths.special(PATH.VERIFY_AND_RETURN, m
 ```
 
 ### useForm
+
+#### Description
+
+_function_ useForm(inputsSchema, onSubmit)
+
+useForm is used to manage state for forms with:
+
+-   controlled inputs
+-   need validation
+
+Parameters
+
+-   inputsSchema
+    _object_, contains the input names and validation to be used
+
+    -   Each key represents an input object
+    -   Input Object Properties
+        -   value
+            _string_, set as initial value, changes with handleOnChange
+        -   error
+            _string_, holds current validation error
+        -   name
+            _string_, holds copy of key value to identify input/state coorelation
+        -   required
+            _boolean_, determines whether input is required to have a value in order to submit
+        -   validator
+            _optional object_, contains regEx key for validation requirements, and error for test to be displayed when invalid
+        -   type
+            _optional string_, contains input type for when using a custom input component
+
+-   onSubmit()
+    _function_, given function for what to do with the resulting form submitted object
+
+Result _Object_ Properties
+
+-   handleSubmit()
+
+    -   _function_, handles event when submit-type button is pressed in form, validates inputs, and then creates fetch body object which is passed to the given onSubmit function
+
+-   handleOnChange()
+
+    -   _string_, handles input onChange event to keep state in sync with form
+
+-   inputs
+
+    -   _object_, holds current state of each input
+    -   Properties
+        -   name -
+
+-   isSubmitDisabled
+
+    -   _boolean_, disables submit button on initial load, and when form inputs are not valid
+
+#### Code Examples
 
 ### useMenu

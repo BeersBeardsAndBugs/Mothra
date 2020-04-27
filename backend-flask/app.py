@@ -3,7 +3,7 @@ from flask_api import status
 from models import *
 import datetime
 import json
-from playhouse.shortcuts import model_to_dict, dict_to_model, get_or_none
+from playhouse.shortcuts import model_to_dict, dict_to_model
 from helper import *
 
 app = Flask(__name__)
@@ -47,6 +47,7 @@ def create_bug():
         priority = given["priority"]
         status = given["status"]
         bug_new = Bug.create(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status)
+        create_notification(bug_update.id, 'bug', bug_new.creator)
         bug_new.save()
     elif request.method == "GET":
         bugs = Bug.select()
@@ -66,15 +67,18 @@ def create_bug():
 
 @app.route("/bug/<param_id>", methods=["PUT"])
 def edit_bug(param_id):
-    given = request.get_json()
     bug = Bug.get(id=param_id)
-    bug.title = given["title"]       
-    bug.name = given["name"]
-    bug.updated_last = datetime.datime.now()
-    bug.priority = given["priority"]  
-    bug.status = given["status"]
-    bug.assigned_to = given["assigned_to"]
-    bug.save()
+    bug_update = bug
+    bug = model_to_dict(bug)
+    given = request.get_json()
+    bug_update.title = given["title"]       
+    bug_update.name = given["name"]
+    bug_update.updated_last = datetime.datime.now()
+    bug_update.priority = given["priority"]  
+    bug_update.status = given["status"]
+    bug_update.assigned_to = given["assigned_to"]
+    bug_update.save()
+    update_notification(param_id, 'bug', 1, bug)
     print('bug updated')
     return 'bug updated'   
 
@@ -134,6 +138,10 @@ def remove_watcher(param_id):
     watcher = Watcher.select().where(Watcher.id == param_id).get()
     watcher.delete_instance()
     return "deleted"
+
+@app.route("/test", methods=["GET", "POST"])
+def get_template():
+    return render_template("testforms.html")
 
 if __name__ == "__main__":
     app.run(use_reloader=True)

@@ -99,7 +99,7 @@ def delete_comment(param_id):
 
 @app.route("/notification", methods=["POST"])
 def create_notification():
-    given = request.form
+    given = request.get_json()
     bug_id = given["bug_id"]
     text = given["text"]
     date = datetime.datetime.now()

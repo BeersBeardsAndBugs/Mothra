@@ -78,8 +78,7 @@ def edit_bug(param_id):
     bug_update.status = given["status"]
     bug_update.assigned_to = given["assigned_to"]
     bug_update.save()
-    update_notification(param_id, 1, bug)
-    print('bug updated')
+    update_notification(param_id, 'bug', 1, bug, '_none')#hardcoded user for now
     return 'bug updated'   
 
 
@@ -88,13 +87,14 @@ def write_comment():
     given = request.get_json()
     comment_new = Comment.create(bug=given["bug"], user = given["user"], text=given["text"], date=datetime.datetime.now())
     comment_new.save()
-    create_notification(given["bug"], given["text"])
+    create_notification(given["bug"], 'comment', given["text"])
     return "No Problems =)"
 
 @app.route("/comment/<param_id>", methods=["DELETE"])
 def delete_comment(param_id):
     comment = Comment.select().where(Comment.id == param_id).get()
     comment.delete_instance()
+    delete_notification(comment.bug.id, comment.id, 1)#hardcoded user for now
     return "deleted"
 
 @app.route("/notification", methods=["POST"])

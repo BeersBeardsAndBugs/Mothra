@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import { navbarStyles } from './navbarStyles'
 import { useMenu } from '../../../hooks'
@@ -7,42 +7,34 @@ import { MobileMenu, ProfileMenu, NotificationsMenu } from './menus'
 
 export const NavbarContainer = ({
     user,
-    setUser,
     setPageSelected,
     handleVisibleBugChange,
     handleNewBugModalOpen,
 }) => {
-    // ALEX TESTING
-    // use for testing notifications
-    useEffect(() => {
-        setUser({
-            ...user,
-            notifications: [
-                { bugId: 1, message: 'The title has been altered.' },
-                { bugId: 2, message: 'Status changed' },
-            ],
-        })
-    }, [])
-    // ALEX TESTING
+    // const [notifications] = useFetch(PATH.NOTIFICATION, [])
+
+    // useEffect(() => {
+    //     notifications.getById(user.response.id)
+    // }, [])
 
     const [profileMenu] = useMenu('profile', {
-        name: user.name,
-        email: user.email,
+        name: user.response.name,
+        email: user.response.email,
         logout: () => {
             setPageSelected('login')
-            setUser(null)
+            user.reset()
         },
     })
 
     const [notificationsMenu] = useMenu('profile', {
-        notifications: user.notifications,
+        notifications: user.response.notifications,
         handleVisibleBugChange,
     })
 
     const [mobileMenu] = useMenu('profile', {
         notificationsMenuOpen: notificationsMenu.open,
         profileMenuOpen: profileMenu.open,
-        notificationsCount: user.notifications?.length,
+        notificationsCount: user.response.notifications?.length,
     })
 
     const classes = makeStyles((theme) => navbarStyles(theme, fade))()

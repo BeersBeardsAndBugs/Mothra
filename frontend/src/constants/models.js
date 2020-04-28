@@ -25,7 +25,7 @@ export const COMMENT = {
     ID: 'id',
     USER: 'user',
     TEXT: 'text',
-    USER_ID: 'date',
+    DATE: 'date',
 }
 // Watcher
 

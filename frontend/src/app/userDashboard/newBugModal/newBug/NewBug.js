@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 export const NewBug = ({ classes }) => {
     const [modalStyle] = React.useState({

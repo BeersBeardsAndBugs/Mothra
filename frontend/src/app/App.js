@@ -7,22 +7,19 @@ import { useFetch } from '../hooks'
 
 export const App = () => {
     const [pageSelected, setPageSelected] = useState('login')
-
     const [user] = useFetch('', null)
 
     return (
         <div className="App">
-            <div className="container">
+            {
                 {
-                    {
-                        login: <LoginForm {...{ setPageSelected, user }} />,
-                        homepage: (
-                            <UserDashboard {...{ user, setPageSelected }} />
-                        ),
-                        signup: <SignupForm {...{ setPageSelected, user }} />,
-                    }[user.response ? 'homepage' : pageSelected]
-                }
-            </div>
+                    login: <LoginForm {...{ setPageSelected, user }} />,
+                    homepage: (
+                        <UserDashboard {...{ user, setPageSelected }} />
+                    ),
+                    signup: <SignupForm {...{ setPageSelected, user }} />,
+                }[user.response ? 'homepage' : pageSelected]
+            }
         </div>
     )
 }

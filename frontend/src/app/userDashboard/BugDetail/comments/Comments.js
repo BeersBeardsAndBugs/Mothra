@@ -10,8 +10,19 @@ import Card from '@material-ui/core/Card'
 import Typography from '@material-ui/core/Typography'
 import React, { useState } from 'react'
 import { COMMENT } from '../../../../constants'
+import { makeStyles } from '@material-ui/core/styles'
 
 export const Comments = ({ comments, bugId }) => {
+
+    const useStyles = makeStyles((theme) => ({
+        commentsContainer : {
+            maxHeight: '400px',
+            overflowY: 'auto',
+        },
+    }))
+
+    const classes = useStyles()
+
     const [newComment, setNewComment] = useState('')
 
     const handleSubmit = () => {
@@ -23,6 +34,7 @@ export const Comments = ({ comments, bugId }) => {
             <Card>
                 <CardContent>
                     <CardHeader title="Comments"></CardHeader>
+                    <div className={classes.commentsContainer}>
 
                     {/*   New Comment Starts here   */}
                     {comments.response.map((comment, index) => {
@@ -70,7 +82,7 @@ export const Comments = ({ comments, bugId }) => {
                             </Card>
                         )
                     })}
-
+</div>
                     <Divider></Divider>
 
                     <br />
@@ -92,6 +104,8 @@ export const Comments = ({ comments, bugId }) => {
                     >
                         Save Comment
                     </Button>
+
+                    
                 </CardContent>
             </Card>
         </Grid>

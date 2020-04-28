@@ -34,6 +34,15 @@ const useStyles = makeStyles((theme) => ({
     Enhancement: {
         background: '#8bc34a',
     },
+
+    // CSS Trick to handle Material Defect that causes horizontal overflow on Grid spacing
+    // We'll use this until Google decides to fix the issue. Tho its been around for over a year...
+    grid: {
+        margin: theme.spacing(0),
+        flexGrow: 0,
+        maxWidth: `100%`,
+        flexBasis: `100%`
+    },
 }))
 
 export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
@@ -61,11 +70,11 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
     }
 
     return (
-        <Grid container spacing={1} justify="center" alignItems="stretch">
+        <Grid container justify="center" alignItems="stretch" spacing={2} className={classes.grid}>
             <Grid item xs={12} sm={12}>
                 <ButtonGroup fullWidth>
                     <Button
-                        color="secondary"
+                        color="primary"
                         variant="contained"
                         ref={myBugsBtn}
                         onClick={() => filterBugs(userName, true)}
@@ -73,7 +82,7 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
                         Assigned Bugs
                     </Button>
                     <Button
-                        color="secondary"
+                        color="primary"
                         variant="contained"
                         onClick={() => filterBugs(userName, false)}
                     >

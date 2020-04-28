@@ -20,20 +20,29 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'space-around',
-        overflow: 'hidden',
         backgroundColor: theme.palette.background.paper,
+        height: '300px',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        
     },
-    gridList: {
-        width: 500,
-        height: 450,
+    detailsContainer : {
+        minHeight: '300px',
     },
-
     title: {
         color: theme.palette.primary.light,
     },
     titleBar: {
         background:
             'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+    },
+    // CSS Trick to handle Material Defect that causes horizontal overflow on Grid spacing
+    // We'll use this until Google decides to fix the issue. Tho its been around for over a year...
+    grid: {
+        margin: theme.spacing(0),
+        flexGrow: 0,
+        maxWidth: `100%`,
+        flexBasis: `100%`
     },
 }))
 
@@ -46,7 +55,7 @@ const pictures = [
 
 export const BugDetail = ({ editBugSubmit, visibleBug }) => {
     const [comments] = useFetch(PATH.COMMENT, visibleBug.comments)
-    const classes = useStyles()
+    const classes = useStyles();
 
     const inputsSchema = {
         [BUG.DESCRIPTION]: {
@@ -63,7 +72,7 @@ export const BugDetail = ({ editBugSubmit, visibleBug }) => {
     )
 
     return (
-        <Grid container justify="flex-start" alignItems="stretch" spacing={2}>
+        <Grid container direction="row" justify="center" alignItems="stretch" spacing={2} className={classes.grid}>
             {/*   Bug Detail Title Banner   */}
             <Grid item xs={12}>
                 <Card>
@@ -80,12 +89,13 @@ export const BugDetail = ({ editBugSubmit, visibleBug }) => {
             </Grid>
 
             {/*   Bug Detail Description and Images  
-        <Grid container item xs={7} alignItems="stretch" direction="column" spacing={2}>
-*/}
+                <Grid container item xs={7} alignItems="stretch" direction="column" spacing={2}>
+            */}
             {/*   Bug Description Details   */}
-            <Grid item xs={12} sm={7}>
-                <Card>
-                    <CardContent>
+            <Grid item xs={12} sm={7} >
+                <Card >
+                    <CardContent > 
+                    <div className={classes.detailsContainer}>
                         <Typography variant="body1">
                             Status: {visibleBug[BUG.STATUS]}
                         </Typography>
@@ -125,6 +135,7 @@ export const BugDetail = ({ editBugSubmit, visibleBug }) => {
                         >
                             Save Change
                         </Button>
+                    </div>
                     </CardContent>
                 </Card>
             </Grid>
@@ -136,10 +147,8 @@ export const BugDetail = ({ editBugSubmit, visibleBug }) => {
                         <div className={classes.pictureContainer}>
                             <GridList
                                 cellHeight={160}
-                                className={classes.gridList}
-                                cols={3}
+                                cols={1}
                             >
-                                {' '}
                                 {pictures.map((tile) => (
                                     <GridListTile key={tile.img}>
                                         <img

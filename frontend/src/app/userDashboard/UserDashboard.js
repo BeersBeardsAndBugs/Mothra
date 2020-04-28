@@ -8,6 +8,7 @@ import { useFetch } from '../../hooks'
 import { PATH } from '../../constants'
 
 export const UserDashboard = ({ user, setPageSelected }) => {
+
     const [bugs] = useFetch(PATH.BUG, [])
     const [visibleBug, setVisibleBug] = useState({})
     const [isNewBugModalOpen, setIsNewBugModalOpen] = React.useState(false)
@@ -39,42 +40,45 @@ export const UserDashboard = ({ user, setPageSelected }) => {
     }
 
     return (
-        <Grid container spacing={2} alignItems="flex-start" justify="stretch">
-            <Grid item sm={12} xs={12} xl={12}>
-                <NavbarContainer
-                    {...{
-                        user,
-                        setPageSelected,
-                        handleVisibleBugChange,
-                        handleNewBugModalOpen,
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12} sm={3} xl={2}>
-                <BugList
-                    {...{
-                        bugs,
-                        userName: user.response.name,
-                        handleVisibleBugChange,
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12} sm={9} xl={9}>
-                {visibleBug?.id && (
-                    <BugDetail
-                        key={visibleBug.id}
-                        {...{
-                            visibleBug,
-                            editBugSubmit,
-                        }}
-                    />
-                )}
-            </Grid>
-            {isNewBugModalOpen && (
-                <NewBugModal
-                    {...{ isNewBugModalOpen, handleNewBugModalClose }}
-                />
-            )}
+      <Grid container alignItems="stretch" justify="flex-start" >
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <NavbarContainer 
+            {...{
+              user,
+              setPageSelected,
+              handleVisibleBugChange,
+              handleNewBugModalOpen,
+            }}
+          />
         </Grid>
+
+        <Grid item xs={12} md={2}>
+          <BugList 
+            {...{
+              bugs,
+              userName: user.response.name,
+              handleVisibleBugChange,
+            }}
+          />
+        </Grid>
+
+        <Grid item xs={12} md={10}>
+          {visibleBug?.id && (
+            <BugDetail
+              key={visibleBug.id}
+              {...{
+                visibleBug,
+                editBugSubmit,
+              }}
+            />
+          )}
+        </Grid>
+
+        {isNewBugModalOpen && (
+          <NewBugModal
+            {...{ isNewBugModalOpen, handleNewBugModalClose }}
+          />
+        )}
+      </Grid>
     )
 }

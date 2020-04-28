@@ -73,58 +73,70 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 #### Description
 
-_function_ useFetch(path, initialValue)
+function _useFetch_(_path_: string, _initialValue_: any) { return [_state_]: ObjectArray }
 
-useFetch is used to manage state that:
+useFetch is used to create and manage state that:
 
--   originates in the database
+-   originates from the database
 -   must remain in sync with the database
 -   and can have CRUD operations performed on by the user
 
-Result [_stateObject_] Properties
+Return _state_ Properties
 
--   response
-    -   _object_, holds the data in state from the fetch response
+-   _response_: any - holds the data in state from the fetch response
     -   Example:
         ```jsx
         {
-            moths.response.map((moth) => <li>{moth.name}</li>)
+            moths.response.map((moth, index) => (
+                <li key={`moth${index}`}>{moth.name}</li>
+            ))
         }
         // <li>Mothra</li>
         // <li>Venomoth</li>
         ```
--   error
-    -   _string_, fetch error message
+-   _error_: string - fetch error message
     -   Example:
         ```jsx
-        <>{moths.error}</>
+        <div>{moths.error}</div>
         // net::ERR_CONNECTION_TIMED_OUT
         ```
--   isLoading
-    -   _boolean_, is fetch promise pending
--   getAll(\__headers_)
+-   _isLoading_: boolean
 
-    -   _function_, uses get reqeust to fetch data from the path specified in the useFetch(_path_, _initialValue_) initialization
+    -   is fetch promise pending
 
--   getById(_id_)
-    -   _function_, get request that adds id parameter to api path
--   add(_body_)
-    -   _function_, post request for creating new data
+-   _getAll_(\__headers_): function
+
+    -   uses get reqeust to fetch data from the path specified in the _useFetch_(_path_, _initialValue_) invocation
+
+-   _getById_(_id_): function
+
+    -   get request that adds id parameter to api path
+
+-   _add_(_body_): function
+
+    -   post request for creating new data
     -   optimisticly updates UI, reverts to previous state if fetch fails
--   edit(_body_)
-    -   _function_, put request for updating existing data
+
+-   _edit_(_body_): function
+
+    -   put request for updating existing data
     -   optimisticly updates UI, reverts to previous state if fetch fails
--   remove(_id_)
-    -   _function_, delete request for deleting existing data
+
+-   _remove_(_id_): function
+
+    -   delete request for deleting existing data
     -   optimisticly updates UI, reverts to previous state if fetch fails
--   special(_path_, _body_)
-    -   _function_, post request that accepts custom path
--   reset()
-    -   _function_, restores response state to initialValue provided at useFetch(_path_, _initialValue_) initialization
+
+-   _special_(_path_, _body_): function
+
+    -   post request that accepts custom path
+
+-   _reset_(): function
+    -   restores response state to initialValue provided at useFetch(_path_, _initialValue_) invocation
 
 #### Code Examples
 
-1.  Initialize
+1.  Invoke to initialize state
 
     ```jsx
     // when data is an array
@@ -144,7 +156,7 @@ Result [_stateObject_] Properties
         moths.getAll()
     },[])
 
-    // when data is an object/string and id needs to be specified
+    // when data is an object/string and an id needs to be specified
     <button onClick={() => moth.getById(id)}Search by Id</button>
     ```
 
@@ -186,8 +198,8 @@ Result [_stateObject_] Properties
 
             return (
                 <ol>
-                    {moths.response.map((moth) => (
-                        <li>{moth.name}</li>
+                    {moths.response.map((moth, index) => (
+                        <li key={index}>{moth.name}</li>
                     ))}
                 </ol>
             )
@@ -282,7 +294,9 @@ const VerifyBtn = <button onClick={() => moths.special(PATH.VERIFY_AND_RETURN, m
 
 #### Description
 
-_function_ useForm(inputsSchema, onSubmit)
+function _useForm_(_inputsSchema_, _onSubmit_) {
+&nbsp;&nbsp;&nbsp;&nbsp;return { _handleSubmit_: function, _handleOnChange_: function, _inputs_: object, _isSubmitDisabled_: boolean }: Object
+}
 
 useForm is used to manage state for forms with:
 
@@ -291,47 +305,131 @@ useForm is used to manage state for forms with:
 
 Parameters
 
--   inputsSchema
-    _object_, contains the input names and validation to be used
+-   _inputsSchema_: object
 
-    -   Each key represents an input object
+    -   contains the input names and validation to be used
+
+    -   each key correlates to a controlled input name
+
     -   Input Object Properties
-        -   value
-            _string_, set as initial value, changes with handleOnChange
-        -   error
-            _string_, holds current validation error
-        -   name
-            _string_, holds copy of key value to identify input/state coorelation
-        -   required
-            _boolean_, determines whether input is required to have a value in order to submit
-        -   validator
-            _optional object_, contains regEx key for validation requirements, and error for test to be displayed when invalid
-        -   type
-            _optional string_, contains input type for when using a custom input component
+        -   _value_: string
+            -   initial value
+        -   _error_: string
+            -   initial error
+        -   _name_: string
+            -   holds copy of key value to identify input/state correlation
+        -   _required_: boolean
+            -   determines whether input is required to have a value in order to submit
+        -   _validator_?: object
+            -   contains validation requirements, and error text
+                -   _regEx_: object
+                    -   contains regular expression to test against value for validation
+                    -   /^[a-zA-Z\]\$/
+                -   _error_: string
+                    -   inputs.error value to be set if regex test fails
+        -   _type_?: string
+            -   correlates to type prop on jsx input tag
 
--   onSubmit()
-    _function_, given function for what to do with the resulting form submitted object
+-   _onSubmit_(): function
+    -   given function for what to do with the resulting form submitted object
 
 Result _Object_ Properties
 
--   handleSubmit()
+-   _handleSubmit_(_event_): function
 
-    -   _function_, handles event when submit-type button is pressed in form, validates inputs, and then creates fetch body object which is passed to the given onSubmit function
+    -   handles event when submit-type button is pressed in form, validates inputs, and then creates fetch body object which is passed to the given onSubmit function
 
--   handleOnChange()
+-   _handleOnChange_(_event_): function
 
-    -   _string_, handles input onChange event to keep state in sync with form
+    -   handles input onChange event to keep state in sync with form
 
--   inputs
+-   _inputs_: object
 
-    -   _object_, holds current state of each input
+    -   holds current state of each input value, associated error, and other relative information
     -   Properties
-        -   name -
+        -   _value_: string
+            -   used for value prop on input jsx tag
+        ```jsx
+        <input value={inputs[NAME].value} />
+        ```
+        -   _error_: string
+            -   used for name prop on input jsx tag
+        ```jsx
+        <div>{inputs[NAME].error}</div>
+        ```
 
--   isSubmitDisabled
+-   _isSubmitDisabled_: boolean
 
-    -   _boolean_, disables submit button on initial load, and when form inputs are not valid
+    -   disables submit button on initial load, and when form inputs are not valid
 
 #### Code Examples
+
+1.  Form Component
+
+    ```jsx
+    import React from 'react'
+    import { MOTH } from '../../constants'
+    import { useForm } from '../../hooks'
+
+    export const MothForm = () => {
+        const inputSchema = {
+            [MOTH.NAME]: {
+                value: '',
+                error: '',
+                name: MOTH.NAME,
+                required: true,
+                validator: {
+                    regEx: /^([a-zA-Z]$/,
+                    error: 'Name must only contain letters.',
+                },
+            },
+            [MOTH.QUANTITY]: {
+                value: 0,
+                error: '',
+                name: MOTH.QUANTITY,
+                required: false,
+            },
+        }
+
+        const onSubmit = (newMoth) => {
+            moths.add(onsubmit)
+        }
+
+        const {
+            handleSubmit,
+            handleOnChange,
+            inputs,
+            isSubmitDisabled,
+        } = useForm(inputsSchema, onSubmit)
+
+        return (
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>{MOTH.NAME}:</label>
+                    <input
+                        name={[MOTH.NAME]}
+                        value={inputs[MOTH.NAME].value}
+                        onChange={handleOnChange}
+                    />
+                </div>
+                <div>{inputs[MOTH.NAME].error}</div>
+
+                <div>
+                    <label>{MOTH.QUANTITY}:</label>
+                    <input
+                        name={[MOTH.QUANTITY]}
+                        value={inputs[MOTH.QUANTITY].value}
+                        onChange={handleOnChange}
+                    />
+                </div>
+                <div>{inputs[MOTH.QUANTITY].error}</div>
+
+                <button type="submit" disabled={isSubmitDisabled}>
+                    Add Moth
+                </button>
+            </form>
+        )
+    }
+    ```
 
 ### useMenu

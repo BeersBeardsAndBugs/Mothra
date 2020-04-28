@@ -78,7 +78,7 @@ def edit_bug(param_id):
     bug_update.status = given["status"]
     bug_update.assigned_to = given["assigned_to"]
     bug_update.save()
-    update_notification(param_id, 'bug', 1, bug)
+    update_notification(param_id, 1, bug)
     print('bug updated')
     return 'bug updated'   
 

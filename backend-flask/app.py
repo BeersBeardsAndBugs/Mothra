@@ -74,12 +74,14 @@ def edit_bug(param_id):
     bug_update = bug
     bug = model_to_dict(bug)
     given = request.get_json()
-    bug_update.title = given["title"]       
-    bug_update.name = given["name"]
-    bug_update.updated_last = datetime.datetime.now()
-    bug_update.priority = given["priority"]  
-    bug_update.status = given["status"]
-    bug_update.assigned_to = given["assigned_to"]
+    print(given)
+    bug_update.description = given ["description"]
+    # bug_update.title = given["title"]       
+    # bug_update.name = given["name"]
+    # bug_update.updated_last = datetime.datetime.now()
+    # bug_update.priority = given["priority"]  
+    # bug_update.status = given["status"]
+    # bug_update.assigned_to = given["assigned_to"]
     bug_update.save()
     update_notification(param_id, 'bug', 1, bug, '_none')#hardcoded user for now
     return 'bug updated'
@@ -88,7 +90,7 @@ def edit_bug(param_id):
 @app.route("/comment", methods=["POST"])
 def write_comment():
     given = request.get_json()
-    comment_new = Comment.create(bug=given["bug"], user = given["user"], text=given["text"], date=datetime.datetime.now())
+    comment_new = Comment.create(bug_id=given["bugId"], user = given["userEmail"], text=given["text"], date=datetime.datetime.now())
     comment_new.save()
     create_notification(given["bug"], 'comment', given["text"])
     return "No Problems =)"

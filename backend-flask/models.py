@@ -10,7 +10,7 @@ class BaseModel(Model):
 class User(BaseModel):
   name = CharField(null=False)
   password = CharField(null=False)
-  email = CharField(null=False, unique = True)
+  email = CharField(null=False, unique=True)
 
 class Bug(BaseModel):
   title = CharField(null = False)
@@ -24,7 +24,7 @@ class Bug(BaseModel):
   status = CharField(null=False)
 
 class Comment(BaseModel):
-  bug = ForeignKeyField(Bug, backref="comments")
+  bug_id = IntegerField(null=False)
   user = CharField(null=False)
   text = CharField(null=False)
   date = CharField(null=False)

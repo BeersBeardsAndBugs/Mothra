@@ -15,7 +15,7 @@ export const Comments = ({ comments, bugId }) => {
     const [newComment, setNewComment] = useState('')
 
     const handleSubmit = () => {
-        comments.add({ text: newComment })
+        comments.add({ text: newComment, bugId })
     }
 
     return (

@@ -42,13 +42,16 @@ def create_bug():
         title = given["title"]
         creator = given["creator"]
         name = given["name"]
+        description = given["description"]
         created_date = datetime.datetime.now()
         updated_last = datetime.datetime.now()
         priority = given["priority"]
         status = given["status"]
-        bug_new = Bug.create(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status)
-        create_notification(bug_update.id, 'bug', bug_new.creator)
+        bug_new = Bug.create(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description)
         bug_new.save()
+        bug_update = Bug.get(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description)
+        create_notification(bug_update.id, 'bug', bug_new.creator)
+        return 'bug created'
     elif request.method == "GET":
         bugs = Bug.select()
         bug_list =[]        
@@ -73,13 +76,13 @@ def edit_bug(param_id):
     given = request.get_json()
     bug_update.title = given["title"]       
     bug_update.name = given["name"]
-    bug_update.updated_last = datetime.datime.now()
+    bug_update.updated_last = datetime.datetime.now()
     bug_update.priority = given["priority"]  
     bug_update.status = given["status"]
     bug_update.assigned_to = given["assigned_to"]
     bug_update.save()
     update_notification(param_id, 'bug', 1, bug, '_none')#hardcoded user for now
-    return 'bug updated'   
+    return 'bug updated'
 
 
 @app.route("/comment", methods=["POST"])
@@ -98,7 +101,7 @@ def delete_comment(param_id):
     return "deleted"
 
 @app.route("/notification", methods=["POST"])
-def create_notification():
+def new_notification():
     given = request.get_json()
     bug_id = given["bug_id"]
     text = given["text"]

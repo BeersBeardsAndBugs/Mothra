@@ -14,7 +14,7 @@ class User(BaseModel):
 
 class Bug(BaseModel):
   title = CharField(null = False)
-  assigned_to = CharField()
+  assigned_to = CharField(null = True)
   creator = CharField(null=False)
   name = CharField(null=False)
   description = CharField(null=False)

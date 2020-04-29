@@ -83,7 +83,7 @@ export const useFetch = (basePath, defaultResponse = null) => {
         dataFetch('get', '', { _headers })
     }
 
-    const login = (path, body) => {
+    const special = (path, body) => {
         dataFetch('post', path, { body })
     }
 
@@ -117,7 +117,7 @@ export const useFetch = (basePath, defaultResponse = null) => {
             getById,
             edit,
             remove,
-            login,
+            special,
             reset,
         },
     ]

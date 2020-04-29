@@ -36,7 +36,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
     }
 
     const editBugSubmit = (editedBug) => {
-        bugs.edit({ ...editedBug, id: visibleBug.id })
+        bugs.edit({ ...editedBug, id: visibleBug.id, userEmail: user.email })
     }
 
     return (

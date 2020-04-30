@@ -1,9 +1,10 @@
 import React from 'react'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import { navbarStyles } from './navbarStyles'
-import { useMenu } from '../../../hooks'
+import { useMenu, useFetch } from '../../../hooks'
 import { Navbar } from './navbar'
 import { MobileMenu, ProfileMenu, NotificationsMenu } from './menus'
+import { useEffect } from 'react'
 
 export const NavbarContainer = ({
     user,
@@ -11,11 +12,19 @@ export const NavbarContainer = ({
     handleVisibleBugChange,
     handleNewBugModalOpen,
 }) => {
-    // const [notifications] = useFetch(PATH.NOTIFICATION, [])
+    const [notifications] = useFetch(
+        PATH.NOTIFICATION,
+        user.reponse.notifications
+    )
 
-    // useEffect(() => {
-    //     notifications.getById(user.response.id)
-    // }, [])
+    useEffect(() => {
+        const getNotificationTimer = setInterval(() => {
+            notifications.getById(user.id)
+        }, 300000)
+        return () => {
+            clearInterval(getNotificationTimer)
+        }
+    })
 
     const [profileMenu] = useMenu('profile', {
         name: user.response.name,
@@ -27,14 +36,14 @@ export const NavbarContainer = ({
     })
 
     const [notificationsMenu] = useMenu('profile', {
-        notifications: user.response.notifications,
+        notifications: notifications,
         handleVisibleBugChange,
     })
 
     const [mobileMenu] = useMenu('profile', {
         notificationsMenuOpen: notificationsMenu.open,
         profileMenuOpen: profileMenu.open,
-        notificationsCount: user.response.notifications?.length,
+        notificationsCount: notifications?.length,
     })
 
     const classes = makeStyles((theme) => navbarStyles(theme, fade))()

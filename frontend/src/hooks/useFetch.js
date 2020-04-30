@@ -41,7 +41,9 @@ export const useFetch = (basePath, defaultResponse = null) => {
         })
     }
 
-    const dataFetch = async (method, pathExtention = '', { headers, body }) => {
+    const dataFetch = async (method, pathExtention = '', options) => {
+        const headers = options['headers']
+        const body = options['body']
         setIsLoading(true)
         try {
             let options = {
@@ -80,7 +82,7 @@ export const useFetch = (basePath, defaultResponse = null) => {
     }
 
     const getAll = (_headers) => {
-        dataFetch('get', '', { _headers })
+        dataFetch('get', '', { headers: _headers })
     }
 
     const special = (path, body) => {
@@ -93,7 +95,7 @@ export const useFetch = (basePath, defaultResponse = null) => {
     }
 
     const getById = (id) => {
-        dataFetch('get', `/${id}`)
+        dataFetch('get', `/${id}`, { headers: {}, body: {} })
     }
 
     const edit = (body) => {
@@ -104,7 +106,7 @@ export const useFetch = (basePath, defaultResponse = null) => {
 
     const remove = (id) => {
         dispatchResponse({ type: 'remove', payload: id })
-        dataFetch('delete', `/${id}`)
+        dataFetch('delete', `/${id}`, {})
     }
 
     return [

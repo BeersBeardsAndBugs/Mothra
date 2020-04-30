@@ -41,14 +41,16 @@ export const UserDashboard = ({ user, setPageSelected }) => {
     return (
         <Grid container spacing={2} alignItems="flex-start" justify="stretch">
             <Grid item sm={12} xs={12} xl={12}>
-                <NavbarContainer
-                    {...{
-                        user,
-                        setPageSelected,
-                        handleVisibleBugChange,
-                        handleNewBugModalOpen,
-                    }}
-                />
+                {user.response && (
+                    <NavbarContainer
+                        {...{
+                            user,
+                            setPageSelected,
+                            handleVisibleBugChange,
+                            handleNewBugModalOpen,
+                        }}
+                    />
+                )}
             </Grid>
             <Grid item xs={12} sm={3} xl={2}>
                 <BugList

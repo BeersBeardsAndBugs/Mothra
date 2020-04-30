@@ -13,10 +13,10 @@ export const NavbarContainer = ({
     handleVisibleBugChange,
     handleNewBugModalOpen,
 }) => {
-    const [notifications] = useFetch(
-        PATH.NOTIFICATION,
-        user.reponse.notifications
-    )
+    const [notifications] = useFetch(PATH.NOTIFICATION, [])
+    useEffect(() => {
+        notifications.getById(user.id)
+    }, [])
 
     useEffect(() => {
         const getNotificationTimer = setInterval(() => {
@@ -35,9 +35,9 @@ export const NavbarContainer = ({
             user.reset()
         },
     })
-
+    console.log('notifications', notifications)
     const [notificationsMenu] = useMenu('profile', {
-        notifications: notifications,
+        notifications: notifications.respomse,
         handleVisibleBugChange,
     })
 

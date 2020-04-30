@@ -36,7 +36,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
     }
 
     const editBugSubmit = (editedBug) => {
-        bugs.edit({ ...editedBug, id: visibleBug.id, userEmail: user.email })
+        bugs.edit({ ...editedBug, id: visibleBug.id, userEmail: user.response.email })
     }
 
     return (
@@ -67,6 +67,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
                     <BugDetail
                         key={visibleBug.id}
                         {...{
+                            userEmail: user.response.email,
                             visibleBug,
                             editBugSubmit,
                         }}
@@ -79,24 +80,5 @@ export const UserDashboard = ({ user, setPageSelected }) => {
                 />
             )}
         </Grid>
-
-        <Grid item xs={12} md={10}>
-          {visibleBug?.id && (
-            <BugDetail
-              key={visibleBug.id}
-              {...{
-                visibleBug,
-                editBugSubmit,
-              }}
-            />
-          )}
-        </Grid>
-
-        {isNewBugModalOpen && (
-          <NewBugModal
-            {...{ isNewBugModalOpen, handleNewBugModalClose }}
-          />
-        )}
-      </Grid>
     )
 }

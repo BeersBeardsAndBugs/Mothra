@@ -12,7 +12,7 @@ import React, { useState } from 'react'
 import { COMMENT } from '../../../../constants'
 import { makeStyles } from '@material-ui/core/styles'
 
-export const Comments = ({ comments, bugId }) => {
+export const Comments = ({ comments, bugId, userEmail }) => {
 
     const useStyles = makeStyles((theme) => ({
         commentsContainer : {
@@ -26,7 +26,7 @@ export const Comments = ({ comments, bugId }) => {
     const [newComment, setNewComment] = useState('')
 
     const handleSubmit = () => {
-        comments.add({ text: newComment, bugId })
+        comments.add({ text: newComment, bugId, userEmail })
     }
 
     return (

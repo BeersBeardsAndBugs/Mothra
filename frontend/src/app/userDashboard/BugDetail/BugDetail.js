@@ -53,7 +53,7 @@ const pictures = [
     { img: 'png_img.png', title: '.png upload', author: 'Alex' },
 ]
 
-export const BugDetail = ({ editBugSubmit, visibleBug }) => {
+export const BugDetail = ({ editBugSubmit, visibleBug, userEmail }) => {
     const [comments] = useFetch(PATH.COMMENT, visibleBug.comments)
     const classes = useStyles();
 
@@ -190,7 +190,7 @@ export const BugDetail = ({ editBugSubmit, visibleBug }) => {
             {comments.isLoading && !comments.reponse ? (
                 <Typography>Loading Comments...</Typography>
             ) : (
-                <Comments {...{ bugId: visibleBug[BUG.ID], comments }} />
+                <Comments {...{ bugId: visibleBug[BUG.ID], comments, userEmail }} />
             )}
         </Grid>
     )

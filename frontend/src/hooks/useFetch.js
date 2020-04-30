@@ -26,14 +26,15 @@ export const useFetch = (basePath, defaultResponse = null) => {
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const responseRef = useRef()
-    useEffect(() => {
-        responseRef.current = response
-    })
+    // useEffect(() => {
+
+    // })
 
     const handleError = (error) => {
         // alert(
         //     ` An error occurred while attempting to communicate to database. Please try again. \nError: ${error}`
         // )
+        console.log('this is the error of responseRef ', responseRef.current)
         setError(error)
         dispatchResponse({
             type: 'replace',
@@ -66,11 +67,30 @@ export const useFetch = (basePath, defaultResponse = null) => {
             if (res.status !== 200) {
                 handleError(res.status)
             } else {
+                console.log('res = ', res)
                 const json = await res.json()
                 console.log('DATA', json)
-                dispatchResponse({ type: 'replace', payload: json })
+                switch(method){
+                    case "get":
+                    dispatchResponse({ type: 'replace', payload: json }) 
+                    break
+                    case "post": 
+                    if(pathExtention === '/user' || pathExtention === '/login'){
+                        dispatchResponse({ type: 'replace', payload: json }) 
+
+                    }
+                    break
+                    // case "put": 
+                    // break
+                    // case "delete": 
+                    // break
+                    default:
+                    break
+                }
+                
             }
         } catch (err) {
+            console.log('error = ', err)
             handleError(err)
         } finally {
             setIsLoading(false)
@@ -90,6 +110,8 @@ export const useFetch = (basePath, defaultResponse = null) => {
     }
 
     const add = (body) => {
+        responseRef.current = response
+        console.log('add ref', responseRef.current)
         dispatchResponse({ type: 'add', payload: body })
         dataFetch('post', '', { body })
     }

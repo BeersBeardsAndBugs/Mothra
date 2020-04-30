@@ -66,34 +66,28 @@ def create_bug():
             bug_list.append(bug)
         return json.dumps(bug_list) 
     elif request.method == "DELETE":
-        return "coming soon =)"       
+        return "coming soon =)"
 
 @app.route("/bug/<param_id>", methods=["PUT"])
 def edit_bug(param_id):
     bug = Bug.get(id=param_id)
-    bug_update = bug
-    bug = model_to_dict(bug)
     given = request.get_json()
-    print(given)
-    bug_update.description = given ["description"]
-    # bug_update.title = given["title"]       
-    # bug_update.name = given["name"]
-    # bug_update.updated_last = datetime.datetime.now()
-    # bug_update.priority = given["priority"]  
-    # bug_update.status = given["status"]
-    # bug_update.assigned_to = given["assigned_to"]
-    bug_update.save()
+    change_fields = given.keys()
+    for change in change_fields:
+        bug.change = given[change]
+    bug.save()
+    bug.description = given ["description"]
     update_notification(param_id, 'bug', 1, bug, '_none')#hardcoded user for now
     return 'bug updated'
-
 
 @app.route("/comment", methods=["POST"])
 def write_comment():
     given = request.get_json()
-    comment_new = Comment.create(bug_id=given["bugId"], user = given["userEmail"], text=given["text"], date=datetime.datetime.now())
+    bug = Bug.get(id=given['bugId'])
+    comment_new = Comment.create(bug=bug, user=given["userEmail"], text=given["text"], date=datetime.datetime.now())
     comment_new.save()
-    create_notification(given["bug"], 'comment', given["text"])
-    return "No Problems =)"
+    create_notification(bug, 'comment', given["userEmail"])
+    return json.dumps('stuff'), status.HTTP_200_OK
 
 @app.route("/comment/<param_id>", methods=["DELETE"])
 def delete_comment(param_id):
@@ -101,33 +95,6 @@ def delete_comment(param_id):
     comment.delete_instance()
     delete_notification(comment.bug.id, comment.id, 1)#hardcoded user for now
     return "deleted"
-
-@app.route("/notification", methods=["POST"])
-def new_notification():
-    given = request.get_json()
-    bug_id = given["bug_id"]
-    text = given["text"]
-    date = datetime.datetime.now()
-    notification_new = Notification.create(bug_id=bug_id, text=text, date=date)
-    notification_new.save()
-    created = Notification.select().where(Notification.text == text).get()
-    return model_to_dict(created)
-
-@app.route("/notification/<param_id>", methods=["PUT", "GET"])
-def check_notification(param_id):
-    if request.method == "GET":
-        notification_list = []
-        watchers = Watcher.select().where(Watcher.user_id == params_user_id)
-        for watcher in watchers:
-            notifications = Notification.select().where(Notification.bug_id == watcher.bug_id)
-            for notification in notifications:
-                notification_list.append(model_to_dict(notification))
-        return json.dumps(notification_list)
-    elif request.method == "PUT":
-        notification = Notification.get(id=param_id)
-        notification.checked = True
-        notification.save()
-        return "saved"
 
 @app.route("/watcher", methods=["POST"])
 def add_watcher():

@@ -5,6 +5,7 @@ import { useMenu, useFetch } from '../../../hooks'
 import { Navbar } from './navbar'
 import { MobileMenu, ProfileMenu, NotificationsMenu } from './menus'
 import { useEffect } from 'react'
+import { PATH } from '../../../constants'
 
 export const NavbarContainer = ({
     user,

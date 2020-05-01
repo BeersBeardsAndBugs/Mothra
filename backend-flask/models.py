@@ -16,7 +16,6 @@ class Bug(BaseModel):
   title = CharField(null = False)
   assigned_to = CharField(null = True)
   creator = CharField(null=False)
-  name = CharField(null=False)
   description = CharField(null=False)
   created_date = CharField(null=False)
   updated_last = CharField(null=False)
@@ -42,4 +41,3 @@ class Notification(BaseModel):
 
 db.connect()
 db.create_tables([User, Bug, Comment, Watcher, Notification])
-

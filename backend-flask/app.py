@@ -42,7 +42,6 @@ def create_bug():
         given = request.get_json()
         title = given["title"]
         creator = given["creator"]
-        name = given["name"]
         description = given["description"]
         created_date = datetime.datetime.now()
         updated_last = datetime.datetime.now()
@@ -73,11 +72,13 @@ def create_bug():
 def edit_bug(param_id):
     bug = Bug.get(id=param_id)
     given = request.get_json()
-    change_fields = given.keys()
-    for change in change_fields:
-        bug.change = given[change]
+    bug.title = given['title']
+    bug.assigned_to = given['assigned_to']
+    bug.description = given['description']
+    bug.updated_last = datetime.datetime.now()
+    bug.priority = given['priority']
+    bug.status = given['status']
     bug.save()
-    bug.description = given ["description"]
     update_notification(param_id, 'bug', 1, bug, '_none')#hardcoded user for now
     return 'bug updated'
 
@@ -91,12 +92,23 @@ def write_comment():
     create_notification(bug, 'comment', given["user"])
     return json.dumps('stuff'), status.HTTP_200_OK
 
-@app.route("/comment/<param_id>", methods=["DELETE"])
+@app.route("/comment/<param_id>", methods=["DELETE", "PUT"])
 def delete_comment(param_id):
-    comment = Comment.select().where(Comment.id == param_id).get()
-    comment.delete_instance()
-    delete_notification(comment.bug.id, comment.id, 1)#hardcoded user for now
-    return "deleted"
+    comment = Comment.get(id=param_id)
+    if request.method == "DELETE":
+        comment.delete_instance()
+        fake_user = 'jake the fake user'
+        delete_notification(comment.bug_id, comment.id, fake_user)#hardcoded user for now
+        return "deleted"
+    elif request.method == "PUT":
+        given = request.get_json()
+        change_fields = given.keys()
+        for change in change_fields:
+            comment.change = given[change]
+        bug.save()
+        update_notification(comment.bug_id, 'comment', given['user'], bug, param_id)
+    return "something because I have to thanks for nothin flask"
+        
 
 @app.route("/watcher", methods=["POST"])
 def add_watcher():

@@ -25,7 +25,7 @@ def update_notification(bug_id, table, user, old, comment_id):
 
 # for this to work properly, we will need a user_id passed with these requests
 def delete_notification(bug_id, comment_id, user):
-    text = f"Commment {id} of bug {bug_id} deleted by {user}."
+    text = f"Commment {comment_id} of bug {bug_id} deleted by {user}."
     new_notification = Notification.create(bug_id=bug_id, text=text, date=datetime.datetime.now())
     new_notification.save()
     return

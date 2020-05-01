@@ -13,9 +13,8 @@ import { COMMENT } from '../../../../constants'
 import { makeStyles } from '@material-ui/core/styles'
 
 export const Comments = ({ comments, bugId, userEmail }) => {
-
     const useStyles = makeStyles((theme) => ({
-        commentsContainer : {
+        commentsContainer: {
             maxHeight: '400px',
             overflowY: 'auto',
         },
@@ -26,7 +25,7 @@ export const Comments = ({ comments, bugId, userEmail }) => {
     const [newComment, setNewComment] = useState('')
 
     const handleSubmit = () => {
-        comments.add({ text: newComment, bugId, userEmail })
+        comments.add({ text: newComment, bugId, user: userEmail })
     }
 
     return (
@@ -35,54 +34,58 @@ export const Comments = ({ comments, bugId, userEmail }) => {
                 <CardContent>
                     <CardHeader title="Comments"></CardHeader>
                     <div className={classes.commentsContainer}>
-
-                    {/*   New Comment Starts here   */}
-                    {comments.response.map((comment, index) => {
-                        return (
-                            <Card
-                                style={{
-                                    padding: '20px 20px',
-                                    marginTop: 10,
-                                }}
-                                key={`${bugId}-comment-${index}`}
-                            >
-                                <CardContent>
-                                    <Grid container wrap="nowrap" spacing={2}>
-                                        <Grid item>
-                                            <Avatar
-                                                alt=""
-                                                src={
-                                                    comment[COMMENT.USER] +
-                                                    '.jpg'
-                                                }
-                                                colorDefault={
-                                                    theme.palette.primary.main
-                                                }
-                                            />
-                                        </Grid>
+                        {/*   New Comment Starts here   */}
+                        {comments.response.map((comment, index) => {
+                            return (
+                                <Card
+                                    style={{
+                                        padding: '20px 20px',
+                                        marginTop: 10,
+                                    }}
+                                    key={`${bugId}-comment-${index}`}
+                                >
+                                    <CardContent>
                                         <Grid
-                                            justifyContent="left"
-                                            item
-                                            xs
-                                            zeroMinWidth
+                                            container
+                                            wrap="nowrap"
+                                            spacing={2}
                                         >
-                                            <Typography variant="h6">
-                                                {comment[COMMENT.USER]}
-                                            </Typography>
-                                            <br />
-                                            <Typography>
-                                                {comment[COMMENT.TEXT]}
-                                            </Typography>
-                                            <Typography variant="caption">
-                                                {comment[COMMENT.DATE]}
-                                            </Typography>
+                                            <Grid item>
+                                                <Avatar
+                                                    alt=""
+                                                    src={
+                                                        comment[COMMENT.USER] +
+                                                        '.jpg'
+                                                    }
+                                                    colorDefault={
+                                                        theme.palette.primary
+                                                            .main
+                                                    }
+                                                />
+                                            </Grid>
+                                            <Grid
+                                                justifyContent="left"
+                                                item
+                                                xs
+                                                zeroMinWidth
+                                            >
+                                                <Typography variant="h6">
+                                                    {comment[COMMENT.USER]}
+                                                </Typography>
+                                                <br />
+                                                <Typography>
+                                                    {comment[COMMENT.TEXT]}
+                                                </Typography>
+                                                <Typography variant="caption">
+                                                    {comment[COMMENT.DATE]}
+                                                </Typography>
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </CardContent>
-                            </Card>
-                        )
-                    })}
-</div>
+                                    </CardContent>
+                                </Card>
+                            )
+                        })}
+                    </div>
                     <Divider></Divider>
 
                     <br />
@@ -104,8 +107,6 @@ export const Comments = ({ comments, bugId, userEmail }) => {
                     >
                         Save Comment
                     </Button>
-
-                    
                 </CardContent>
             </Card>
         </Grid>

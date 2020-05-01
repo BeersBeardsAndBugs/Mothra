@@ -5,6 +5,7 @@ import datetime
 import json
 from playhouse.shortcuts import model_to_dict, dict_to_model
 from helper import *
+# import time
 
 app = Flask(__name__)
 
@@ -84,9 +85,10 @@ def edit_bug(param_id):
 def write_comment():
     given = request.get_json()
     bug = Bug.get(id=given['bugId'])
-    comment_new = Comment.create(bug=bug, user=given["userEmail"], text=given["text"], date=datetime.datetime.now())
-    comment_new.save()
-    create_notification(bug, 'comment', given["userEmail"])
+    comment_new = Comment.create(bug=bug, user=given["user"], text=given["text"], date=given["date"])
+    comment_new.save()     	
+    # time.sleep(10)
+    create_notification(bug, 'comment', given["user"])
     return json.dumps('stuff'), status.HTTP_200_OK
 
 @app.route("/comment/<param_id>", methods=["DELETE"])

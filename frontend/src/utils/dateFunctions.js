@@ -28,5 +28,5 @@ export const dateTimeNowText = () => {
     const paddedMinute = leftPadZero(minute)
     const paddedSeconds = leftPadZero(seconds)
 
-    return `${paddedDay}-${textMonth}-${year} ${paddedHour}-${paddedMinute}-${paddedSeconds}`
+    return `${paddedDay}-${textMonth}-${year} ${paddedHour}:${paddedMinute}:${paddedSeconds}`
 }

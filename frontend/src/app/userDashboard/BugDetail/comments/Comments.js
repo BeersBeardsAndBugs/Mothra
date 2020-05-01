@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography'
 import React, { useState } from 'react'
 import { COMMENT } from '../../../../constants'
 import { makeStyles } from '@material-ui/core/styles'
+import { dateTimeNowText } from '../../../../utils'
 
 export const Comments = ({ comments, bugId, userEmail }) => {
     const useStyles = makeStyles((theme) => ({
@@ -25,7 +26,13 @@ export const Comments = ({ comments, bugId, userEmail }) => {
     const [newComment, setNewComment] = useState('')
 
     const handleSubmit = () => {
-        comments.add({ text: newComment, bugId, user: userEmail })
+        comments.add({
+            [COMMENT.TEXT]: newComment,
+            bugId,
+            [COMMENT.USER]: userEmail,
+            [COMMENT.DATE]: dateTimeNowText(),
+        })
+        setNewComment('')
     }
 
     return (
@@ -53,14 +60,14 @@ export const Comments = ({ comments, bugId, userEmail }) => {
                                             <Grid item>
                                                 <Avatar
                                                     alt=""
-                                                    src={
-                                                        comment[COMMENT.USER] +
-                                                        '.jpg'
-                                                    }
-                                                    colorDefault={
-                                                        theme.palette.primary
-                                                            .main
-                                                    }
+                                                    // src={
+                                                    //     comment[COMMENT.USER] +
+                                                    //     '.jpg'
+                                                    // }
+                                                    // colorDefault={
+                                                    //     theme.palette.primary
+                                                    //         .main
+                                                    // }
                                                 />
                                             </Grid>
                                             <Grid

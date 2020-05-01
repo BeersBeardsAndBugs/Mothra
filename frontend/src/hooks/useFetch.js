@@ -70,24 +70,9 @@ export const useFetch = (basePath, defaultResponse = null) => {
                 console.log('res = ', res)
                 const json = await res.json()
                 console.log('DATA', json)
-                switch(method){
-                    case "get":
-                    dispatchResponse({ type: 'replace', payload: json }) 
-                    break
-                    case "post": 
-                    if(pathExtention === '/user' || pathExtention === '/login'){
-                        dispatchResponse({ type: 'replace', payload: json }) 
-
-                    }
-                    break
-                    // case "put": 
-                    // break
-                    // case "delete": 
-                    // break
-                    default:
-                    break
+                if (method === 'get' || (method === 'post' && pathExtention)) {
+                    dispatchResponse({ type: 'replace', payload: json })
                 }
-                
             }
         } catch (err) {
             console.log('error = ', err)
@@ -111,7 +96,6 @@ export const useFetch = (basePath, defaultResponse = null) => {
 
     const add = (body) => {
         responseRef.current = response
-        console.log('add ref', responseRef.current)
         dispatchResponse({ type: 'add', payload: body })
         dataFetch('post', '', { body })
     }

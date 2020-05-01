@@ -70,16 +70,32 @@ def create_bug():
 
 @app.route("/bug/<param_id>", methods=["PUT"])
 def edit_bug(param_id):
-    bug = Bug.get(id=param_id)
+    # bug = Bug.get(id=param_id)
     given = request.get_json()
-    bug.title = given['title']
-    bug.assigned_to = given['assigned_to']
-    bug.description = given['description']
-    bug.updated_last = datetime.datetime.now()
-    bug.priority = given['priority']
-    bug.status = given['status']
-    bug.save()
-    update_notification(param_id, 'bug', 1, bug, '_none')#hardcoded user for now
+    # bug.title = given['title']
+    # bug.assigned_to = given['assigned_to']
+    # bug.description = given['description']
+    # bug.updated_last = datetime.datetime.now()
+    # bug.priority = given['priority']
+    # bug.status = given['status']
+    # bug.save()
+
+    # This works
+    # update_bug = (Bug.update({ 
+    #     Bug.title: given["title"],
+    #     Bug.assigned_to: given["assigned_to"],
+    #     Bug.description: given["description"],
+    #     Bug.updated_last: given["updated_last"],
+    #     Bug.priority: given["priority"],
+    #     Bug.status: given['status']
+    #     })).where(Bug.id==param_id)
+    # update_bug.execute()
+    
+    update_bug = (Bug.update(given)).where(Bug.id==param_id)
+    update_bug.execute()
+    
+    
+    update_notification(param_id, 'bug', 1, "bug", '_none')#hardcoded user for now
     return 'bug updated'
 
 @app.route("/comment", methods=["POST"])

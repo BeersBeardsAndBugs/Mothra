@@ -2,9 +2,10 @@ import React from 'react'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import Menu from '@material-ui/core/Menu'
+import { NOTIFICATION } from '../../../../constants'
 
 export const NotificationsMenu = ({
-    notifications = [],
+    notifications,
     handleAllMenuClose,
     anchorEl,
     menuId,
@@ -25,17 +26,19 @@ export const NotificationsMenu = ({
             open={isMenuOpen}
             onClose={handleAllMenuClose}
         >
-            {notifications.map((notification, index) => {
+            {notifications.response.map((notification, index) => {
                 return (
                     <MenuItem
                         key={'notification' + index}
                         onClick={() =>
-                            handleNotificationClick(notification.bugId)
+                            handleNotificationClick(
+                                notification[NOTIFICATION.BUG_ID]
+                            )
                         }
                     >
                         <ListItemText
-                            primary={notification.bugId}
-                            secondary={notification.message}
+                            primary={notification[NOTIFICATION.BUG_ID]}
+                            secondary={notification[NOTIFICATION.TEXT]}
                         />
                     </MenuItem>
                 )

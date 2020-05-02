@@ -11,12 +11,12 @@ export const BUG = {
     TITLE: 'title',
     ASSIGNED_TO: 'assigned_to',
     CREATED_BY: 'creator',
-    NAME: 'name',
     DESCRIPTION: 'description',
     CREATED_DATE: 'created_date',
     UPDATED_LAST: 'updated_last',
     PRIORITY: 'priority',
     STATUS: 'status',
+    UPDATED_BY: 'updated_by',
 }
 
 // Comment
@@ -33,7 +33,7 @@ export const WATCHER = { ID: 'id', BUG_ID: 'bug_id', USER_ID: 'user_id' }
 
 // Notifications
 
-export const NOTIFICATIONS = {
+export const NOTIFICATION = {
     ID: 'id',
     BUG_ID: 'bug_id',
     TEXT: 'text',

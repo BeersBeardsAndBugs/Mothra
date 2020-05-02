@@ -21,6 +21,7 @@ class Bug(BaseModel):
   updated_last = CharField(null=False)
   priority = CharField(null=False)
   status = CharField(null=False)
+  updated_by = CharField(null=False)
 
 class Comment(BaseModel):
   bug = ForeignKeyField(Bug, backref="comments")

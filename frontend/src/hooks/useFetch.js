@@ -31,10 +31,6 @@ export const useFetch = (basePath, defaultResponse = null) => {
     // })
 
     const handleError = (error) => {
-        // alert(
-        //     ` An error occurred while attempting to communicate to database. Please try again. \nError: ${error}`
-        // )
-        console.log('this is the error of responseRef ', responseRef.current)
         setError(error)
         dispatchResponse({
             type: 'replace',
@@ -67,7 +63,6 @@ export const useFetch = (basePath, defaultResponse = null) => {
             if (res.status !== 200) {
                 handleError(res.status)
             } else {
-                console.log('res = ', res)
                 const json = await res.json()
                 console.log('DATA', json)
                 if (method === 'get' || (method === 'post' && pathExtention)) {
@@ -75,7 +70,6 @@ export const useFetch = (basePath, defaultResponse = null) => {
                 }
             }
         } catch (err) {
-            console.log('error = ', err)
             handleError(err)
         } finally {
             setIsLoading(false)
@@ -101,11 +95,11 @@ export const useFetch = (basePath, defaultResponse = null) => {
     }
 
     const getById = (id) => {
+        console.log('NOTIFICATIONS')
         dataFetch('get', `/${id}`, { headers: {}, body: {} })
     }
 
     const edit = (body) => {
-        console.log('id', body.id)
         dispatchResponse({ type: 'edit', payload: body })
         dataFetch('put', `/${body.id}`, { body })
     }

@@ -47,9 +47,9 @@ def create_bug():
         updated_last = datetime.datetime.now()
         priority = given["priority"]
         status = given["status"]
-        bug_new = Bug.create(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description)
+        bug_new = Bug.create(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description, updated_by=creator)
         bug_new.save()
-        bug_update = Bug.get(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description)
+        bug_update = Bug.get(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description, updated_by=creator)
         create_notification(bug_update.id, 'bug', bug_new.creator)
         return 'bug created'
     elif request.method == "GET":
@@ -70,33 +70,12 @@ def create_bug():
 
 @app.route("/bug/<param_id>", methods=["PUT"])
 def edit_bug(param_id):
-    # bug = Bug.get(id=param_id)
+    old_bug = Bug.get(id=param_id)
     given = request.get_json()
-    # bug.title = given['title']
-    # bug.assigned_to = given['assigned_to']
-    # bug.description = given['description']
-    # bug.updated_last = datetime.datetime.now()
-    # bug.priority = given['priority']
-    # bug.status = given['status']
-    # bug.save()
-
-    # This works
-    # update_bug = (Bug.update({ 
-    #     Bug.title: given["title"],
-    #     Bug.assigned_to: given["assigned_to"],
-    #     Bug.description: given["description"],
-    #     Bug.updated_last: given["updated_last"],
-    #     Bug.priority: given["priority"],
-    #     Bug.status: given['status']
-    #     })).where(Bug.id==param_id)
-    # update_bug.execute()
-    
     update_bug = (Bug.update(given)).where(Bug.id==param_id)
     update_bug.execute()
-    
-    
-    update_notification(param_id, 'bug', 1, "bug", '_none')#hardcoded user for now
-    return 'bug updated'
+    update_notification(param_id, 'bug', given["updated_by"], old_bug, '_none')#hardcoded user for now
+    return json.dumps('bug updated')
 
 @app.route("/comment", methods=["POST"])
 def write_comment():
@@ -140,6 +119,23 @@ def remove_watcher(param_id):
     watcher = Watcher.select().where(Watcher.id == param_id).get()
     watcher.delete_instance()
     return "deleted"
+
+@app.route("/notification/<params_user_id>", methods=["PUT", "GET"])
+def check_notification(params_user_id):
+    if request.method == "GET":
+        notification_list = []
+        watchers = Watcher.select().where(Watcher.user_id == params_user_id)
+        for watcher in watchers:
+            notifications = Notification.select().where(Notification.bug_id == watcher.bug_id)
+            for notification in notifications:
+                notification_list.append(model_to_dict(notification))
+        return json.dumps(notification_list)
+    elif request.method == "PUT":
+        notification = Notification.get(id=param_id)
+        notification.checked = True
+        notification.save()
+        return json.dumps("saved")
+
 
 @app.route("/test", methods=["GET", "POST"])
 def get_template():

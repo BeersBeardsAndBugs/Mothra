@@ -5,10 +5,9 @@ import { BugList } from './BugList'
 import { NavbarContainer } from './navbarContainer'
 import { NewBugModal } from './newBugModal'
 import { useFetch } from '../../hooks'
-import { PATH } from '../../constants'
+import { PATH, BUG } from '../../constants'
 
 export const UserDashboard = ({ user, setPageSelected }) => {
-
     const [bugs] = useFetch(PATH.BUG, [])
     const [visibleBug, setVisibleBug] = useState({})
     const [isNewBugModalOpen, setIsNewBugModalOpen] = React.useState(false)
@@ -36,7 +35,11 @@ export const UserDashboard = ({ user, setPageSelected }) => {
     }
 
     const editBugSubmit = (editedBug) => {
-        bugs.edit({ ...editedBug, id: visibleBug.id, userEmail: user.response.email })
+        bugs.edit({
+            ...editedBug,
+            [BUG.ID]: visibleBug.id,
+            [BUG.UPDATED_BY]: user.response.email,
+        })
     }
 
     return (

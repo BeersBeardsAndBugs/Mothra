@@ -22,7 +22,8 @@ import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import CloseIcon from '@material-ui/icons/Close'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import { BUG } from '../../../constants'
+import { BUG, PATH, USER } from '../../../constants'
+import { useForm } from '../../../hooks'
 
 const useStyles = makeStyles((theme) => ({
     pictureContainer: {
@@ -59,27 +60,44 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-
-
-export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
+export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose }) => {
     const classes = useStyles();
-
     const inputsSchema = {
+        [BUG.TITLE]: {
+            value: '',
+            error: '',
+            name: BUG.TITLE,
+            required: true,
+            validator: {
+                regEx: /^[a-zA-Z]{3,}$/,
+                error: 'Title must be at least be 3 characters.',
+            }
+        },
         [BUG.DESCRIPTION]: {
             value: '',
             error: '',
             name: BUG.DESCRIPTION,
+            required: false,
+        },
+        [BUG.PRIORITY]: {
+            value: '',
+            error: '',
+            name: BUG.PRIORITY,
+            required: true,
+        },
+        [BUG.ASSIGNED_TO]: {
+            value: '',
+            error: '',
+            name: BUG.ASSIGNED_TO,
             required: true,
         },
     }
 
-    const [title, setTitle] = React.useState('');
-    const [desc, setDesc] = React.useState('');
     const [tags, setTags] = React.useState([]);
     const [priority, setPriority] = React.useState('None');
     const [assignTo, setAssignTo] = React.useState('');
-    const [isSubmitDisabled, setIsSubmitDisabled] = React.useState([true]);
-    const [handleSubmit, setHandleSubmit] = React.useState([]);
+    // const [isSubmitDisabled, setIsSubmitDisabled] = React.useState([true]);
+    // const [handleSubmit, setHandleSubmit] = React.useState([]);
     
     // Should come from an API/parent component that gets a List of Users
     const names = [
@@ -94,8 +112,7 @@ export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
         'Critical',
         'High',
         'Normal',
-        'Enhancement',
-        'None'
+        'Enhancement'
       ];
 
     const handleTagsChange = (event) => {
@@ -105,23 +122,25 @@ export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
     const handlePriorityChange = (event) => {
         setPriority(event.target.value);
     };
-
-    
-    const handleTitleChange = (event) => {
-        setTitle(event.target.value);
-    };
-
-    const handleDescChange = (event) => {
-        setDesc(event.target.value);
-    };
-
+ 
     const handleAssignToChange = (event) => {
         setAssignTo(event.target.value);
     };
 
+
+    const doCreate = (body) => {
+        console.log("activate doCreate()");
+        //api.create(PATH.BUG, body)
+    }
+
+    const { handleSubmit, handleOnChange, inputs, isSubmitDisabled } = useForm(
+        inputsSchema,
+        doCreate
+    )
+
     return (
         <div className={classes.root}>
-            <Dialog maxWidth='lg' fullWidth open={isNewBugModalOpen} disableBackdropClick onClose={handleNewBugModalClose}>
+            <Dialog maxWidth='lg' fullWidth open={isNewBugDialogOpen} disableBackdropClick onClose={handleNewBugDialogClose}>
             <DialogTitle>
 
             <Grid container direction="row" justify="space-between" alignItems="center" spacing={2}>
@@ -129,7 +148,7 @@ export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
                     <Typography>Create New Ticket</Typography>
                 </Grid>
                 <Grid item justify='flex-end'>
-                    <IconButton onClick={handleNewBugModalClose}>
+                    <IconButton onClick={handleNewBugDialogClose}>
                         <CloseIcon />
                     </IconButton>
                 </Grid>
@@ -141,18 +160,17 @@ export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
             <Grid container direction="row" justify="center" alignItems="stretch" spacing={2}>
                 <Grid item xs={12}>
                     <FormControl fullWidth variant="outlined">
-                        <InputLabel htmlFor="component-outlined">Bug title</InputLabel>
-                        <OutlinedInput autoFocusvalue={title} onChange={handleTitleChange} label="Bug Title" />
+                        <InputLabel>Bug title</InputLabel>
+                        <OutlinedInput label="Bug Title" name={BUG.TITLE} value={inputs[BUG.TITLE].value} onChange={handleOnChange}/>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={7} >
-                    <TextField fullWidth label="Description" multiline rows={10} value={desc} onChange={handleDescChange}  variant="outlined"
-                    />
+                    <TextField label="Description" name={BUG.DESCRIPTION} value={inputs[BUG.DESCRIPTION].value} onChange={handleOnChange} fullWidth multiline rows={10} variant="outlined"/>
                 </Grid>
                 <Grid item xs={12} sm={5}>
                 <FormControl fullWidth>
-                    <InputLabel id="demo-mutiple-name-label">Priority</InputLabel>
-                    <Select value={priority} onChange={handlePriorityChange} input={<Input />}>
+                    <InputLabel>Priority</InputLabel>
+                    <Select name={BUG.PRIORITY} value={inputs[BUG.PRIORITY].value} onChange={handleOnChange} input={<Input />}>
                     {priorities.map((priority) => (
                         <MenuItem key={priority} value={priority}>
                             <ListItemAvatar className={classes.forceInline}>
@@ -165,9 +183,9 @@ export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
                     </Select>
                 </FormControl>
                 <FormControl fullWidth>
-                    <InputLabel id="demo-mutiple-name-label">Assign To</InputLabel>
-                    <Select value={assignTo} onChange={handleAssignToChange} input={<Input />}>
-                    {names.map((name) => (
+                    <InputLabel>Assign To</InputLabel>
+                    <Select name={BUG.ASSIGNED_TO} value={inputs[BUG.ASSIGNED_TO].value} onChange={handleOnChange} input={<Input />}>
+                        {names.map((name) => (
                         <MenuItem key={name} value={name}>
                             <ListItemAvatar className={classes.forceInline}>
                                 <Avatar variant='square' alt="" src={name.split(" ")[0] +'.jpg'}></Avatar>
@@ -198,37 +216,29 @@ export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
             <Grid item xs={12} sm={12}>
                 <Card>
                     <CardContent>
-
-                    <Button type="submit" variant="contained" color="secondary">
+                    <Button variant="contained" color="secondary">
                         + Add Image
                     </Button>
-
 {/*** 
-
-                        <div className={classes.pictureContainer}>
-                            <GridList cols={2.5} className={classes.gridList}>
-                                {pictures.map((tile) => (
-                                    <GridListTile key={tile.img}>
-                                        <img src={tile.img} alt={tile.title} />
-                                        <GridListTileBar title={tile.title}
-                                        actionIcon={
-                                            <IconButton aria-label={`star ${tile.title}`}>
-                                                <SettingsOverscanIcon/>
-                                            </IconButton>
-                                            }
-                                        />
-                                    </GridListTile>
-                                ))}
-
-                                <GridListTile>
-                                <GridListTileBar title="Add Image">
-
-                                </GridListTileBar>
-                                    
-                                </GridListTile>
-                            </GridList>
-                        </div>
-
+                    <div className={classes.pictureContainer}>
+                        <GridList cols={2.5} className={classes.gridList}>
+                            {pictures.map((tile) => (
+                            <GridListTile key={tile.img}>
+                                <img src={tile.img} alt={tile.title} />
+                                    <GridListTileBar title={tile.title}
+                                    actionIcon={
+                                        <IconButton aria-label={`star ${tile.title}`}>
+                                            <SettingsOverscanIcon/>
+                                        </IconButton>
+                                    }
+                                />
+                            </GridListTile>
+                            ))}
+                        <GridListTile>
+                            <GridListTileBar title="Add Image"></GridListTileBar>   
+                        </GridListTile>
+                    </GridList>
+                </div>
 */}
                     </CardContent>
                 </Card>
@@ -241,8 +251,7 @@ export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
             </Grid>
             </Grid>
             </form>
-                </DialogContent>
-            </Dialog>
-        </div>
-    )
-}
+        </DialogContent>
+    </Dialog>
+</div>
+)}

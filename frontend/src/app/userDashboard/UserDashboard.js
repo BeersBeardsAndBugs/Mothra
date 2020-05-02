@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { BugDetail } from './BugDetail'
 import { BugList } from './BugList'
 import { NavbarContainer } from './navbarContainer'
-import { NewBugModal } from './newBugModal'
+import { NewBugDialog } from './newBugDialog'
 import { useFetch } from '../../hooks'
 import { PATH } from '../../constants'
 
@@ -11,7 +11,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
 
     const [bugs] = useFetch(PATH.BUG, [])
     const [visibleBug, setVisibleBug] = useState({})
-    const [isNewBugModalOpen, setIsNewBugModalOpen] = React.useState(false)
+    const [isNewBugDialogOpen, setIsNewBugDialogOpen] = React.useState(false)
 
     useEffect(() => {
         bugs.getAll()
@@ -27,12 +27,12 @@ export const UserDashboard = ({ user, setPageSelected }) => {
         }
     }
 
-    const handleNewBugModalOpen = () => {
-        setIsNewBugModalOpen(true)
+    const handleNewBugDialogOpen = () => {
+        setIsNewBugDialogOpen(true)
     }
 
-    const handleNewBugModalClose = () => {
-        setIsNewBugModalOpen(false)
+    const handleNewBugDialogClose = () => {
+        setIsNewBugDialogOpen(false)
     }
 
     const editBugSubmit = (editedBug) => {
@@ -47,7 +47,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
               user,
               setPageSelected,
               handleVisibleBugChange,
-              handleNewBugModalOpen,
+              handleNewBugDialogOpen,
             }}
           />
         </Grid>
@@ -74,9 +74,9 @@ export const UserDashboard = ({ user, setPageSelected }) => {
           )}
         </Grid>
 
-        {isNewBugModalOpen && (
-          <NewBugModal
-            {...{ isNewBugModalOpen, handleNewBugModalClose }}
+        {isNewBugDialogOpen && (
+          <NewBugDialog
+            {...{ isNewBugDialogOpen, handleNewBugDialogClose }}
           />
         )}
       </Grid>

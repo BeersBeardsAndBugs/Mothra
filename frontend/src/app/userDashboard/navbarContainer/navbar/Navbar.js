@@ -15,7 +15,7 @@ export const Navbar = ({
     profileMenu,
     notificationsMenu,
     mobileMenu,
-    handleNewBugModalOpen,
+    handleNewBugDialogOpen,
 }) => {
     return (
         <AppBar position="static">
@@ -40,7 +40,7 @@ export const Navbar = ({
                     variant="contained"
                     color="secondary"
                     startIcon={<AddIcon />}
-                    onClick={handleNewBugModalOpen}
+                    onClick={handleNewBugDialogOpen}
                 >
                     Create Bug
                 </Button>

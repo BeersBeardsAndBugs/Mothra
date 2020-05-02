@@ -9,7 +9,7 @@ export const NavbarContainer = ({
     user,
     setPageSelected,
     handleVisibleBugChange,
-    handleNewBugModalOpen,
+    handleNewBugDialogOpen,
 }) => {
     // const [notifications] = useFetch(PATH.NOTIFICATION, [])
 
@@ -54,7 +54,7 @@ export const NavbarContainer = ({
                     profileMenu,
                     notificationsMenu,
                     mobileMenu,
-                    handleNewBugModalOpen,
+                    handleNewBugDialogOpen,
                 }}
             />
             <MobileMenu {...{ ...mobileMenu.props, handleAllMenuClose }} />

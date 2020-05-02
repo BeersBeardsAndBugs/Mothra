@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(0),
         flexGrow: 0,
         maxWidth: `100%`,
-        flexBasis: `100%`
+        flexBasis: `100%`,
     },
 }))
 
@@ -65,12 +65,17 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
             })
         }
 
-        console.log(filtered)
         setFilteredList(filtered)
     }
 
     return (
-        <Grid container justify="center" alignItems="stretch" spacing={2} className={classes.grid}>
+        <Grid
+            container
+            justify="center"
+            alignItems="stretch"
+            spacing={2}
+            className={classes.grid}
+        >
             <Grid item xs={12} sm={12}>
                 <ButtonGroup fullWidth>
                     <Button

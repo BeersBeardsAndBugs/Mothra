@@ -8,11 +8,11 @@ user2.save()
 user3 = User(name="preston", password="poogle", email='poogle@gmail.com')
 user3.save()
 
-bug1 = Bug(title='UI Broken', creator='jordon', assigned_to='preston', name='bug1', priority='High', description='im broke', created_date='tuesday', updated_last='tuesday', status='in progress')
+bug1 = Bug(title='UI Broken', creator='jordon', assigned_to='preston', name='bug1', priority='High', description='im broke', created_date='tuesday', updated_last='tuesday', status='in progress', updated_by='jordon')
 bug1.save()
-bug2 = Bug(title='Error on Save', creator='alex', assigned_to='preston', name='bug2', priority='Normal', description='im broke too', created_date='1-1-2020', updated_last='1-3-2020', status='in progress')
+bug2 = Bug(title='Error on Save', creator='alex', assigned_to='preston', name='bug2', priority='Normal', description='im broke too', created_date='1-1-2020', updated_last='1-3-2020', status='in progress', updated_by='jordon')
 bug2.save()
-bug3 = Bug(title='Weird glitch', creator='preston', assigned_to='jordon', name='bug3', priority='Critical', description='im lyke, super broke', created_date='1-1-2020', updated_last='1-3-2020', status='in progress')
+bug3 = Bug(title='Weird glitch', creator='preston', assigned_to='jordon', name='bug3', priority='Critical', description='im lyke, super broke', created_date='1-1-2020', updated_last='1-3-2020', status='in progress', updated_by='jordon')
 bug3.save()
 
 

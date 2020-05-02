@@ -14,14 +14,14 @@ class User(BaseModel):
 
 class Bug(BaseModel):
   title = CharField(null = False)
-  assigned_to = CharField()
+  assigned_to = CharField(null = True)
   creator = CharField(null=False)
-  name = CharField(null=False)
   description = CharField(null=False)
   created_date = CharField(null=False)
   updated_last = CharField(null=False)
   priority = CharField(null=False)
   status = CharField(null=False)
+  updated_by = CharField(null=False)
 
 class Comment(BaseModel):
   bug = ForeignKeyField(Bug, backref="comments")
@@ -42,4 +42,3 @@ class Notification(BaseModel):
 
 db.connect()
 db.create_tables([User, Bug, Comment, Watcher, Notification])
-

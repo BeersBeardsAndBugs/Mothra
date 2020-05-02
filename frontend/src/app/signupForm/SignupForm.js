@@ -68,7 +68,7 @@ export const SignupForm = ({ setPageSelected, user }) => {
     }
 
     const doLogin = (body) => {
-        user.login(PATH.USER, body)
+        user.special(PATH.USER, body)
     }
 
     const { handleSubmit, handleOnChange, inputs, isSubmitDisabled } = useForm(

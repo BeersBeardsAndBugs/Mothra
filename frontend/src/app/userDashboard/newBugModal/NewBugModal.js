@@ -1,53 +1,30 @@
+import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles'
-import React from 'react'
-import { NewBug } from './newBug'
-
-import FilledInput from '@material-ui/core/FilledInput';
 import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-
 import Grid from '@material-ui/core/Grid'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import Checkbox from '@material-ui/core/Checkbox'
 import ListItemText from '@material-ui/core/ListItemText'
-
 import Avatar from '@material-ui/core/Avatar'
 import BugReportIcon from '@material-ui/icons/BugReportRounded'
-
-import Box from '@material-ui/core/Box'
-import GridList from '@material-ui/core/GridList'
-import GridListTile from '@material-ui/core/GridListTile'
-import GridListTileBar from '@material-ui/core/GridListTileBar'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
-import ButtonGroup from '@material-ui/core/ButtonGroup'
 import CloseIcon from '@material-ui/icons/Close'
-import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan'
-import { positions } from '@material-ui/system';
-
-import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-
-
-
-import { BUG, PATH } from '../../../constants'
+import { BUG } from '../../../constants'
 
 const useStyles = makeStyles((theme) => ({
-
     pictureContainer: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -87,7 +64,6 @@ const useStyles = makeStyles((theme) => ({
 export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
     const classes = useStyles();
 
-
     const inputsSchema = {
         [BUG.DESCRIPTION]: {
             value: '',
@@ -97,15 +73,6 @@ export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
         },
     }
 
-    const pictures = [
-        { img: 'jpg_img.JPG', title: '.jpg upload', author: 'Preston' },
-        { img: 'gif_img.gif', title: '.gif upload', author: 'Jordon' },
-        { img: 'ultrawide_img.png', title: 'ultrawide upload', author: 'Alex' },
-        { img: 'png_img.png', title: '.png upload', author: 'Alex' },
-    ]
-
-
-
     const [title, setTitle] = React.useState('');
     const [desc, setDesc] = React.useState('');
     const [tags, setTags] = React.useState([]);
@@ -113,11 +80,15 @@ export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
     const [assignTo, setAssignTo] = React.useState('');
     const [isSubmitDisabled, setIsSubmitDisabled] = React.useState([true]);
     const [handleSubmit, setHandleSubmit] = React.useState([]);
+    
+    // Should come from an API/parent component that gets a List of Users
     const names = [
         'Jordon West',
         'Preston West',
         'Alex Albright',
       ];
+
+    // Should come from an API/parent component that gets a List of all possible Priority Levels
     const priorities = [
         'Blocker',
         'Critical',
@@ -171,21 +142,11 @@ export const NewBugModal = ({ isNewBugModalOpen, handleNewBugModalClose }) => {
                 <Grid item xs={12}>
                     <FormControl fullWidth variant="outlined">
                         <InputLabel htmlFor="component-outlined">Bug title</InputLabel>
-                        <OutlinedInput autoFocus id="component-outlined" value={title} onChange={handleTitleChange} label="Bug Title" />
+                        <OutlinedInput autoFocusvalue={title} onChange={handleTitleChange} label="Bug Title" />
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={7} >
-                    <TextField
-                        fullWidth
-                        id="standard-textarea"
-                        label="Description"
-                        placeholder="Description"
-                        multiline
-                        rows={4}
-                        name="Description"
-                        value={desc}
-                        onChange={handleDescChange}
-                        variant="outlined"
+                    <TextField fullWidth label="Description" multiline rows={10} value={desc} onChange={handleDescChange}  variant="outlined"
                     />
                 </Grid>
                 <Grid item xs={12} sm={5}>

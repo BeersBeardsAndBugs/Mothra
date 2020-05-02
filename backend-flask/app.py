@@ -5,6 +5,7 @@ import datetime
 import json
 from playhouse.shortcuts import model_to_dict, dict_to_model
 from helper import *
+# import time
 
 app = Flask(__name__)
 
@@ -41,13 +42,16 @@ def create_bug():
         given = request.get_json()
         title = given["title"]
         creator = given["creator"]
-        name = given["name"]
+        description = given["description"]
         created_date = datetime.datetime.now()
         updated_last = datetime.datetime.now()
         priority = given["priority"]
         status = given["status"]
-        bug_new = Bug.create(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status)
+        bug_new = Bug.create(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description, updated_by=creator)
         bug_new.save()
+        bug_update = Bug.get(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description, updated_by=creator)
+        create_notification(bug_update.id, 'bug', bug_new.creator)
+        return 'bug created'
     elif request.method == "GET":
         bugs = Bug.select()
         bug_list =[]        
@@ -62,60 +66,44 @@ def create_bug():
             bug_list.append(bug)
         return json.dumps(bug_list) 
     elif request.method == "DELETE":
-        return "coming soon =)"       
+        return "coming soon =)"
 
 @app.route("/bug/<param_id>", methods=["PUT"])
 def edit_bug(param_id):
+    old_bug = Bug.get(id=param_id)
     given = request.get_json()
-    bug = Bug.get(id=param_id)
-    updated_keys = given.keys()
-    for key in updated_keys:
-        bug[key] = given[key]
-    bug.save()
-    print('bug updated')
-    return 'bug updated'   
-
+    update_bug = (Bug.update(given)).where(Bug.id==param_id)
+    update_bug.execute()
+    update_notification(param_id, 'bug', given["updated_by"], old_bug, '_none')#hardcoded user for now
+    return json.dumps('bug updated')
 
 @app.route("/comment", methods=["POST"])
 def write_comment():
     given = request.get_json()
-    comment_new = Comment.create(bug=given["bug"], user = given["user"], text=given["text"], date=datetime.datetime.now())
-    comment_new.save()
-    create_notification(given["bug"], given["text"])
-    return "No Problems =)"
+    bug = Bug.get(id=given['bugId'])
+    comment_new = Comment.create(bug=bug, user=given["user"], text=given["text"], date=given["date"])
+    comment_new.save()     	
+    # time.sleep(10)
+    create_notification(bug, 'comment', given["user"])
+    return json.dumps('stuff'), status.HTTP_200_OK
 
-@app.route("/comment/<param_id>", methods=["DELETE"])
+@app.route("/comment/<param_id>", methods=["DELETE", "PUT"])
 def delete_comment(param_id):
-    comment = Comment.select().where(Comment.id == param_id).get()
-    comment.delete_instance()
-    return "deleted"
-
-@app.route("/notification", methods=["POST"])
-def create_notification():
-    given = request.form
-    bug_id = given["bug_id"]
-    text = given["text"]
-    date = datetime.datetime.now()
-    notification_new = Notification.create(bug_id=bug_id, text=text, date=date)
-    notification_new.save()
-    created = Notification.select().where(Notification.text == text).get()
-    return model_to_dict(created)
-
-@app.route("/notification/<param_id>", methods=["PUT", "GET"])
-def check_notification(param_id):
-    if request.method == "GET":
-        notification_list = []
-        watchers = Watcher.select().where(Watcher.user_id == params_user_id)
-        for watcher in watchers:
-            notifications = Notification.select().where(Notification.bug_id == watcher.bug_id)
-            for notification in notifications:
-                notification_list.append(model_to_dict(notification))
-        return json.dumps(notification_list)
+    comment = Comment.get(id=param_id)
+    if request.method == "DELETE":
+        comment.delete_instance()
+        fake_user = 'jake the fake user'
+        delete_notification(comment.bug_id, comment.id, fake_user)#hardcoded user for now
+        return "deleted"
     elif request.method == "PUT":
-        notification = Notification.get(id=param_id)
-        notification.checked = True
-        notification.save()
-        return "saved"
+        given = request.get_json()
+        change_fields = given.keys()
+        for change in change_fields:
+            comment.change = given[change]
+        bug.save()
+        update_notification(comment.bug_id, 'comment', given['user'], bug, param_id)
+    return "something because I have to thanks for nothin flask"
+        
 
 @app.route("/watcher", methods=["POST"])
 def add_watcher():
@@ -131,6 +119,27 @@ def remove_watcher(param_id):
     watcher = Watcher.select().where(Watcher.id == param_id).get()
     watcher.delete_instance()
     return "deleted"
+
+@app.route("/notification/<params_user_id>", methods=["PUT", "GET"])
+def check_notification(params_user_id):
+    if request.method == "GET":
+        notification_list = []
+        watchers = Watcher.select().where(Watcher.user_id == params_user_id)
+        for watcher in watchers:
+            notifications = Notification.select().where(Notification.bug_id == watcher.bug_id)
+            for notification in notifications:
+                notification_list.append(model_to_dict(notification))
+        return json.dumps(notification_list)
+    elif request.method == "PUT":
+        notification = Notification.get(id=param_id)
+        notification.checked = True
+        notification.save()
+        return json.dumps("saved")
+
+
+@app.route("/test", methods=["GET", "POST"])
+def get_template():
+    return render_template("testforms.html")
 
 if __name__ == "__main__":
     app.run(use_reloader=True)

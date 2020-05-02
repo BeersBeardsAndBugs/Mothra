@@ -26,14 +26,11 @@ export const useFetch = (basePath, defaultResponse = null) => {
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const responseRef = useRef()
-    useEffect(() => {
-        responseRef.current = response
-    })
+    // useEffect(() => {
+
+    // })
 
     const handleError = (error) => {
-        // alert(
-        //     ` An error occurred while attempting to communicate to database. Please try again. \nError: ${error}`
-        // )
         setError(error)
         dispatchResponse({
             type: 'replace',
@@ -41,7 +38,9 @@ export const useFetch = (basePath, defaultResponse = null) => {
         })
     }
 
-    const dataFetch = async (method, pathExtention = '', { headers, body }) => {
+    const dataFetch = async (method, pathExtention = '', options) => {
+        const headers = options['headers']
+        const body = options['body']
         setIsLoading(true)
         try {
             let options = {
@@ -66,7 +65,9 @@ export const useFetch = (basePath, defaultResponse = null) => {
             } else {
                 const json = await res.json()
                 console.log('DATA', json)
-                dispatchResponse({ type: 'replace', payload: json })
+                if (method === 'get' || (method === 'post' && pathExtention)) {
+                    dispatchResponse({ type: 'replace', payload: json })
+                }
             }
         } catch (err) {
             handleError(err)
@@ -80,31 +81,32 @@ export const useFetch = (basePath, defaultResponse = null) => {
     }
 
     const getAll = (_headers) => {
-        dataFetch('get', '', { _headers })
+        dataFetch('get', '', { headers: _headers })
     }
 
-    const login = (path, body) => {
+    const special = (path, body) => {
         dataFetch('post', path, { body })
     }
 
     const add = (body) => {
+        responseRef.current = response
         dispatchResponse({ type: 'add', payload: body })
         dataFetch('post', '', { body })
     }
 
     const getById = (id) => {
-        dataFetch('get', `/${id}`)
+        console.log('NOTIFICATIONS')
+        dataFetch('get', `/${id}`, { headers: {}, body: {} })
     }
 
     const edit = (body) => {
-        console.log('id', body.id)
         dispatchResponse({ type: 'edit', payload: body })
         dataFetch('put', `/${body.id}`, { body })
     }
 
     const remove = (id) => {
         dispatchResponse({ type: 'remove', payload: id })
-        dataFetch('delete', `/${id}`)
+        dataFetch('delete', `/${id}`, {})
     }
 
     return [
@@ -117,7 +119,7 @@ export const useFetch = (basePath, defaultResponse = null) => {
             getById,
             edit,
             remove,
-            login,
+            special,
             reset,
         },
     ]

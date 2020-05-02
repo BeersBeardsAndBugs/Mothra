@@ -24,9 +24,8 @@ const useStyles = makeStyles((theme) => ({
         height: '300px',
         overflowY: 'auto',
         overflowX: 'hidden',
-        
     },
-    detailsContainer : {
+    detailsContainer: {
         minHeight: '300px',
     },
     title: {
@@ -42,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(0),
         flexGrow: 0,
         maxWidth: `100%`,
-        flexBasis: `100%`
+        flexBasis: `100%`,
     },
 }))
 
@@ -53,9 +52,9 @@ const pictures = [
     { img: 'png_img.png', title: '.png upload', author: 'Alex' },
 ]
 
-export const BugDetail = ({ editBugSubmit, visibleBug }) => {
+export const BugDetail = ({ editBugSubmit, visibleBug, userEmail }) => {
     const [comments] = useFetch(PATH.COMMENT, visibleBug.comments)
-    const classes = useStyles();
+    const classes = useStyles()
 
     const inputsSchema = {
         [BUG.DESCRIPTION]: {
@@ -72,7 +71,14 @@ export const BugDetail = ({ editBugSubmit, visibleBug }) => {
     )
 
     return (
-        <Grid container direction="row" justify="center" alignItems="stretch" spacing={2} className={classes.grid}>
+        <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="stretch"
+            spacing={2}
+            className={classes.grid}
+        >
             {/*   Bug Detail Title Banner   */}
             <Grid item xs={12}>
                 <Card>
@@ -92,50 +98,50 @@ export const BugDetail = ({ editBugSubmit, visibleBug }) => {
                 <Grid container item xs={7} alignItems="stretch" direction="column" spacing={2}>
             */}
             {/*   Bug Description Details   */}
-            <Grid item xs={12} sm={7} >
-                <Card >
-                    <CardContent > 
-                    <div className={classes.detailsContainer}>
-                        <Typography variant="body1">
-                            Status: {visibleBug[BUG.STATUS]}
-                        </Typography>
-                        <Typography variant="body1">
-                            Bug Priority: {visibleBug[BUG.PRIORITY]}
-                        </Typography>
-                        <Typography variant="body1">
-                            Current Owner: {visibleBug[BUG.ASSIGNED_TO]}
-                        </Typography>
-                        <Typography variant="body1">
-                            Last Updated: {visibleBug[BUG.UPDATED_LAST]} by{' '}
-                            {visibleBug[BUG.UPDATED_BY]}
-                        </Typography>
-                        <Typography variant="body1">
-                            Created: {visibleBug[BUG.CREATED_DATE]} by{' '}
-                            {visibleBug[BUG.CREATED_BY]}
-                        </Typography>
-                        <br />
-                        <TextField
-                            fullWidth
-                            id="standard-textarea"
-                            label="Description"
-                            placeholder="Description"
-                            multiline
-                            rows={4}
-                            name={BUG.DESCRIPTION}
-                            value={inputs[BUG.DESCRIPTION].value}
-                            onChange={handleOnChange}
-                            variant="outlined"
-                        />
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            onClick={handleSubmit}
-                            disabled={isSubmitDisabled}
-                        >
-                            Save Change
-                        </Button>
-                    </div>
+            <Grid item xs={12} sm={7}>
+                <Card>
+                    <CardContent>
+                        <div className={classes.detailsContainer}>
+                            <Typography variant="body1">
+                                Status: {visibleBug[BUG.STATUS]}
+                            </Typography>
+                            <Typography variant="body1">
+                                Bug Priority: {visibleBug[BUG.PRIORITY]}
+                            </Typography>
+                            <Typography variant="body1">
+                                Current Owner: {visibleBug[BUG.ASSIGNED_TO]}
+                            </Typography>
+                            <Typography variant="body1">
+                                Last Updated: {visibleBug[BUG.UPDATED_LAST]} by{' '}
+                                {visibleBug[BUG.UPDATED_BY]}
+                            </Typography>
+                            <Typography variant="body1">
+                                Created: {visibleBug[BUG.CREATED_DATE]} by{' '}
+                                {visibleBug[BUG.CREATED_BY]}
+                            </Typography>
+                            <br />
+                            <TextField
+                                fullWidth
+                                id="standard-textarea"
+                                label="Description"
+                                placeholder="Description"
+                                multiline
+                                rows={4}
+                                name={BUG.DESCRIPTION}
+                                value={inputs[BUG.DESCRIPTION].value}
+                                onChange={handleOnChange}
+                                variant="outlined"
+                            />
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                onClick={handleSubmit}
+                                disabled={isSubmitDisabled}
+                            >
+                                Save Change
+                            </Button>
+                        </div>
                     </CardContent>
                 </Card>
             </Grid>
@@ -145,10 +151,7 @@ export const BugDetail = ({ editBugSubmit, visibleBug }) => {
                 <Card>
                     <CardContent>
                         <div className={classes.pictureContainer}>
-                            <GridList
-                                cellHeight={160}
-                                cols={1}
-                            >
+                            <GridList cellHeight={160} cols={1}>
                                 {pictures.map((tile) => (
                                     <GridListTile key={tile.img}>
                                         <img
@@ -187,10 +190,12 @@ export const BugDetail = ({ editBugSubmit, visibleBug }) => {
             {/*   Comments Section  
     <Grid container item xs={5} alignItems="stretch" spacing={2}>
     */}
-            {comments.isLoading && !comments.reponse ? (
+            {comments.isLoading && !comments.response ? (
                 <Typography>Loading Comments...</Typography>
             ) : (
-                <Comments {...{ bugId: visibleBug[BUG.ID], comments }} />
+                <Comments
+                    {...{ bugId: visibleBug[BUG.ID], comments, userEmail }}
+                />
             )}
         </Grid>
     )

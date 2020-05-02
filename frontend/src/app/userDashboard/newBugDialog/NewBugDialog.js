@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -69,7 +69,7 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
             name: BUG.TITLE,
             required: true,
             validator: {
-                regEx: /^[a-zA-Z]{3,}$/,
+                regEx: /^[a-zA-Z ]{3,}$/,
                 error: 'Title must be at least be 3 characters.',
             }
         },
@@ -91,6 +91,12 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
             name: BUG.ASSIGNED_TO,
             required: true,
         },
+        watchers: {
+            value: [],
+            error: '',
+            name: 'watchers',
+            required: false,
+        }
     }
 
     const [tags, setTags] = React.useState([]);
@@ -119,7 +125,7 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
 
     const doCreate = (body) => {
         console.log(body, "activate doCreate()");
-        //api.create(PATH.BUG, body)
+        //api.add(PATH.BUG, body);
     }
 
     const { handleSubmit, handleOnChange, inputs, isSubmitDisabled } = useForm(
@@ -136,7 +142,7 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
                 <Grid item>
                     <Typography>Create New Ticket</Typography>
                 </Grid>
-                <Grid item justify='flex-end'>
+                <Grid item>
                     <IconButton onClick={handleNewBugDialogClose}>
                         <CloseIcon />
                     </IconButton>
@@ -150,7 +156,7 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
                 <Grid item xs={12}>
                     <FormControl fullWidth variant="outlined">
                         <InputLabel>Bug title</InputLabel>
-                        <OutlinedInput label="Bug Title" name={BUG.TITLE} value={inputs[BUG.TITLE].value} onChange={handleOnChange}/>
+                        <OutlinedInput label="Bug Title" autoFocus inputProps={{maxLength: 80}} name={BUG.TITLE} value={inputs[BUG.TITLE].value} onChange={handleOnChange}/>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={7} >

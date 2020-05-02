@@ -94,8 +94,6 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
     }
 
     const [tags, setTags] = React.useState([]);
-    const [priority, setPriority] = React.useState('None');
-    const [assignTo, setAssignTo] = React.useState('');
     // const [isSubmitDisabled, setIsSubmitDisabled] = React.useState([true]);
     // const [handleSubmit, setHandleSubmit] = React.useState([]);
     
@@ -119,17 +117,8 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
         setTags(event.target.value);
     };
 
-    const handlePriorityChange = (event) => {
-        setPriority(event.target.value);
-    };
- 
-    const handleAssignToChange = (event) => {
-        setAssignTo(event.target.value);
-    };
-
-
     const doCreate = (body) => {
-        console.log("activate doCreate()");
+        console.log(body, "activate doCreate()");
         //api.create(PATH.BUG, body)
     }
 

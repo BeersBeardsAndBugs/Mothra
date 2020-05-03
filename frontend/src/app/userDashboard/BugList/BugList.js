@@ -109,7 +109,7 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText
-                                primary={bug[BUG.DESCRIPTION]}
+                                primary={bug[BUG.TITLE]}
                                 secondary={
                                     bug[BUG.ASSIGNED_TO]
                                         ? `${bug[BUG.ASSIGNED_TO]}`

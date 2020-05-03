@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose }) => {
+export const NewBugDialog = ({ add, isNewBugDialogOpen, handleNewBugDialogClose }) => {
     const classes = useStyles();
     const inputsSchema = {
         [BUG.TITLE]: {
@@ -91,6 +91,12 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
             name: BUG.ASSIGNED_TO,
             required: true,
         },
+        creator: {
+            value: 'alex',
+        },
+        [BUG.STATUS]: {
+            value: 'in progress',
+        },
         watchers: {
             value: [],
             error: '',
@@ -98,6 +104,19 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
             required: false,
         }
     }
+/**
+    {
+        "title": "Testing POST Bug Creation API", 
+        "assigned_to": "preston", 
+        "creator": "jordon", 
+        "description": "This is a test to see if I can create a Bug using a POST Request and payload",
+        "created_date": "sunday", 
+        "updated_last": "sunday", 
+        "priority": "Critical", 
+        "status": "in progress", 
+        "updated_by":"jordon"
+    }
+*/ 
 
     const [tags, setTags] = React.useState([]);
     // const [isSubmitDisabled, setIsSubmitDisabled] = React.useState([true]);
@@ -125,7 +144,8 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
 
     const doCreate = (body) => {
         console.log(body, "activate doCreate()");
-        //api.add(PATH.BUG, body);
+        handleNewBugDialogClose();
+        add(body);
     }
 
     const { handleSubmit, handleOnChange, inputs, isSubmitDisabled } = useForm(

@@ -79,7 +79,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
 
         {isNewBugDialogOpen && (
           <NewBugDialog
-            {...{ isNewBugDialogOpen, handleNewBugDialogClose }}
+            {...{ add:bugs.add, isNewBugDialogOpen, handleNewBugDialogClose }}
           />
         )}
       </Grid>

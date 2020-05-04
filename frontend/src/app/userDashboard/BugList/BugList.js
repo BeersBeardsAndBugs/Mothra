@@ -18,7 +18,9 @@ const useStyles = makeStyles((theme) => ({
     listStyle: {
         color: 'black',
     },
-
+    listText: {
+        wordWrap: 'break-word',
+    },
     Blocker: {
         background: '#b71c1c',
     },
@@ -46,26 +48,20 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
-    const myBugsBtn = useRef(null)
-
-    const [filteredList, setFilteredList] = useState([])
-
     const classes = useStyles()
+    const myBugsBtn = useRef(null)
+    const [showMine, setShowMine] = useState(true);
 
-    function filterBugs(assigned_to, forOwner) {
-        let filtered = []
-
-        if (forOwner) {
-            filtered = bugs.response.filter((bug) => {
-                return bug[BUG.ASSIGNED_TO] === assigned_to
-            })
-        } else {
-            filtered = bugs.response.filter((bug) => {
-                return bug[BUG.ASSIGNED_TO] !== assigned_to
-            })
-        }
-
-        setFilteredList(filtered)
+    let filteredList = [];
+    
+    if (showMine) {
+        filteredList = bugs.response.filter((bug) => {
+            return bug[BUG.ASSIGNED_TO] === userName
+        })
+    } else {
+        filteredList = bugs.response.filter((bug) => {
+            return bug[BUG.ASSIGNED_TO] !== userName
+        })
     }
 
     return (
@@ -82,14 +78,14 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
                         color="primary"
                         variant="contained"
                         ref={myBugsBtn}
-                        onClick={() => filterBugs(userName, true)}
+                        onClick={() => setShowMine(true)}
                     >
                         Assigned Bugs
                     </Button>
                     <Button
                         color="primary"
                         variant="contained"
-                        onClick={() => filterBugs(userName, false)}
+                        onClick={() => setShowMine(false)}
                     >
                         Other Bugs
                     </Button>
@@ -109,6 +105,7 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText
+                            className={classes.listText}
                                 primary={bug[BUG.TITLE]}
                                 secondary={
                                     bug[BUG.ASSIGNED_TO]
@@ -116,16 +113,6 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
                                         : 'No Owner'
                                 }
                             />
-                            <ListItemSecondaryAction>
-                                {/*
-                  Keeping this here in case we want to include something in future
-
-                  <IconButton edge="end" aria-label="delete">
-                    <DeleteIcon />
-                  </IconButton>
-
-                */}
-                            </ListItemSecondaryAction>
                         </ListItem>
                     ))}
                 </List>

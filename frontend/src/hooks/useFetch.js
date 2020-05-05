@@ -1,6 +1,7 @@
 import { useState, useReducer, useRef, useEffect } from 'react'
 
 const dataReducer = (objects, { type, payload }) => {
+    console.log('payload', payload)
     switch (type) {
         case 'add':
             return [...objects, payload]
@@ -65,6 +66,7 @@ export const useFetch = (basePath, defaultResponse = null) => {
             } else {
                 const json = await res.json()
                 console.log('DATA', json)
+                console.log('type', type)
                 if (type) {
                     dispatchResponse({ type, payload: json })
                 }

@@ -53,7 +53,7 @@ const pictures = [
 ]
 
 export const BugDetail = ({ editBugSubmit, visibleBug, userEmail }) => {
-    const [comments] = useFetch(PATH.COMMENT, visibleBug.comments)
+    const [comments] = useFetch(PATH.COMMENT, visibleBug.comments || [])
     const classes = useStyles()
 
     const inputsSchema = {

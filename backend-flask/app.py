@@ -22,19 +22,31 @@ def get_user():
     else:
         return 'not found', status.HTTP_404_NOT_FOUND
 
-@app.route("/user", methods=["POST"])
+@app.route("/user", methods=["POST", "GET"])
 def create_user():
-    given = request.get_json()
-    user_check = User.get_or_none(email=given['email'])
-    if user_check is not None:
-        print('not a unique email. Need to account for this on frontend')
-        return "Not a unique email", status.HTTP_409_CONFLICT
-    else:
-        user_new = User.create(name=given["name"], password=given["password"], email=given["email"])
-        user_new.save()
-        user = User.get()
-        user = User.get(email=given["email"], password=given["password"])
-        return json.dumps(model_to_dict(user))
+    if request.method == "POST":
+        given = request.get_json()
+        user_check = User.get_or_none(email=given['email'])
+        if user_check is not None:
+            print('not a unique email. Need to account for this on frontend')
+            return "Not a unique email", status.HTTP_409_CONFLICT
+        else:
+            user_new = User.create(name=given["name"], password=given["password"], email=given["email"])
+            user_new.save()
+            user = User.get()
+            user = User.get(email=given["email"], password=given["password"])
+            return json.dumps(model_to_dict(user))
+    elif request.method == "GET":
+        users = User.select()
+        user_list =[]        
+        for user in users:
+            user = model_to_dict(user)
+            del user["password"]
+            user_list.append(user)
+        return json.dumps(user_list) 
+    elif request.method == "DELETE":
+        return "coming soon =)"
+
 
 @app.route("/bug", methods=["POST", "GET", "DELETE"])
 def create_bug():
@@ -42,16 +54,17 @@ def create_bug():
         given = request.get_json()
         title = given["title"]
         creator = given["creator"]
+        assigned_to = given["assigned_to"]
         description = given["description"]
         created_date = datetime.datetime.now()
         updated_last = datetime.datetime.now()
         priority = given["priority"]
         status = given["status"]
-        bug_new = Bug.create(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description, updated_by=creator)
+        bug_new = Bug.create(assigned_to=assigned_to, title=title, creator=creator, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description, updated_by=creator)
         bug_new.save()
-        bug_update = Bug.get(title=title, creator=creator, name=name, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description, updated_by=creator)
-        create_notification(bug_update.id, 'bug', bug_new.creator)
-        return 'bug created'
+        bug_update = Bug.get(title=title, creator=creator, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description, updated_by=creator)
+        # create_notification(bug_update.id, 'bug', bug_new.creator)
+        return json.dumps('bug created')
     elif request.method == "GET":
         bugs = Bug.select()
         bug_list =[]        

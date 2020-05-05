@@ -9,11 +9,16 @@ import { PATH, BUG } from '../../constants'
 
 export const UserDashboard = ({ user, setPageSelected }) => {
     const [bugs] = useFetch(PATH.BUG, [])
+    const [users] = useFetch(PATH.USER, [])
     const [visibleBug, setVisibleBug] = useState({})
     const [isNewBugDialogOpen, setIsNewBugDialogOpen] = React.useState(false)
 
     useEffect(() => {
         bugs.getAll()
+    }, [])
+
+    useEffect(() => {
+      users.getAll()
     }, [])
 
     const handleVisibleBugChange = (bugId) => {
@@ -44,6 +49,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
 
     return (
       <Grid container alignItems="stretch" justify="flex-start" >
+      {console.log("users from userDashboard.js", users)}
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <NavbarContainer 
             {...{
@@ -54,7 +60,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
             }}
           />
         </Grid>
-
+        
         <Grid item xs={12} md={2}>
           <BugList 
             {...{
@@ -79,7 +85,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
 
         {isNewBugDialogOpen && (
           <NewBugDialog
-            {...{ isNewBugDialogOpen, handleNewBugDialogClose }}
+            {...{ add:bugs.add, users, isNewBugDialogOpen, handleNewBugDialogClose }}
           />
         )}
       </Grid>

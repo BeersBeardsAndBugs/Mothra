@@ -22,7 +22,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import CloseIcon from '@material-ui/icons/Close'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import { BUG, PATH, USER } from '../../../constants'
+import { BUG, USER, OPTIONS_BUG_PRIORITY } from '../../../constants'
 import { useForm } from '../../../hooks'
 
 const useStyles = makeStyles((theme) => ({
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose }) => {
+export const NewBugDialog = ({ add, users, isNewBugDialogOpen, handleNewBugDialogClose }) => {
     const classes = useStyles();
     const inputsSchema = {
         [BUG.TITLE]: {
@@ -91,6 +91,12 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
             name: BUG.ASSIGNED_TO,
             required: true,
         },
+        creator: {
+            value: 'alex',
+        },
+        [BUG.STATUS]: {
+            value: 'in progress',
+        },
         watchers: {
             value: [],
             error: '',
@@ -99,33 +105,16 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
         }
     }
 
-    const [tags, setTags] = React.useState([]);
-    // const [isSubmitDisabled, setIsSubmitDisabled] = React.useState([true]);
-    // const [handleSubmit, setHandleSubmit] = React.useState([]);
-    
-    // Should come from an API/parent component that gets a List of Users
-    const names = [
-        'Jordon West',
-        'Preston West',
-        'Alex Albright',
-      ];
-
-    // Should come from an API/parent component that gets a List of all possible Priority Levels
-    const priorities = [
-        'Blocker',
-        'Critical',
-        'High',
-        'Normal',
-        'Enhancement'
-      ];
+    const [watchers, setWatchers] = React.useState([]);
 
     const handleTagsChange = (event) => {
-        setTags(event.target.value);
+        setWatchers(event.target.value);
     };
 
     const doCreate = (body) => {
         console.log(body, "activate doCreate()");
-        //api.add(PATH.BUG, body);
+        handleNewBugDialogClose();
+        add(body);
     }
 
     const { handleSubmit, handleOnChange, inputs, isSubmitDisabled } = useForm(
@@ -166,7 +155,7 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
                 <FormControl fullWidth>
                     <InputLabel>Priority</InputLabel>
                     <Select name={BUG.PRIORITY} value={inputs[BUG.PRIORITY].value} onChange={handleOnChange} input={<Input />}>
-                    {priorities.map((priority) => (
+                    {OPTIONS_BUG_PRIORITY.map((priority) => (
                         <MenuItem key={priority} value={priority}>
                             <ListItemAvatar className={classes.forceInline}>
                                 <Avatar variant='square' className={classes[priority]}>
@@ -180,27 +169,27 @@ export const NewBugDialog = ({ api, isNewBugDialogOpen, handleNewBugDialogClose 
                 <FormControl fullWidth>
                     <InputLabel>Assign To</InputLabel>
                     <Select name={BUG.ASSIGNED_TO} value={inputs[BUG.ASSIGNED_TO].value} onChange={handleOnChange} input={<Input />}>
-                        {names.map((name) => (
-                        <MenuItem key={name} value={name}>
+                        {users.response.map((user) => (
+                        <MenuItem key={user[USER.ID]} value={user[USER.NAME]}>
                             <ListItemAvatar className={classes.forceInline}>
-                                <Avatar variant='square' alt="" src={name.split(" ")[0] +'.jpg'}></Avatar>
+                                <Avatar variant='square' alt="" src={user[USER.NAME] +'.jpg'}></Avatar>
                             </ListItemAvatar>
-                            <ListItemText primary={name} className={classes.forceInline} />
+                            <ListItemText primary={user[USER.NAME]} className={classes.forceInline} />
                         </MenuItem>))}
                     </Select>
                 </FormControl>
 
                 <FormControl fullWidth >
                     <InputLabel>Notify Teammates</InputLabel>
-                    <Select multiple value={tags} onChange={handleTagsChange} input={<Input />} 
+                    <Select multiple value={watchers} onChange={handleTagsChange} input={<Input />} 
                     renderValue={(selected) => selected.join(', ')}>
-                        {names.map((name) => (
-                            <MenuItem key={name} value={name}>
+                        {users.response.map((user) => (
+                            <MenuItem key={user[USER.ID]} value={user[USER.NAME]}>
                                 <ListItemAvatar className={classes.forceInline}>
-                                    <Avatar variant='square' alt="" src={name.split(" ")[0] +'.jpg'}></Avatar>
+                                    <Avatar variant='square' alt="" src={user[USER.NAME] +'.jpg'}></Avatar>
                                 </ListItemAvatar>
-                            <ListItemText primary={name} />
-                            <Checkbox checked={tags.indexOf(name) > -1} />
+                            <ListItemText primary={user[USER.NAME]} />
+                            <Checkbox checked={watchers.indexOf(user[USER.NAME]) > -1} />
                             </MenuItem>
                         ))}
                     </Select>

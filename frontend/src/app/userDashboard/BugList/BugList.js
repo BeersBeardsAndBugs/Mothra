@@ -136,9 +136,12 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
     const options = {
         download: false,
         print: false,
+        disableToolbarSelect: true,
         onRowsSelect: (rowData, test) => {
-            handleVisibleBugChange(bugs.response[rowData[0].dataIndex].id)
-            setRowsSelected([rowData[0].dataIndex])
+            if (rowsSelected[0] !== rowData[0].dataIndex) {
+                handleVisibleBugChange(bugs.response[rowData[0].dataIndex].id)
+                setRowsSelected([rowData[0].dataIndex])
+            }
         },
         selectableRows: 'single',
         selectableRowsOnClick: true,

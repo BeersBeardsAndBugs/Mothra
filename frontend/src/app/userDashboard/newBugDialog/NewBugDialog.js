@@ -22,7 +22,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import CloseIcon from '@material-ui/icons/Close'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import { BUG, USER, OPTIONS_BUG_PRIORITY } from '../../../constants'
+import { BUG, USER, OPTIONS_BUG_PRIORITY, OPTIONS_BUG_STATUS } from '../../../constants'
 import { useForm } from '../../../hooks'
 
 const useStyles = makeStyles((theme) => ({
@@ -79,6 +79,12 @@ export const NewBugDialog = ({ add, users, isNewBugDialogOpen, handleNewBugDialo
             name: BUG.DESCRIPTION,
             required: false,
         },
+        [BUG.STATUS]: {
+            value: 'Not Started',
+            error: '',
+            name: BUG.STATUS,
+            required: true,
+        },
         [BUG.PRIORITY]: {
             value: '',
             error: '',
@@ -93,9 +99,6 @@ export const NewBugDialog = ({ add, users, isNewBugDialogOpen, handleNewBugDialo
         },
         creator: {
             value: 'alex',
-        },
-        [BUG.STATUS]: {
-            value: 'in progress',
         },
         watchers: {
             value: [],
@@ -152,6 +155,15 @@ export const NewBugDialog = ({ add, users, isNewBugDialogOpen, handleNewBugDialo
                     <TextField label="Description" name={BUG.DESCRIPTION} value={inputs[BUG.DESCRIPTION].value} onChange={handleOnChange} fullWidth multiline rows={10} variant="outlined"/>
                 </Grid>
                 <Grid item xs={12} sm={5}>
+                <FormControl fullWidth>
+                    <InputLabel>Status</InputLabel>
+                    <Select name={BUG.STATUS} value={inputs[BUG.STATUS].value} onChange={handleOnChange} input={<Input />}>
+                    {OPTIONS_BUG_STATUS.map((status) => (
+                        <MenuItem key={status} value={status}>
+                            <ListItemText primary={status} className={classes.forceInline} />
+                        </MenuItem>))}
+                    </Select>
+                </FormControl>
                 <FormControl fullWidth>
                     <InputLabel>Priority</InputLabel>
                     <Select name={BUG.PRIORITY} value={inputs[BUG.PRIORITY].value} onChange={handleOnChange} input={<Input />}>

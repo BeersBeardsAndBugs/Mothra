@@ -64,7 +64,7 @@ def create_bug():
         bug_new.save()
         bug_update = Bug.get(title=title, creator=creator, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description, updated_by=creator)
         # create_notification(bug_update.id, 'bug', bug_new.creator)
-        return json.dumps('bug created')
+        return json.dumps(model_to_dict(bug_update))
     elif request.method == "GET":
         bugs = Bug.select()
         bug_list =[]        
@@ -98,7 +98,9 @@ def write_comment():
     comment_new.save()     	
     # time.sleep(10)
     create_notification(bug, 'comment', given["user"])
-    return json.dumps('stuff'), status.HTTP_200_OK
+    comment_update = Comment.get(bug=bug, user=given["user"], text=given["text"], date=given["date"])
+    # create_notification(bug_update.id, 'bug', bug_new.creator)
+    return json.dumps(model_to_dict(comment_update))
 
 @app.route("/comment/<param_id>", methods=["DELETE", "PUT"])
 def delete_comment(param_id):

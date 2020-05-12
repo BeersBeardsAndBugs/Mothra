@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm mothra.db
+python seed.py

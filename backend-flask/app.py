@@ -95,8 +95,6 @@ def write_comment():
     given = request.get_json()
     bug = Bug.get(id=given['bugId'])
     comment_new = Comment.create(bug=bug, user=given["user"], text=given["text"], date=given["date"])
-    comment_new.save()     	
-    # time.sleep(10)
     create_notification(bug, 'comment', given["user"])
     comment_update = Comment.get(bug=bug, user=given["user"], text=given["text"], date=given["date"])
     # create_notification(bug_update.id, 'bug', bug_new.creator)
@@ -126,7 +124,6 @@ def add_watcher():
     bug_id = given["bug_id"]
     user_id = given["user_id"]
     watcher_new = Watcher.create(bug_id=bug_id, user_id=user_id)
-    watcher_new.save()
     return "saved"
 
 @app.route("/watcher/<param_id>", methods=["DELETE"])

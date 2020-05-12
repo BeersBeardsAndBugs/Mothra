@@ -70,12 +70,7 @@ export const Comments = ({ comments, bugId, userEmail }) => {
                                                     // }
                                                 />
                                             </Grid>
-                                            <Grid
-                                                justifyContent="left"
-                                                item
-                                                xs
-                                                zeroMinWidth
-                                            >
+                                            <Grid item xs zeroMinWidth>
                                                 <Typography variant="h6">
                                                     {comment[COMMENT.USER]}
                                                 </Typography>

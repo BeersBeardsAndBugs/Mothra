@@ -49,7 +49,6 @@ export const UserDashboard = ({ user, setPageSelected }) => {
 
     return (
         <Grid container alignItems="stretch" justify="flex-start">
-            {console.log('users from userDashboard.js', users)}
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <NavbarContainer
                     {...{
@@ -61,7 +60,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
                 />
             </Grid>
 
-            <Grid item xs={12} md={2}>
+            <Grid item xs={12} md={4}>
                 <BugList
                     {...{
                         bugs,
@@ -71,7 +70,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
                 />
             </Grid>
 
-            <Grid item xs={12} md={10}>
+            <Grid item xs={12} md={8}>
                 {visibleBug?.id && (
                     <BugDetail
                         key={visibleBug.id}

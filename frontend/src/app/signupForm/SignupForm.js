@@ -148,7 +148,6 @@ export const SignupForm = ({ setPageSelected, user }) => {
                             )
                         }
                         onChange={(e) => {
-                            console.log(e)
                             if (!isPasswordConfirmed) {
                                 setIsPasswordConfirmed(
                                     e.target.value ===

@@ -21,8 +21,8 @@ import BugReportIcon from '@material-ui/icons/BugReportRounded'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import CloseIcon from '@material-ui/icons/Close'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import { BUG, USER, OPTIONS_BUG_PRIORITY } from '../../../constants'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import { BUG, USER, OPTIONS_BUG_PRIORITY, OPTIONS_BUG_STATUS } from '../../../constants'
 import { useForm } from '../../../hooks'
 
 const useStyles = makeStyles((theme) => ({
@@ -84,6 +84,12 @@ export const NewBugDialog = ({
             name: BUG.DESCRIPTION,
             required: false,
         },
+        [BUG.STATUS]: {
+            value: 'Not Started',
+            error: '',
+            name: BUG.STATUS,
+            required: true,
+        },
         [BUG.PRIORITY]: {
             value: '',
             error: '',
@@ -98,9 +104,6 @@ export const NewBugDialog = ({
         },
         creator: {
             value: 'alex',
-        },
-        [BUG.STATUS]: {
-            value: 'in progress',
         },
         watchers: {
             value: [],
@@ -128,6 +131,7 @@ export const NewBugDialog = ({
 
     return (
         <div className={classes.root}>
+<<<<<<< HEAD
             <Dialog
                 maxWidth="lg"
                 fullWidth
@@ -266,6 +270,71 @@ export const NewBugDialog = ({
                                         ))}
                                     </Select>
                                 </FormControl>
+=======
+            <Dialog maxWidth='lg' fullWidth open={isNewBugDialogOpen} disableBackdropClick onClose={handleNewBugDialogClose}>
+            <DialogTitle>
+
+            <Grid container direction="row" justify="space-between" alignItems="center" spacing={2}>
+                <Grid item>
+                    <Typography>Create New Ticket</Typography>
+                </Grid>
+                <Grid item>
+                    <IconButton onClick={handleNewBugDialogClose}>
+                        <CloseIcon />
+                    </IconButton>
+                </Grid>
+            </Grid>
+
+            </DialogTitle>
+            <DialogContent>
+            <form noValidate autoComplete="off">
+            <Grid container direction="row" justify="center" alignItems="stretch" spacing={2}>
+                <Grid item xs={12}>
+                    <FormControl fullWidth variant="outlined">
+                        <InputLabel>Bug title</InputLabel>
+                        <OutlinedInput label="Bug Title" autoFocus inputProps={{maxLength: 80}} name={BUG.TITLE} value={inputs[BUG.TITLE].value} onChange={handleOnChange}/>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={7} >
+                    <TextField label="Description" name={BUG.DESCRIPTION} value={inputs[BUG.DESCRIPTION].value} onChange={handleOnChange} fullWidth multiline rows={10} variant="outlined"/>
+                </Grid>
+                <Grid item xs={12} sm={5}>
+                <FormControl fullWidth>
+                    <InputLabel>Status</InputLabel>
+                    <Select name={BUG.STATUS} value={inputs[BUG.STATUS].value} onChange={handleOnChange} input={<Input />}>
+                    {OPTIONS_BUG_STATUS.map((status) => (
+                        <MenuItem key={status} value={status}>
+                            <ListItemText primary={status} className={classes.forceInline} />
+                        </MenuItem>))}
+                    </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                    <InputLabel>Priority</InputLabel>
+                    <Select name={BUG.PRIORITY} value={inputs[BUG.PRIORITY].value} onChange={handleOnChange} input={<Input />}>
+                    {OPTIONS_BUG_PRIORITY.map((priority) => (
+                        <MenuItem key={priority} value={priority}>
+                            <ListItemAvatar className={classes.forceInline}>
+                                <Avatar variant='square' className={classes[priority]}>
+                                    <BugReportIcon></BugReportIcon>
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={priority} className={classes.forceInline} />
+                        </MenuItem>))}
+                    </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                    <InputLabel>Assign To</InputLabel>
+                    <Select name={BUG.ASSIGNED_TO} value={inputs[BUG.ASSIGNED_TO].value} onChange={handleOnChange} input={<Input />}>
+                        {users.response.map((user) => (
+                        <MenuItem key={user[USER.ID]} value={user[USER.NAME]}>
+                            <ListItemAvatar className={classes.forceInline}>
+                                <Avatar variant='square' alt="" src={user[USER.NAME] +'.jpg'}></Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={user[USER.NAME]} className={classes.forceInline} />
+                        </MenuItem>))}
+                    </Select>
+                </FormControl>
+>>>>>>> 56f2d4aedf1079613136288cc3b6b17c79aa563b
 
                                 <FormControl fullWidth>
                                     <InputLabel>Notify Teammates</InputLabel>

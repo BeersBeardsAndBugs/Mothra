@@ -22,6 +22,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
     }, [])
 
     const handleVisibleBugChange = (bugId) => {
+      console.log("Filtering visible bug with ID: " + bugId);
         const foundBugs = bugs.response.filter((bug) => bug.id === bugId)
         if (foundBugs.length === 1) {
             setVisibleBug((prevState) => ({
@@ -49,7 +50,6 @@ export const UserDashboard = ({ user, setPageSelected }) => {
 
     return (
       <Grid container alignItems="stretch" justify="flex-start" >
-      {console.log("users from userDashboard.js", users)}
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <NavbarContainer 
             {...{
@@ -76,6 +76,8 @@ export const UserDashboard = ({ user, setPageSelected }) => {
             <BugDetail
               key={visibleBug.id}
               {...{
+                add:bugs.add,
+                users,
                 visibleBug,
                 editBugSubmit,
               }}

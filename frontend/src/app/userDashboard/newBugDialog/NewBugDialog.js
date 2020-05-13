@@ -95,7 +95,7 @@ export const NewBugDialog = ({ add, users, isNewBugDialogOpen, handleNewBugDialo
             value: '',
             error: '',
             name: BUG.ASSIGNED_TO,
-            required: true,
+            required: false,
         },
         creator: {
             value: 'alex',
@@ -126,7 +126,7 @@ export const NewBugDialog = ({ add, users, isNewBugDialogOpen, handleNewBugDialo
     )
 
     return (
-        <div className={classes.root}>
+        <div>
             <Dialog maxWidth='lg' fullWidth open={isNewBugDialogOpen} disableBackdropClick onClose={handleNewBugDialogClose}>
             <DialogTitle>
 

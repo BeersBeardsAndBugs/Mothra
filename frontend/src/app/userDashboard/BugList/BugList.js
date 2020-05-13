@@ -1,15 +1,9 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
-import ListItemText from '@material-ui/core/ListItemText'
-import Button from '@material-ui/core/Button'
-import ButtonGroup from '@material-ui/core/ButtonGroup'
 import Avatar from '@material-ui/core/Avatar'
 import BugReportIcon from '@material-ui/icons/BugReportRounded'
 import Grid from '@material-ui/core/Grid'
+import MUIDataTable from 'mui-datatables'
 import { BUG } from '../../../constants'
 
 const useStyles = makeStyles((theme) => ({
@@ -47,21 +41,131 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
+export const BugList = ({ bugs, users, userName, handleVisibleBugChange }) => {
+    const { ID, PRIORITY, ASSIGNED_TO, STATUS, TITLE } = BUG
     const classes = useStyles()
-    const myBugsBtn = useRef(null)
-    const [showMine, setShowMine] = useState(true);
+    const [filterList, setFilterList] = useState([[], [], [userName], [], []])
+    const [rowsSelected, setRowsSelected] = useState([])
 
-    let filteredList = [];
-    
-    if (showMine) {
-        filteredList = bugs.response.filter((bug) => {
-            return bug[BUG.ASSIGNED_TO] === userName
-        })
-    } else {
-        filteredList = bugs.response.filter((bug) => {
-            return bug[BUG.ASSIGNED_TO] !== userName
-        })
+    const userNames = users.response.map((user) => user.name)
+
+    const filterIndexMap = {
+        // correlates to their index in columns array
+        [PRIORITY]: 1,
+        [ASSIGNED_TO]: 2,
+        [STATUS]: 3,
+    }
+
+    const UNASSIGNED = '<unassigned>'
+
+    const columns = [
+        {
+            label: 'Id',
+            name: ID,
+            options: { display: false, filter: false },
+        },
+        {
+            label: 'Priority',
+            name: PRIORITY,
+            options: {
+                customBodyRender: (value) => (
+                    <Avatar className={classes[value]}>
+                        <BugReportIcon></BugReportIcon>
+                    </Avatar>
+                ),
+                filterList: filterList[filterIndexMap[PRIORITY]],
+            },
+        },
+        {
+            label: 'Assigned',
+            name: ASSIGNED_TO,
+            options: {
+                filterList: filterList[filterIndexMap[ASSIGNED_TO]],
+                filterOptions: {
+                    names: [UNASSIGNED, ...userNames],
+                    logic: (value, filters) => {
+                        if (filters[0] === UNASSIGNED) {
+                            return !!value
+                        } else if (filters[0] !== value) {
+                            return true
+                        }
+                        return false
+                    },
+                },
+            },
+        },
+        {
+            label: 'Status',
+            name: STATUS,
+            options: {
+                filterList: filterList[filterIndexMap[STATUS]],
+            },
+        },
+        {
+            label: 'Title',
+            name: TITLE,
+            options: { filter: false },
+        },
+    ]
+
+    const onRowsSelect = (rowDataList) => {
+        const prevSelBugIndex = rowsSelected[0]
+        const selBugIndex = rowDataList[0].dataIndex
+        if (prevSelBugIndex !== selBugIndex) {
+            handleVisibleBugChange(bugs.response[selBugIndex].id)
+            setRowsSelected([selBugIndex])
+        }
+    }
+
+    const onFilterChange = (changedColumn, filterList, type) => {
+        if (type === 'dropdown') {
+            switch (changedColumn) {
+                case PRIORITY:
+                case ASSIGNED_TO:
+                case STATUS:
+                    setFilterList(filterList)
+                    break
+                default:
+                    break
+            }
+        } else if (type === 'chip') {
+            switch (changedColumn) {
+                case PRIORITY:
+                    setFilterList(
+                        filterList.map((list, index) =>
+                            index === filterIndexMap[PRIORITY] ? [] : list
+                        )
+                    )
+                    break
+                case ASSIGNED_TO:
+                    setFilterList(
+                        filterList.map((list, index) =>
+                            index === filterIndexMap[ASSIGNED_TO] ? [] : list
+                        )
+                    )
+                    break
+                case STATUS:
+                    setFilterList(
+                        filterList.map((list, index) =>
+                            index === filterIndexMap[STATUS] ? [] : list
+                        )
+                    )
+                    break
+                default:
+                    break
+            }
+        }
+    }
+
+    const options = {
+        download: false,
+        print: false,
+        disableToolbarSelect: true,
+        selectableRows: 'single',
+        selectableRowsOnClick: true,
+        rowsSelected,
+        onRowsSelect,
+        onFilterChange,
     }
 
     return (
@@ -72,51 +176,12 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
             spacing={2}
             className={classes.grid}
         >
-            <Grid item xs={12} sm={12}>
-                <ButtonGroup fullWidth>
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        ref={myBugsBtn}
-                        onClick={() => setShowMine(true)}
-                    >
-                        Assigned Bugs
-                    </Button>
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={() => setShowMine(false)}
-                    >
-                        Other Bugs
-                    </Button>
-                </ButtonGroup>
-            </Grid>
-            <Grid item xs={12} sm={12}>
-                <List className={classes.listStyle}>
-                    {filteredList.map((bug, i) => (
-                        <ListItem
-                            key={i}
-                            button
-                            onClick={() => handleVisibleBugChange(bug[BUG.ID])}
-                        >
-                            <ListItemAvatar>
-                                <Avatar className={classes[bug[BUG.PRIORITY]]}>
-                                    <BugReportIcon></BugReportIcon>
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                            className={classes.listText}
-                                primary={bug[BUG.TITLE]}
-                                secondary={
-                                    bug[BUG.ASSIGNED_TO]
-                                        ? `${bug[BUG.ASSIGNED_TO]}`
-                                        : 'No Owner'
-                                }
-                            />
-                        </ListItem>
-                    ))}
-                </List>
-            </Grid>
+            <MUIDataTable
+                title="Bug List"
+                data={bugs.response}
+                columns={columns}
+                options={options}
+            />
         </Grid>
     )
 }

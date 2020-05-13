@@ -64,7 +64,7 @@ def create_bug():
         bug_new.save()
         bug_update = Bug.get(title=title, creator=creator, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description, updated_by=creator)
         # create_notification(bug_update.id, 'bug', bug_new.creator)
-        return json.dumps('bug created')
+        return json.dumps(model_to_dict(bug_update))
     elif request.method == "GET":
         bugs = Bug.select()
         bug_list =[]        
@@ -95,15 +95,25 @@ def write_comment():
     given = request.get_json()
     bug = Bug.get(id=given['bugId'])
     comment_new = Comment.create(bug=bug, user=given["user"], text=given["text"], date=given["date"])
-    comment_new.save()     	
-    # time.sleep(10)
     create_notification(bug, 'comment', given["user"])
-    return json.dumps('stuff'), status.HTTP_200_OK
+    comment_update = Comment.get(bug=bug, user=given["user"], text=given["text"], date=given["date"])
+    # create_notification(bug_update.id, 'bug', bug_new.creator)
+    return json.dumps(model_to_dict(comment_update))
 
-@app.route("/comment/<param_id>", methods=["DELETE", "PUT"])
+@app.route("/comment/<param_id>", methods=["DELETE", "PUT", "GET"])
 def delete_comment(param_id):
-    comment = Comment.get(id=param_id)
-    if request.method == "DELETE":
+    print ("test")
+    if request.method == "GET":
+        bug = Bug.select().where(Bug.id == param_id)
+        comments = Comment.select().where(Comment.bug == bug)
+        bug_comments_list = []
+        for comment in comments:
+            comment_model = model_to_dict(comment)
+            del comment_model["bug"]
+            bug_comments_list.append(comment_model)
+        return json.dumps(bug_comments_list)    
+    elif request.method == "DELETE":
+        comment = Comment.get(id=param_id)
         comment.delete_instance()
         fake_user = 'jake the fake user'
         delete_notification(comment.bug_id, comment.id, fake_user)#hardcoded user for now
@@ -124,7 +134,6 @@ def add_watcher():
     bug_id = given["bug_id"]
     user_id = given["user_id"]
     watcher_new = Watcher.create(bug_id=bug_id, user_id=user_id)
-    watcher_new.save()
     return "saved"
 
 @app.route("/watcher/<param_id>", methods=["DELETE"])

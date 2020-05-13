@@ -15,20 +15,16 @@ export const UserDashboard = ({ user, setPageSelected }) => {
 
     useEffect(() => {
         bugs.getAll()
+        users.getAll()
     }, [])
 
-    useEffect(() => {
-      users.getAll()
-    }, [])
+    useEffect(() => {}, [visibleBug])
 
     const handleVisibleBugChange = (bugId) => {
-      console.log("Filtering visible bug with ID: " + bugId);
+        console.log('Filtering visible bug with ID: ' + bugId)
         const foundBugs = bugs.response.filter((bug) => bug.id === bugId)
         if (foundBugs.length === 1) {
-            setVisibleBug((prevState) => ({
-                ...prevState,
-                ...foundBugs[0],
-            }))
+            setVisibleBug(foundBugs[0])
         }
     }
 
@@ -49,47 +45,54 @@ export const UserDashboard = ({ user, setPageSelected }) => {
     }
 
     return (
-      <Grid container alignItems="stretch" justify="flex-start" >
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <NavbarContainer 
-            {...{
-              user,
-              setPageSelected,
-              handleVisibleBugChange,
-              handleNewBugDialogOpen,
-            }}
-          />
-        </Grid>
-        
-        <Grid item xs={12} md={2}>
-          <BugList 
-            {...{
-              bugs,
-              userName: user.response.name,
-              handleVisibleBugChange,
-            }}
-          />
-        </Grid>
+        <Grid container alignItems="stretch" justify="flex-start">
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <NavbarContainer
+                    {...{
+                        user,
+                        setPageSelected,
+                        handleVisibleBugChange,
+                        handleNewBugDialogOpen,
+                    }}
+                />
+            </Grid>
 
-        <Grid item xs={12} md={10}>
-          {visibleBug?.id && (
-            <BugDetail
-              key={visibleBug.id}
-              {...{
-                add:bugs.add,
-                users,
-                visibleBug,
-                editBugSubmit,
-              }}
-            />
-          )}
-        </Grid>
+            <Grid item xs={12} md={4}>
+                <BugList
+                    {...{
+                        bugs,
+                        userName: user.response.name,
+                        handleVisibleBugChange,
+                        users,
+                    }}
+                />
+            </Grid>
 
-        {isNewBugDialogOpen && (
-          <NewBugDialog
-            {...{ add:bugs.add, users, isNewBugDialogOpen, handleNewBugDialogClose }}
-          />
-        )}
-      </Grid>
+            <Grid item xs={12} md={8}>
+                {visibleBug?.id && (
+                    <BugDetail
+                        key={visibleBug.id}
+                        {...{
+                            add: bugs.add,
+                            users,
+                            visibleBug,
+                            editBugSubmit,
+                            userEmail: user.response.email,
+                        }}
+                    />
+                )}
+            </Grid>
+
+            {isNewBugDialogOpen && (
+                <NewBugDialog
+                    {...{
+                        add: bugs.add,
+                        users,
+                        isNewBugDialogOpen,
+                        handleNewBugDialogClose,
+                    }}
+                />
+            )}
+        </Grid>
     )
 }

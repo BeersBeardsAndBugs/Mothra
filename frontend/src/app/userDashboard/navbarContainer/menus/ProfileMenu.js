@@ -16,10 +16,6 @@ export const ProfileMenu = ({
         handleAllMenuClose()
         logout()
     }
-    console.log(
-        'UserMessage',
-        'findDomNode warning discussion can be found at https://github.com/mui-org/material-ui/issues/13394'
-    )
     return (
         <Menu
             anchorEl={anchorEl}

@@ -41,11 +41,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
+export const BugList = ({ bugs, users, userName, handleVisibleBugChange }) => {
     const { ID, PRIORITY, ASSIGNED_TO, STATUS, TITLE } = BUG
     const classes = useStyles()
     const [filterList, setFilterList] = useState([[], [], [userName], [], []])
     const [rowsSelected, setRowsSelected] = useState([])
+
+    const userNames = users.response.map((user) => user.name)
 
     const filterIndexMap = {
         // correlates to their index in columns array
@@ -53,6 +55,8 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
         [ASSIGNED_TO]: 2,
         [STATUS]: 3,
     }
+
+    const UNASSIGNED = '<unassigned>'
 
     const columns = [
         {
@@ -77,6 +81,13 @@ export const BugList = ({ bugs, userName, handleVisibleBugChange }) => {
             name: ASSIGNED_TO,
             options: {
                 filterList: filterList[filterIndexMap[ASSIGNED_TO]],
+                filterOptions: {
+                    names: [UNASSIGNED, ...userNames],
+                    logic: (location, filters, third) => {
+                        if (filters[0] === UNASSIGNED) return !!location
+                        return false
+                    },
+                },
             },
         },
         {

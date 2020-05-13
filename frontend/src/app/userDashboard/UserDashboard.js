@@ -15,9 +15,6 @@ export const UserDashboard = ({ user, setPageSelected }) => {
 
     useEffect(() => {
         bugs.getAll()
-    }, [])
-
-    useEffect(() => {
         users.getAll()
     }, [])
 
@@ -66,6 +63,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
                         bugs,
                         userName: user.response.name,
                         handleVisibleBugChange,
+                        users,
                     }}
                 />
             </Grid>

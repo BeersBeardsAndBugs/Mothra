@@ -26,26 +26,27 @@ status_list=[
 ]
 user_list = User.select()
 print('creating bugs and comments..')
-for _ in range(25):
+for _ in range(70):
     random.shuffle(priority_list)
     random.shuffle(status_list)
     creator = user_list[random.randint(0,2)]
     assigned_to = user_list[random.randint(0,2)]
+    updated_by = user_list[random.randint(0,2)]
     bug = Bug.create(
         title=fake.bs(),
-        creator=creator,
+        creator=creator.name,
         priority=priority_list[0],
         description=fake.sentence(),
         created_date=fake.date(),
         updated_last= fake.date(),
         status=status_list[0],
-        updated_by=assigned_to,
-        assigned_to=assigned_to
+        updated_by=updated_by.name,
+        assigned_to=assigned_to.name
         )
     for _ in range(random.randint(1,5)):
 
         Comment.create(
-            user=user_list[random.randint(0,2)],
+            user=(user_list[random.randint(0,2)]).name,
             bug=bug,
             text=fake.sentence(),
             date=fake.date()    

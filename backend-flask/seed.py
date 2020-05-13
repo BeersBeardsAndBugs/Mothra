@@ -1,52 +1,64 @@
 from peewee import *
 from models import *
+from faker import Faker
+import random 
+from datetime import datetime, timedelta
+fake = Faker()
 
-user = User(name='jordon', password='123', email='123@gmail.com')
-user.save()
-user2 = User(name="alex", password="asdf", email='asdf@asdf.com')
-user2.save()
-user3 = User(name="preston", password="poogle", email='poogle@gmail.com')
-user3.save()
-user4 = User(name="Jessica Alba", password='ImInLoveWithAlex', email='intoTheBlue@aol.com')
-user4.save()
+print('creating users..')
+user = User.create(name='jordon', password='123', email='123@gmail.com')
+user2 = User.create(name="alex", password="asdf", email='asdf@asdf.com')
+user3 = User.create(name="preston", password="poogle", email='poogle@gmail.com')
 
-bug1 = Bug(title='UI Broken', creator='jordon', assigned_to='preston', name='bug1', priority='High', description='im broke', created_date='tuesday', updated_last='tuesday', status='in progress', updated_by='jordon')
-bug1.save()
-bug2 = Bug(title='Error on Save', creator='alex', assigned_to='preston', name='bug2', priority='Normal', description='im broke too', created_date='1-1-2020', updated_last='1-3-2020', status='in progress', updated_by='jordon')
-bug2.save()
-bug3 = Bug(title='Weird glitch', creator='preston', assigned_to='jordon', name='bug3', priority='Critical', description='im lyke, super broke', created_date='1-1-2020', updated_last='1-3-2020', status='in progress', updated_by='jordon')
-bug3.save()
-bug4 = Bug(title='Status and not assigned', creator='preston', name='bug4', priority='Critical', description='im lyke, super broke', created_date='1-1-2020', updated_last='1-3-2020', status='code review', updated_by='jordon')
-bug4.save()
+priority_list=[
+    'Blocker',
+    'Critical',
+    'High',
+    'Normal',
+    'Enhancement',
+    ]
+status_list=[
+    'Not Started',
+    'In Progress',
+    'Ready for Review',
+    'Approved',
+    'Merged',
+]
+user_list = User.select()
+print('creating bugs and comments..')
+for _ in range(70):
+    random.shuffle(priority_list)
+    random.shuffle(status_list)
+    creator = user_list[random.randint(0,2)]
+    assigned_to = user_list[random.randint(0,2)]
+    updated_by = user_list[random.randint(0,2)]
+    bug = Bug.create(
+        title=fake.bs(),
+        creator=creator.name,
+        priority=priority_list[0],
+        description=fake.sentence(),
+        created_date=fake.date(),
+        updated_last= fake.date(),
+        status=status_list[0],
+        updated_by=updated_by.name,
+        assigned_to=assigned_to.name
+        )
+    for _ in range(random.randint(1,5)):
 
+        Comment.create(
+            user=(user_list[random.randint(0,2)]).name,
+            bug=bug,
+            text=fake.sentence(),
+            date=fake.date()    
+        )
+print('creating notifications..')
+for _ in range(50):
+        Notification.create(
+            bug_id=(random.randint(1, 24)),
+            text=fake.sentence(),
+            date=fake.date()
+        )
 
-comment1 = Comment(user='jordon', bug=bug1, text="hey hey this is my cooment", date="1/1/2020")
-comment1.save()
-comment2 = Comment(user='alex', bug=bug1, text="comment from jordon", date="1/2/2020")
-comment2.save()
-comment3 = Comment(user='preston', bug=bug2, text="comments, comment comment comment, comment comment, comment cooooooooom", date="1/2/2020")
-comment3.save()
-comment4 = Comment(user='preston', bug=bug2, text="oooooone comment, next to anoooooother commeeeeeeent", date="1/6/2020")
-comment4.save()
-comment5 = Comment(user='alex', bug=bug2, text="twooooooo comments, alongside, yet another -coooomeeeeeeeent", date="1/15/2020")
-comment5.save()
-comment6 = Comment(user='jordon', bug=bug2, text="comment, comment party, comment party, party softly, party sooooooft ", date="1/19/2020")
-comment6.save()
-comment7 = Comment(user='alex', bug=bug2, text="Sooooooft Comments, nice and soft, not a erect, commeeeeent", date="1/25/2020")
-comment7.save()
-comment8 = Comment(user='preston', bug=bug2, text="Fiiiiive comments, in my faaaaaace-", date="1/28/2020")
-comment8.save()
-
-notification1 = Notification(bug_id=1, text="alex has updated this bug", date="4/19/2020")
-notification1.save()
-notification2 = Notification(bug_id=1, text="This is no longer being worked on", date="4/19/2020")
-notification2.save()
-notification3 = Notification(bug_id=2, text="This bug has been rectified", date="4/19/2020")
-notification3.save()
-
-watcher1 = Watcher(bug_id=1, user_id=1)
-watcher1.save()
-watcher2 = Watcher(bug_id=2, user_id=1)
-watcher2.save()
-watcher3 = Watcher(bug_id=1, user_id=2)
-watcher3.save()
+watcher1 = Watcher.create(bug_id=1, user_id=1)
+watcher2 = Watcher.create(bug_id=2, user_id=1)
+watcher3 = Watcher.create(bug_id=1, user_id=2)

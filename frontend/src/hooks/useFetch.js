@@ -60,6 +60,7 @@ export const useFetch = (basePath, defaultResponse = null) => {
             } else {
                 const json = await res.json()
                 if (type) {
+                    console.log('fetch comment', json)
                     dispatchResponse({ type, payload: json })
                 }
             }

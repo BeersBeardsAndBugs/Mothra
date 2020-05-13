@@ -87,8 +87,6 @@ export const BugList = ({ bugs, users, userName, handleVisibleBugChange }) => {
                         if (filters[0] === UNASSIGNED) {
                             return !!value
                         } else if (filters[0] !== value) {
-                            console.log('filters', filters[0])
-                            console.log('value', value)
                             return true
                         }
                         return false

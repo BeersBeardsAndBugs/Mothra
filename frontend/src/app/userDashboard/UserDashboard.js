@@ -18,13 +18,12 @@ export const UserDashboard = ({ user, setPageSelected }) => {
         users.getAll()
     }, [])
 
+    useEffect(() => {}, [visibleBug])
+
     const handleVisibleBugChange = (bugId) => {
         const foundBugs = bugs.response.filter((bug) => bug.id === bugId)
         if (foundBugs.length === 1) {
-            setVisibleBug((prevState) => ({
-                ...prevState,
-                ...foundBugs[0],
-            }))
+            setVisibleBug(foundBugs[0])
         }
     }
 

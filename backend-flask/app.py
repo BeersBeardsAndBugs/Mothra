@@ -100,10 +100,20 @@ def write_comment():
     # create_notification(bug_update.id, 'bug', bug_new.creator)
     return json.dumps(model_to_dict(comment_update))
 
-@app.route("/comment/<param_id>", methods=["DELETE", "PUT"])
+@app.route("/comment/<param_id>", methods=["DELETE", "PUT", "GET"])
 def delete_comment(param_id):
-    comment = Comment.get(id=param_id)
-    if request.method == "DELETE":
+    print ("test")
+    if request.method == "GET":
+        bug = Bug.select().where(Bug.id == param_id)
+        comments = Comment.select().where(Comment.bug == bug)
+        bug_comments_list = []
+        for comment in comments:
+            comment_model = model_to_dict(comment)
+            del comment_model["bug"]
+            bug_comments_list.append(comment_model)
+        return json.dumps(bug_comments_list)    
+    elif request.method == "DELETE":
+        comment = Comment.get(id=param_id)
         comment.delete_instance()
         fake_user = 'jake the fake user'
         delete_notification(comment.bug_id, comment.id, fake_user)#hardcoded user for now

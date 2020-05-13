@@ -10,7 +10,7 @@ import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BUG, PATH } from '../../../constants'
 import { useForm, useFetch } from '../../../hooks'
 import { Comments } from './comments'
@@ -53,8 +53,13 @@ const pictures = [
 ]
 
 export const BugDetail = ({ editBugSubmit, visibleBug, userEmail }) => {
+    console.table(visibleBug.comments)
     const [comments] = useFetch(PATH.COMMENT, visibleBug.comments || [])
     const classes = useStyles()
+
+    useEffect(() => {
+        comments.getById(visibleBug.id)
+    }, [visibleBug])
 
     const inputsSchema = {
         [BUG.DESCRIPTION]: {

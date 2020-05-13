@@ -53,7 +53,6 @@ const pictures = [
 ]
 
 export const BugDetail = ({ editBugSubmit, visibleBug, userEmail }) => {
-    console.table(visibleBug.comments)
     const [comments] = useFetch(PATH.COMMENT, visibleBug.comments || [])
     const classes = useStyles()
 

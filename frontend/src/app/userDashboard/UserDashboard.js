@@ -21,6 +21,7 @@ export const UserDashboard = ({ user, setPageSelected }) => {
     useEffect(() => {}, [visibleBug])
 
     const handleVisibleBugChange = (bugId) => {
+        console.log('Filtering visible bug with ID: ' + bugId)
         const foundBugs = bugs.response.filter((bug) => bug.id === bugId)
         if (foundBugs.length === 1) {
             setVisibleBug(foundBugs[0])
@@ -72,6 +73,8 @@ export const UserDashboard = ({ user, setPageSelected }) => {
                     <BugDetail
                         key={visibleBug.id}
                         {...{
+                            add: bugs.add,
+                            users,
                             visibleBug,
                             editBugSubmit,
                             userEmail: user.response.email,

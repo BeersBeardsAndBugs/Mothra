@@ -184,7 +184,6 @@ export const NewBugDialog = ({ add, users, isNewBugDialogOpen, handleNewBugDialo
                         <MenuItem key={'Unassigned'} value={null}>
                             <ListItemText primary="Unassigned"/>
                         </MenuItem>
-                        
                         {users.response.map((user) => (
                         <MenuItem key={user[USER.ID]} value={user[USER.NAME]}>
                             <ListItemAvatar className={classes.forceInline}>

@@ -25,12 +25,20 @@ status_list=[
     'Merged',
 ]
 user_list = User.select()
+print (user_list)
 print('creating bugs and comments..')
+class assigned_to_class:
+    name = ''
+
 for _ in range(70):
     random.shuffle(priority_list)
     random.shuffle(status_list)
     creator = user_list[random.randint(0,2)]
-    assigned_to = user_list[random.randint(0,2)]
+    random_num = random.randint(0,3)
+    if random_num == 3:
+        assigned_to = assigned_to_class()
+    else:
+        assigned_to = user_list[random.randint(0,2)]
     updated_by = user_list[random.randint(0,2)]
     bug = Bug.create(
         title=fake.bs(),

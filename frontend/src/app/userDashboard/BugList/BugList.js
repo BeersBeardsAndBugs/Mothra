@@ -83,8 +83,14 @@ export const BugList = ({ bugs, users, userName, handleVisibleBugChange }) => {
                 filterList: filterList[filterIndexMap[ASSIGNED_TO]],
                 filterOptions: {
                     names: [UNASSIGNED, ...userNames],
-                    logic: (location, filters, third) => {
-                        if (filters[0] === UNASSIGNED) return !!location
+                    logic: (value, filters) => {
+                        if (filters[0] === UNASSIGNED) {
+                            return !!value
+                        } else if (filters[0] !== value) {
+                            console.log('filters', filters[0])
+                            console.log('value', value)
+                            return true
+                        }
                         return false
                     },
                 },

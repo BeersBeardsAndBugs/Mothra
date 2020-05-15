@@ -4,6 +4,7 @@ import Avatar from '@material-ui/core/Avatar'
 import BugReportIcon from '@material-ui/icons/BugReportRounded'
 import Grid from '@material-ui/core/Grid'
 import MUIDataTable from 'mui-datatables'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import { BUG } from '../../../constants'
 
 const useStyles = makeStyles((theme) => ({
@@ -46,6 +47,8 @@ export const BugList = ({ bugs, users, userName, handleVisibleBugChange }) => {
     const classes = useStyles()
     const [filterList, setFilterList] = useState([[], [], [userName], [], []])
     const [rowsSelected, setRowsSelected] = useState([])
+
+    const getMuiTheme = () => createMuiTheme({})
 
     const userNames = users.response.map((user) => user.name)
 
@@ -92,6 +95,7 @@ export const BugList = ({ bugs, users, userName, handleVisibleBugChange }) => {
                         return false
                     },
                 },
+                rowsPerPageOptions: [10],
             },
         },
         {
@@ -176,12 +180,14 @@ export const BugList = ({ bugs, users, userName, handleVisibleBugChange }) => {
             spacing={2}
             className={classes.grid}
         >
+            {/* <MuiThemeProvider theme={getMuiTheme}> */}
             <MUIDataTable
                 title="Bug List"
                 data={bugs.response}
                 columns={columns}
                 options={options}
             />
+            {/* </MuiThemeProvider> */}
         </Grid>
     )
 }

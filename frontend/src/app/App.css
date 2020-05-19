@@ -1,0 +1,105 @@
+@import "../constants/vars.css";
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+
+
+
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+
+/*
+.App-header {
+  background-color: var(--blank-space-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--primary-font-size);
+  color: var(--primary-font-color);
+}
+
+.App-link {
+  color: var(--link-font-color);
+}
+
+.container {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+.loginForm {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 400px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+
+.inputField {
+  padding-top: 16px;
+}
+
+.input {
+  box-sizing: border-box;
+  outline: none;
+  border: var(--interaction-border);
+  border-radius: var(--interaction-border-radius);
+  font-size: var(--placeholder-font-size);
+  width: 100%;
+  padding: 12px; 
+  background: var(--interaction-background);
+}
+
+
+.submitButton {
+  padding-top: 16px;
+}
+
+.btn {
+  width: 100%;
+  min-width: 280px;
+  color: var(--placeholder-font-color);
+  padding: 12px;
+  font-size: var(--primary-font-color);
+  font-weight: bold;
+  border: var(--interaction-border);
+  border-radius: var(--interaction-border-radius);
+  background: var(--interaction-background);
+  cursor: pointer;
+}
+
+.login-signup-btn {
+  border: none;
+  background: none;
+  color: var(--link-font-color);
+  cursor: pointer;
+}
+*/
+

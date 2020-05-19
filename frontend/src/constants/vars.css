@@ -1,0 +1,15 @@
+:root {
+  /* Bug Severity Color Codes */
+  --blocker-color-code: #b71c1c;
+  --critical-color-code: #e53935;
+  --high-color-code: #fb8c00;
+  --normal-color-code: #fdd835;
+  --enhancement-color-code: #8bc34a;
+
+  /* Logo */
+  --logo-color: #6700ac;
+  --logo-left-wing-skew: 0;
+  --logo-right-wing-skew: 0;
+  --logo-wings-scale: 1;
+  --logo-animation-dur: 1s;
+}

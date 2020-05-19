@@ -236,6 +236,9 @@ export const BugDetail = ({ editBugSubmit, visibleBug, userEmail, users }) => {
                                     onChange={handleOnChange}
                                     input={<Input />}
                                 >
+                                <MenuItem key={'Unassigned'} value={null}>
+                                    <ListItemText primary="Unassigned"/>
+                                </MenuItem>
                                     {users.response.map((user) => (
                                         <MenuItem
                                             key={user[USER.ID]}

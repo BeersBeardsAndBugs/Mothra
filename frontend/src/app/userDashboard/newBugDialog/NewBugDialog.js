@@ -185,6 +185,9 @@ export const NewBugDialog = ({
                 <FormControl fullWidth>
                     <InputLabel>Assign To</InputLabel>
                     <Select name={BUG.ASSIGNED_TO} value={inputs[BUG.ASSIGNED_TO].value} onChange={handleOnChange} input={<Input />}>
+                        <MenuItem key={'Unassigned'} value={null}>
+                            <ListItemText primary="Unassigned"/>
+                        </MenuItem>
                         {users.response.map((user) => (
                         <MenuItem key={user[USER.ID]} value={user[USER.NAME]}>
                             <ListItemAvatar className={classes.forceInline}>

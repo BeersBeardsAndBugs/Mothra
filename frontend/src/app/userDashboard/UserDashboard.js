@@ -15,19 +15,16 @@ export const UserDashboard = ({ user, setPageSelected }) => {
 
     useEffect(() => {
         bugs.getAll()
-    }, [])
-
-    useEffect(() => {
         users.getAll()
     }, [])
 
+    useEffect(() => {}, [visibleBug])
+
     const handleVisibleBugChange = (bugId) => {
+        console.log('Filtering visible bug with ID: ' + bugId)
         const foundBugs = bugs.response.filter((bug) => bug.id === bugId)
         if (foundBugs.length === 1) {
-            setVisibleBug((prevState) => ({
-                ...prevState,
-                ...foundBugs[0],
-            }))
+            setVisibleBug(foundBugs[0])
         }
     }
 
@@ -49,7 +46,6 @@ export const UserDashboard = ({ user, setPageSelected }) => {
 
     return (
         <Grid container alignItems="stretch" justify="flex-start">
-            {console.log('users from userDashboard.js', users)}
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <NavbarContainer
                     {...{
@@ -61,21 +57,24 @@ export const UserDashboard = ({ user, setPageSelected }) => {
                 />
             </Grid>
 
-            <Grid item xs={12} md={2}>
+            <Grid item xs={12} md={4}>
                 <BugList
                     {...{
                         bugs,
                         userName: user.response.name,
                         handleVisibleBugChange,
+                        users,
                     }}
                 />
             </Grid>
 
-            <Grid item xs={12} md={10}>
+            <Grid item xs={12} md={8}>
                 {visibleBug?.id && (
                     <BugDetail
                         key={visibleBug.id}
                         {...{
+                            add: bugs.add,
+                            users,
                             visibleBug,
                             editBugSubmit,
                             userEmail: user.response.email,

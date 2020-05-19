@@ -1,7 +1,6 @@
 import { useState, useReducer, useRef, useEffect } from 'react'
 
 const dataReducer = (objects, { type, payload }) => {
-    console.log('payload', payload)
     switch (type) {
         case 'add':
             return [...objects, payload]
@@ -55,18 +54,11 @@ export const useFetch = (basePath, defaultResponse = null) => {
             if (['post', 'put'].some((item) => item === method)) {
                 options = { ...options, body: JSON.stringify(body) }
             }
-            console.log('SENT', {
-                path: storedPath + pathExtention,
-                options,
-            })
             const res = await fetch(storedPath + pathExtention, options)
-            console.log('RESPONSE', res)
             if (res.status !== 200) {
                 handleError(res.status)
             } else {
                 const json = await res.json()
-                console.log('DATA', json)
-                console.log('type', type)
                 if (type) {
                     dispatchResponse({ type, payload: json })
                 }

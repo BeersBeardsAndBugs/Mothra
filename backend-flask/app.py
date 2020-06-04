@@ -94,9 +94,8 @@ def write_comment():
     given = request.get_json()
     bug = Bug.get(id=given['bugId'])
     comment_new = Comment.create(bug=bug, user=given["user"], text=given["text"], date=given["date"])
-    create_notification(bug, 'comment', given["user"])
     comment_update = Comment.get(bug=bug, user=given["user"], text=given["text"], date=given["date"])
-    create_notification(bug.id, 'bug', bug_new.creator)
+    create_notification(bug.id, 'comment', bug.creator)
     return json.dumps(model_to_dict(comment_update))
 
 @app.route("/comment/<param_id>", methods=["DELETE", "PUT", "GET"])

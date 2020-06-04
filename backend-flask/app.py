@@ -61,9 +61,8 @@ def create_bug():
         priority = given["priority"]
         status = given["status"]
         bug_new = Bug.create(assigned_to=assigned_to, title=title, creator=creator, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description, updated_by=creator)
-        bug_new.save()
         bug_update = Bug.get(title=title, creator=creator, created_date=created_date, updated_last=updated_last, priority=priority, status=status, description=description, updated_by=creator)
-        # create_notification(bug_update.id, 'bug', bug_new.creator)
+        create_notification(bug_update.id, 'bug', bug_new.creator)
         return json.dumps(model_to_dict(bug_update))
     elif request.method == "GET":
         bugs = Bug.select()
@@ -87,7 +86,7 @@ def edit_bug(param_id):
     given = request.get_json()
     update_bug = (Bug.update(given)).where(Bug.id==param_id)
     update_bug.execute()
-    update_notification(param_id, 'bug', given["updated_by"], old_bug, '_none')#hardcoded user for now
+    update_notification(param_id, 'bug', given["updated_by"], old_bug, '_none')
     return json.dumps('bug updated')
 
 @app.route("/comment", methods=["POST"])
@@ -95,9 +94,8 @@ def write_comment():
     given = request.get_json()
     bug = Bug.get(id=given['bugId'])
     comment_new = Comment.create(bug=bug, user=given["user"], text=given["text"], date=given["date"])
-    create_notification(bug, 'comment', given["user"])
     comment_update = Comment.get(bug=bug, user=given["user"], text=given["text"], date=given["date"])
-    # create_notification(bug_update.id, 'bug', bug_new.creator)
+    create_notification(bug.id, 'comment', bug.creator)
     return json.dumps(model_to_dict(comment_update))
 
 @app.route("/comment/<param_id>", methods=["DELETE", "PUT", "GET"])
@@ -116,7 +114,7 @@ def delete_comment(param_id):
         comment = Comment.get(id=param_id)
         comment.delete_instance()
         fake_user = 'jake the fake user'
-        delete_notification(comment.bug_id, comment.id, fake_user)#hardcoded user for now
+        delete_notification(comment.bug_id, comment.id, fake_user)
         return "deleted"
     elif request.method == "PUT":
         given = request.get_json()

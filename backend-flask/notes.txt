@@ -1,3 +1,0 @@
-On hover should be added to bug icons so user knows what they mean
-text is super big
-Create bug button ought to be put above the filter tabs

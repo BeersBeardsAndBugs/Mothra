@@ -1,5 +1,6 @@
 from flask import request, Flask, render_template
 from flask_api import status
+from flask_cors import CORS
 from models import *
 import datetime
 import json
@@ -8,6 +9,7 @@ from helper import *
 # import time
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def new_user_data_ep():

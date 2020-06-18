@@ -12,7 +12,7 @@ This will be a Django/Python API with a React frontend project for tracking bugs
 6. cd into 'Mothra/backend-flask' and type 'flask run'
    The flask server should start running on 127.0.0.1:5000/
 
-## Running Dev Environment
+## Running Dev Environment (windows)
 
 In terminal, cd into 'Mothra/'
 start windev
